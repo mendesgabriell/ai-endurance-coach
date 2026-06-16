@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Endurance Coach — Documento Executivo v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent: #c8f135;
+    --accent2: #7b61ff;
+    --accent3: #ff6b35;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 48px 32px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .cover {
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 48px;
+    margin-bottom: 56px;
+  }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover-badge { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--border); padding: 6px 12px; border-radius: 4px; }
+  .cover-status { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; border: 1px solid rgba(200,241,53,0.3); padding: 6px 12px; border-radius: 4px; background: rgba(200,241,53,0.05); }
+  .cover-title { font-size: 52px; font-weight: 700; letter-spacing: -2px; line-height: 1.05; margin-top: 48px; }
+  .cover-title span { color: var(--accent); }
+  .cover-sub { font-size: 18px; color: var(--muted); margin-top: 16px; font-weight: 300; max-width: 600px; }
+  .cover-meta { display: flex; gap: 32px; margin-top: 48px; flex-wrap: wrap; }
+  .cover-meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .cover-meta-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .cover-meta-value { font-size: 13px; color: var(--text); font-weight: 500; }
+
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .section-number { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); background: rgba(200,241,53,0.08); border: 1px solid rgba(200,241,53,0.2); padding: 4px 10px; border-radius: 4px; }
+  .section-title { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; }
+  .card + .card { margin-top: 10px; }
+  .card-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  .card-body { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+  .highlight { background: rgba(200,241,53,0.04); border: 1px solid rgba(200,241,53,0.2); border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+  .highlight-title { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+  .highlight-body { font-size: 13px; color: var(--text); line-height: 1.7; }
+
+  .tag { display: inline-block; font-size: 10px; font-family: 'Space Mono', monospace; padding: 3px 8px; border-radius: 4px; margin: 2px 2px 2px 0; }
+  .tag-lime { background: rgba(200,241,53,0.12); color: var(--accent); }
+  .tag-purple { background: rgba(123,97,255,0.12); color: var(--accent2); }
+  .tag-orange { background: rgba(255,107,53,0.12); color: var(--accent3); }
+  .tag-green { background: rgba(34,197,94,0.12); color: var(--green); }
+  .tag-red { background: rgba(239,68,68,0.12); color: var(--red); }
+  .tag-yellow { background: rgba(245,158,11,0.12); color: var(--yellow); }
+  .tag-gray { background: rgba(107,107,128,0.15); color: var(--muted); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr.ours td { background: rgba(200,241,53,0.03); }
+  tr.ours td:first-child { border-left: 2px solid var(--accent); }
+
+  .arch-layer { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 4px; }
+  .arch-layer-label { font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .arch-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .arch-chip { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 11px; display: flex; align-items: center; gap: 5px; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .arch-arrow { text-align: center; color: var(--border); font-size: 18px; line-height: 1; margin: 2px 0; }
+
+  .signal-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .signal-row:last-child { border-bottom: none; }
+  .signal-if { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-family: 'Space Mono', monospace; font-size: 11px; flex: 1; }
+  .signal-then { background: rgba(200,241,53,0.06); border: 1px solid rgba(200,241,53,0.15); border-radius: 6px; padding: 4px 10px; font-size: 11px; flex: 1.5; color: var(--accent); }
+
+  .profile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .profile-tier { font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 6px; }
+  .profile-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .profile-desc { font-size: 12px; color: var(--muted); margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .profile-items { list-style: none; }
+  .profile-items li { font-size: 12px; color: var(--muted); padding: 3px 0; display: flex; gap: 6px; }
+  .profile-items li span:first-child { color: var(--accent); }
+
+  .horizon { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+  .horizon-label { font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+  .horizon-period { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .horizon-focus { font-size: 12px; color: var(--muted); margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .horizon-items { list-style: none; }
+  .horizon-items li { font-size: 12px; color: var(--muted); padding: 4px 0; display: flex; gap: 8px; align-items: flex-start; }
+  .horizon-items li::before { content: '→'; color: var(--accent); flex-shrink: 0; font-family: 'Space Mono', monospace; font-size: 11px; }
+
+  .sport-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sport-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 7px 16px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+
+  .mini-card { background: var(--bg); border-radius: 8px; padding: 10px 12px; font-size: 11px; }
+  .mini-card-title { font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .mini-card-body { color: var(--muted); line-height: 1.6; }
+
+  .pricing-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .pricing-free { border-top: 2px solid var(--muted); }
+  .pricing-starter { border-top: 2px solid var(--accent2); }
+  .pricing-pro { border-top: 2px solid var(--accent); }
+  .pricing-elite { border-top: 2px solid var(--accent3); }
+  .pricing-coach { border-top: 2px solid var(--yellow); }
+  .pricing-tier { font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 6px; }
+  .pricing-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .pricing-price { font-size: 24px; font-weight: 700; color: var(--accent); font-family: 'Space Mono', monospace; margin-bottom: 2px; }
+  .pricing-price-sub { font-size: 11px; color: var(--muted); margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .pricing-items { list-style: none; }
+  .pricing-items li { font-size: 11px; color: var(--muted); padding: 3px 0; display: flex; gap: 6px; }
+  .pricing-items li span:first-child { color: var(--green); }
+
+  .footer { text-align: center; padding: 32px 0 0; border-top: 1px solid var(--border); font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; line-height: 2; }
+
+  .mono { font-family: 'Space Mono', monospace; }
+  .mt-10 { margin-top: 10px; }
+  .mt-14 { margin-top: 14px; }
+  .mb-10 { margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-badge">Documento Executivo · Confidencial · v2.0</div>
+    <div class="cover-status">Em Desenvolvimento</div>
+  </div>
+  <div>
+    <div class="cover-title">AI Endurance<br><span>Coach</span></div>
+    <div class="cover-sub">O sistema operacional do atleta — do primeiro 5k ao infinito. Coach de IA que age, decide e evolui com você.</div>
+  </div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Versão</div>
+      <div class="cover-meta-value">2.0 — Revisado</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Data</div>
+      <div class="cover-meta-value">Junho 2026</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Estágio</div>
+      <div class="cover-meta-value">Pré-MVP · Validação em curso</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">MVP</div>
+      <div class="cover-meta-value">90 dias</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Limite de distância</div>
+      <div class="cover-meta-value">∞ — Sem teto</div>
+    </div>
+  </div>
+</div>
+
+<!-- 1. VISÃO -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">01</div>
+    <div class="section-title">Visão e Proposta de Valor</div>
+  </div>
+  <div class="highlight">
+    <div class="highlight-title">O coach que age. Não o que informa.</div>
+    <div class="highlight-body">Integra todos os seus wearables, lê seus dados em tempo real, e toma decisões: <em>"Hoje seu 20km vira 12km pela manhã + 8km à noite, porque seu HRV caiu 18% e você tem reunião às 7h."</em> É o treinador de elite democratizado — do cara que quer começar a correr até o atleta buscando provas de 200, 300, 500km. Sem teto de distância. Sem teto de ambição.</div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">O problema que resolvemos</div>
+      <div class="card-body">Atletas de todos os níveis treinam no escuro. Têm dados no relógio, plano numa planilha, nutrição num app, sono em outro — mas ninguém conecta tudo e diz o que fazer hoje, agora, considerando tudo ao mesmo tempo. O produto que faz isso, focado em endurance e força, com UX de classe mundial, não existe ainda.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">A história de origem</div>
+      <div class="card-body">Na La Mision 110km 2025, o adutor travou por sobrecarga compensatória. Um coach com acesso a todos os dados de treino, força e fadiga teria identificado o risco semanas antes e ajustado o protocolo. Esse coach existe agora — e vai existir para todo atleta que quiser evoluir de verdade.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. PRINCÍPIO DE DESIGN -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">02</div>
+    <div class="section-title">Princípio de Design — UX como Vantagem Competitiva</div>
+  </div>
+  <div class="highlight">
+    <div class="highlight-title">A melhor interface do mundo para atletas.</div>
+    <div class="highlight-body">Design não é decoração — é o produto. Enquanto concorrentes entregam dashboards técnicos e interfaces de engenheiro, nossa obsessão é clareza, velocidade e prazer de uso. O atleta abre o app e em 3 segundos sabe o que fazer hoje. Cada tela, cada interação, cada palavra é projetada para um atleta em movimento — não para um analista de dados. Este é um pilar não negociável desde o dia zero.</div>
+  </div>
+  <div class="grid-3">
+    <div class="mini-card">
+      <div class="mini-card-title">Desktop first → Mobile</div>
+      <div class="mini-card-body">H1 começa em web para visão macro. App mobile evolui em H2. WhatsApp é o canal de interação diária desde o início.</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-card-title">3 segundos de clareza</div>
+      <div class="mini-card-body">Ao abrir o app, o atleta vê: status do dia (Verde/Amarelo/Vermelho), treino de hoje, e uma métrica que importa. Nada mais.</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-card-title">Linguagem humana</div>
+      <div class="mini-card-body">Nenhum jargão técnico na superfície. CTL/ATL/TSB ficam por baixo. O atleta vê "você está em boa forma, pode forçar hoje".</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. MERCADO -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">03</div>
+    <div class="section-title">Análise de Mercado</div>
+  </div>
+  <div class="card mb-10">
+    <table>
+      <thead>
+        <tr>
+          <th>Concorrente</th>
+          <th>Ponto Forte</th>
+          <th>Falha Crítica</th>
+          <th>Preço</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>WHOOP Coach</strong></td>
+          <td><span class="tag tag-green">HRV + sono</span></td>
+          <td>Preso no hardware. Sem plano real. Sem endurance específico.</td>
+          <td class="mono">$30/mês</td>
+        </tr>
+        <tr>
+          <td><strong>Runna</strong> (Strava)</td>
+          <td><span class="tag tag-green">UX excelente</span> <span class="tag tag-green">planos adaptivos</span></td>
+          <td>Só road running. Sem biométrica real. Sem força. Sem nutrição.</td>
+          <td class="mono">~$10/mês</td>
+        </tr>
+        <tr>
+          <td><strong>Vert.run</strong></td>
+          <td><span class="tag tag-green">Trail/ultra</span> <span class="tag tag-green">Coros/Garmin</span></td>
+          <td>Sem IA conversacional. Sem HRV/sono. Sem nutrição. Sem força.</td>
+          <td class="mono">$15/mês</td>
+        </tr>
+        <tr>
+          <td><strong>athletedata</strong></td>
+          <td><span class="tag tag-green">CTL/ATL/TSB</span> <span class="tag tag-green">WhatsApp 7am</span> <span class="tag tag-green">envia pro relógio</span></td>
+          <td>Interface de engenheiro. Sem trail/ultra. Sem nutrição. Sem força. Fora do Brasil.</td>
+          <td class="mono">$20/mês</td>
+        </tr>
+        <tr>
+          <td><strong>afasteryou</strong></td>
+          <td><span class="tag tag-green">IA age (60 tools)</span></td>
+          <td>Só triathlon. Muito técnico. Sem modo treinador. Sem nutrição.</td>
+          <td class="mono">$25/mês</td>
+        </tr>
+        <tr>
+          <td><strong>Future</strong></td>
+          <td><span class="tag tag-green">Coach humano</span></td>
+          <td>$250/mês. Inacessível. Não escala.</td>
+          <td class="mono">$250/mês</td>
+        </tr>
+        <tr class="ours">
+          <td><strong>⚡ Nosso produto</strong></td>
+          <td>
+            <span class="tag tag-lime">todos os sports endurance</span>
+            <span class="tag tag-lime">multi-wearable</span>
+            <span class="tag tag-lime">age ≠ informa</span>
+            <span class="tag tag-lime">força + endurance</span>
+            <span class="tag tag-lime">nutrição integrada</span>
+            <span class="tag tag-lime">modo treinador</span>
+            <span class="tag tag-lime">UX world-class</span>
+            <span class="tag tag-lime">PT/BR first</span>
+          </td>
+          <td style="color:var(--accent); font-size:11px; font-style:italic;">O gap que nenhum produto preenche hoje.</td>
+          <td class="mono" style="color:var(--accent);">Freemium<br>+ planos</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Mercado primário — Atleta direto</div>
+      <div class="card-body">Atletas amadores sérios de endurance no Brasil e América Latina. Treinam 6–15h/semana, têm prova no calendário, usam wearable. Faixa 25–50 anos. Do primeiro 5km ao ultra de 500km — sem teto.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Mercado secundário — Treinadores e assessorias</div>
+      <div class="card-body">Canal B2B via assessorias de corrida, triathlon e ciclismo. Um treinador com 30 alunos = 30 usuários imediatos. O produto potencializa o treinador — não o substitui. Alto LTV, baixo CAC.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. ESPORTES -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">04</div>
+    <div class="section-title">Esportes, Modalidades e Força</div>
+  </div>
+  <div class="sport-grid mb-10">
+    <div class="sport-chip">🏃 Corrida de Rua</div>
+    <div class="sport-chip">⛰️ Trail Running</div>
+    <div class="sport-chip">🏔️ Ultra Trail</div>
+    <div class="sport-chip">🚴 Ciclismo</div>
+    <div class="sport-chip">🏊 Natação</div>
+    <div class="sport-chip">🔱 Triathlon</div>
+    <div class="sport-chip">💥 HYROX</div>
+    <div class="sport-chip">💪 Musculação / Força</div>
+    <div class="sport-chip" style="opacity:0.5; border-style:dashed;">⚙️ Outros · v2+</div>
+    <div class="sport-chip" style="color:var(--accent); border-color:rgba(200,241,53,0.3);">∞ Sem limite de distância</div>
+  </div>
+  <div class="highlight">
+    <div class="highlight-title">Força e musculação são pilares — não acessórios</div>
+    <div class="highlight-body">Desde o usuário iniciante, o coach integra treino de força à rotina de endurance. Não é "aqui você corre, ali você malha" — é um plano único e coerente. Princípios do fisiculturismo aplicados ao contexto de cada atleta: composição corporal, estética e performance como objetivos que coexistem. Para o atleta de ultra trail, força de membros inferiores e core é diferencial de prova. Para o iniciante, é base de saúde e prevenção de lesão.</div>
+  </div>
+  <div class="grid-3 mt-10">
+    <div class="mini-card">
+      <div class="mini-card-title">🏃 Corrida / Trail / Ultra</div>
+      <div class="mini-card-body">Pace, VO2max estimado, cadência, D+/hora, economia de corrida, CTL/ATL/TSB, zonas calibradas por atleta</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-card-title">🔱 Triathlon / Bike / Natação</div>
+      <div class="mini-card-body">FTP, watts/kg, swim pace/100m, brick sessions, TSS por modal, eficiência de transição</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-card-title">💥 HYROX</div>
+      <div class="mini-card-body">Tempo por estação, sled push/pull carga, wall balls pace, transição corrida-força, potência funcional</div>
+    </div>
+  </div>
+  <div class="card mt-10">
+    <div class="card-title">Zonas de treino calibradas por atleta — não genéricas</div>
+    <div class="card-body">Z1 de um ultra runner não é uma caminhada — é um trote leve. As zonas são definidas na anamnese e calibradas continuamente pelos dados de HRV, lactato estimado e performance real. O coach nunca prescreve um treino que na prática vira caminhada para aquele atleta específico.</div>
+  </div>
+</div>
+
+<!-- 5. ARQUITETURA -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">05</div>
+    <div class="section-title">Arquitetura do Produto</div>
+  </div>
+
+  <div class="arch-layer" style="border-top:2px solid #444;">
+    <div class="arch-layer-label" style="color:var(--muted);">◎ Camada 1 — Fontes de Dados</div>
+    <div class="arch-chips">
+      <div class="arch-chip"><div class="dot" style="background:var(--green)"></div>Coros ✅</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--green)"></div>Strava ✅</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Oura Ring · H1</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>WHOOP · H1</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Garmin · H1</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Apple Health · H1</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Calendário Google/Apple · H1</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--yellow)"></div>Nix (eletrólitos) · H2</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--yellow)"></div>Polar / Suunto · H2</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--yellow)"></div>Exames médicos PDF · H2</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--muted)"></div>TrainingPeaks · H3</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--muted)"></div>Sistemas médicos integrados · H3</div>
+    </div>
+    <div style="font-size:10px; color:var(--muted); margin-top:10px; font-family:'Space Mono',monospace;">
+      <span style="color:var(--green)">■</span> Ativo &nbsp;
+      <span style="color:var(--accent)">■</span> H1 MVP &nbsp;
+      <span style="color:var(--yellow)">■</span> H2 &nbsp;
+      <span style="color:var(--muted)">■</span> H3
+    </div>
+  </div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-layer" style="border-top:2px solid var(--accent2);">
+    <div class="arch-layer-label" style="color:var(--accent2);">⊕ Camada 2 — Engine de Correlação</div>
+    <div class="arch-chips">
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>HRV × Sono × Carga</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>CTL / ATL / TSB</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>ACWR</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>Zonas calibradas por atleta</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>Ciclo hormonal feminino · H1</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>Histórico de lesões</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>Calendário e compromissos</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>Balanço calórico inteligente</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>Risco de lesão preditivo</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent2)"></div>Marcadores médicos · H2</div>
+    </div>
+  </div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-layer" style="border-top:2px solid var(--accent3);">
+    <div class="arch-layer-label" style="color:var(--accent3);">⊗ Camada 3 — Engine de Metodologia</div>
+    <div class="arch-chips">
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Polarizado 80/20</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Piramidal / Threshold</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Modelo Norueguês</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Treino concorrente força + endurance</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Fisiculturismo aplicado ao endurance</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Periodização por blocos</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Tapering específico por prova</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Benchmark atletas elite</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Bases biológicas por gênero e idade</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent3)"></div>Protocolos TDAH + exercício · H2</div>
+    </div>
+  </div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-layer" style="border-top:2px solid var(--accent);">
+    <div class="arch-layer-label" style="color:var(--accent);">★ Camada 4 — Coach IA (decisão e ação)</div>
+    <div class="arch-chips">
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Verde / Amarelo / Vermelho</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Replanejar sessão automaticamente</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Enviar treino pro relógio</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Dividir volume manhã/noite</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Adaptar por lesão ativa</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>WhatsApp 7am com nome personalizado</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Alerta de padrão pré-lesão</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Ajuste nutricional diário</div>
+      <div class="arch-chip"><div class="dot" style="background:var(--accent)"></div>Sessão de mobilidade 15min diária</div>
+    </div>
+  </div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-layer" style="border-top:2px solid var(--green);">
+    <div class="arch-layer-label" style="color:var(--green);">◈ Camada 5 — Interfaces</div>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px;">
+      <div class="mini-card">
+        <div class="mini-card-title">💬 WhatsApp · H1</div>
+        <div class="mini-card-body">Interação diária. Check-in, treino do dia, coach com nome. Canal principal de uso.</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-card-title">🖥️ Web App · H1</div>
+        <div class="mini-card-body">Dashboard macro. Calendário de treinos. Periodização. Todos os dados integrados. Desktop first.</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-card-title">📱 App Mobile · H2</div>
+        <div class="mini-card-body">Experiência completa no celular. Check-in, dashboard, nutrição, plano de treino.</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-card-title">⌚ Relógio · H1</div>
+        <div class="mini-card-body">Treino enviado direto para Coros/Garmin. Atleta executa sem precisar abrir nada.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. CINCO PILARES -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">06</div>
+    <div class="section-title">Os Cinco Pilares do Produto</div>
+  </div>
+  <div class="grid-2 mb-10">
+    <div class="card" style="border-top:2px solid var(--accent);">
+      <div class="card-title">⚡ 1. Coach de Treino Adaptativo</div>
+      <div class="card-body">Plano periodizado por prova alvo — sem teto de distância. Endurance + musculação 7x/semana integrados desde o iniciante. Metodologia científica. Envia treino pro relógio. Ajusta em tempo real. Benchmark com atletas elite como referência de princípios.</div>
+    </div>
+    <div class="card" style="border-top:2px solid var(--accent2);">
+      <div class="card-title">🥗 2. Nutrição Inteligente</div>
+      <div class="card-body"><strong>H1:</strong> Input manual por texto/foto dentro do app. Carbo de performance não entra no déficit calórico — lógica inédita. Suplementação registrada. Lesão ativa informa protocolo nutricional.<br><strong>H2:</strong> API MyFitnessPal ou similar.<br><strong>H3:</strong> Sistema próprio de nutrição.</div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card" style="border-top:2px solid var(--accent3);">
+      <div class="card-title">🏁 3. Race Intelligence</div>
+      <div class="card-body">Calendário anual de provas — A, B e C. Perfil de elevação, terreno, clima histórico. Splits dos top finishers. Pacing strategy específico por prova. Nutrição e hidratação personalizadas por temperatura esperada. Periodização automática a partir da data da prova A.</div>
+    </div>
+    <div class="card" style="border-top:2px solid var(--green);">
+      <div class="card-title">🔄 4. Recovery e Saúde</div>
+      <div class="card-body">Sessão diária de 15min de mobilidade gerada pelo contexto. Plano de treino adaptado para lesão ativa desde H1 (input manual). Detecção de padrão pré-lesão por histórico. <strong>H2:</strong> Leitura de exames PDF, marketplace de clínicas parceiras. <strong>H3:</strong> Longevidade personalizada.</div>
+    </div>
+    <div class="card" style="border-top:2px solid var(--yellow);">
+      <div class="card-title">👥 5. Plataforma de Treinadores</div>
+      <div class="card-body"><strong>H2:</strong> Modo treinador com múltiplos atletas. IA assiste o treinador — não o substitui. Treinador conversa com a IA sobre cada atleta e ajusta treinos. Canal B2B via assessorias. Um treinador com 30 alunos = 30 usuários imediatos.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. ONBOARDING -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">07</div>
+    <div class="section-title">Anamnese e Onboarding Progressivo</div>
+  </div>
+  <div class="card mb-10">
+    <div class="card-title">O que a anamnese captura desde o dia zero</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px;">
+      <div class="mini-card"><div class="mini-card-title">🎯 Objetivo</div><div class="mini-card-body">Primeira prova, PR, ultra, estética, saúde. O que o atleta quer de verdade.</div></div>
+      <div class="mini-card"><div class="mini-card-title">📋 Histórico</div><div class="mini-card-body">Provas feitas, tempos de referência (5k/10k/21k/42k), anos de treino.</div></div>
+      <div class="mini-card"><div class="mini-card-title">⌚ Wearables</div><div class="mini-card-body">Quais dispositivos usa. Integração automática a partir da resposta.</div></div>
+      <div class="mini-card"><div class="mini-card-title">🏥 Saúde</div><div class="mini-card-body">Lesões ativas ou históricas. Restrições médicas. O plano já nasce adaptado.</div></div>
+      <div class="mini-card"><div class="mini-card-title">🧬 Biológico</div><div class="mini-card-body">Gênero, idade, peso. Ciclo hormonal (feminino). Condições específicas (TDAH, etc).</div></div>
+      <div class="mini-card"><div class="mini-card-title">🗓️ Disponibilidade</div><div class="mini-card-body">Horas por semana, horários preferidos, compromissos fixos no calendário.</div></div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="profile" style="border-top:2px solid var(--muted);">
+      <div class="profile-tier">Perfil Iniciante</div>
+      <div class="profile-name">Começando agora</div>
+      <div class="profile-desc">Do sofá ao primeiro 5km. Ou recomeçando depois de parar.</div>
+      <ul class="profile-items">
+        <li><span>✦</span> Plano simples, linguagem acessível</li>
+        <li><span>✦</span> Força integrada desde o início</li>
+        <li><span>✦</span> Mobilidade 15min diária</li>
+        <li><span>✦</span> Nutrição básica por foto</li>
+        <li><span>✦</span> Gamificação de consistência</li>
+        <li><span>✦</span> Coach com nome personalizado</li>
+      </ul>
+    </div>
+    <div class="profile" style="border-top:2px solid var(--accent2);">
+      <div class="profile-tier">Perfil Intermediário</div>
+      <div class="profile-name">Atleta em evolução</div>
+      <div class="profile-desc">Já treina. Quer bater PR ou completar um ultra de 50–100km.</div>
+      <ul class="profile-items">
+        <li><span>✦</span> HRV + sono → decisão do dia</li>
+        <li><span>✦</span> Plano periodizado por prova</li>
+        <li><span>✦</span> Treino enviado pro relógio</li>
+        <li><span>✦</span> Carbo de performance</li>
+        <li><span>✦</span> Race intelligence básico</li>
+        <li><span>✦</span> Força + endurance integrados</li>
+      </ul>
+    </div>
+    <div class="profile" style="border-top:2px solid var(--accent);">
+      <div class="profile-tier">Perfil Avançado</div>
+      <div class="profile-name">Sem limite</div>
+      <div class="profile-desc">Ultra trail 100k+ até 500km. Endurance + estética. Performance máxima.</div>
+      <ul class="profile-items">
+        <li><span>✦</span> Todos os dados integrados</li>
+        <li><span>✦</span> Fisiculturismo + endurance</li>
+        <li><span>✦</span> Benchmark com atletas elite</li>
+        <li><span>✦</span> Exames médicos integrados · H2</li>
+        <li><span>✦</span> Longevidade + performance</li>
+        <li><span>✦</span> Race intelligence completo</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 8. DECISÃO DO COACH -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">08</div>
+    <div class="section-title">Lógica de Decisão do Coach</div>
+  </div>
+  <div class="grid-2">
+    <div style="display:grid; gap:8px;">
+      <div style="background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.2); border-radius:10px; padding:16px;">
+        <div style="color:var(--green); font-weight:600; margin-bottom:8px;">🟢 Dia Verde</div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8;">HRV ≥ baseline · Sono ≥ 75 · ACWR 0.8–1.3<br><span style="color:var(--green);">→ Sessão completa. Pode forçar intensidade.</span></div>
+      </div>
+      <div style="background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.2); border-radius:10px; padding:16px;">
+        <div style="color:var(--yellow); font-weight:600; margin-bottom:8px;">🟡 Dia Amarelo</div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8;">HRV 10–20% abaixo · Sono 55–74 · ACWR 1.3–1.5<br><span style="color:var(--yellow);">→ Volume reduzido. Divide sessão. Sem intensidade.</span></div>
+      </div>
+      <div style="background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.2); border-radius:10px; padding:16px;">
+        <div style="color:var(--red); font-weight:600; margin-bottom:8px;">🔴 Dia Vermelho</div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8;">HRV ≥ 20% abaixo · Sono &lt; 55 · ACWR &gt; 1.5<br><span style="color:var(--red);">→ Descanso ativo. Z1 30min máx + mobilidade.</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px;">Exemplos de decisão automática</div>
+      <div class="signal-row">
+        <div class="signal-if">20km + HRV baixo</div>
+        <div style="color:var(--muted); flex-shrink:0;">→</div>
+        <div class="signal-then">12km manhã Z2 + 8km noite</div>
+      </div>
+      <div class="signal-row">
+        <div class="signal-if">Reunião 7h no calendário</div>
+        <div style="color:var(--muted); flex-shrink:0;">→</div>
+        <div class="signal-then">Treino movido para 12h</div>
+      </div>
+      <div class="signal-row">
+        <div class="signal-if">Padrão de dor no adutor</div>
+        <div style="color:var(--muted); flex-shrink:0;">→</div>
+        <div class="signal-then">Alerta + mobilidade específica + ajuste de força</div>
+      </div>
+      <div class="signal-row">
+        <div class="signal-if">Lesão ativa (input manual)</div>
+        <div style="color:var(--muted); flex-shrink:0;">→</div>
+        <div class="signal-then">Plano adaptado. O que pode. O que evitar. Progressão de retorno.</div>
+      </div>
+      <div class="signal-row">
+        <div class="signal-if">Fase lútea detectada</div>
+        <div style="color:var(--muted); flex-shrink:0;">→</div>
+        <div class="signal-then">HRV naturalmente mais baixo. Ajusta expectativa sem reduzir desnecessariamente.</div>
+      </div>
+      <div class="signal-row">
+        <div class="signal-if">Prova A em 14 dias</div>
+        <div style="color:var(--muted); flex-shrink:0;">→</div>
+        <div class="signal-then">Tapering ativo. Volume −40%. Intensidade mantida. Anti-inflamatório.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 9. NUTRIÇÃO -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">09</div>
+    <div class="section-title">Nutrição — Lógica Inédita</div>
+  </div>
+  <div class="highlight">
+    <div class="highlight-title">Carbo de performance ≠ caloria do dia</div>
+    <div class="highlight-body">Atleta com meta de reduzir % gordura faz 20km e ingere 80g de carbo durante o treino. Esses 320kcal não entram no cômputo do déficit calórico — são combustível de performance. O app entende essa distinção que nenhum app de nutrição atual faz. Permite combinar endurance de alta intensidade com objetivos estéticos sem sacrificar performance ou saúde.</div>
+  </div>
+  <div class="grid-3 mt-10">
+    <div class="card">
+      <div class="card-title">H1 — Input manual</div>
+      <div class="card-body">Texto ou foto dentro do app. Carbo de performance separado. Suplementação registrada. Protocolo de hidratação e eletrólito básico. Ajuste por lesão ativa e objetivo do atleta.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">H2 — API de terceiro</div>
+      <div class="card-body">Integração MyFitnessPal ou similar. Nix para dados de eletrólito e sódio por taxa de suor. Leitura de exames PDF para ajustes nutricionais precisos.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">H3 — Sistema próprio</div>
+      <div class="card-body">Banco de alimentos próprio. Scanner de barcode. Receitas personalizadas. IA nutricional treinada no perfil do atleta ao longo do tempo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 10. RACE INTELLIGENCE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">10</div>
+    <div class="section-title">Race Intelligence</div>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+    <div class="mini-card"><div class="mini-card-title">📍 Perfil do percurso</div><div class="mini-card-body">Elevação total, D+ por segmento, terreno técnico vs runnable, pontos críticos da prova</div></div>
+    <div class="mini-card"><div class="mini-card-title">🌡️ Clima histórico</div><div class="mini-card-body">Temperatura média, umidade, altitude, condição de solo. Predição para o dia da prova.</div></div>
+    <div class="mini-card"><div class="mini-card-title">🏆 Dados de elite</div><div class="mini-card-body">Splits dos top finishers. Pacing por segmento. Onde a prova "mata" historicamente.</div></div>
+    <div class="mini-card"><div class="mini-card-title">🥤 Nutrição da prova</div><div class="mini-card-body">Protocolo de carbo + eletrólito por distância. Hidratação ajustada por temperatura esperada.</div></div>
+    <div class="mini-card"><div class="mini-card-title">📅 Periodização automática</div><div class="mini-card-body">A partir da data da prova A, o sistema monta os blocos ao contrário. Tapering ativa automaticamente.</div></div>
+    <div class="mini-card"><div class="mini-card-title">∞ Calendário anual</div><div class="mini-card-body">Provas A, B e C. Toda a periodização anual otimizada em função do calendário completo do atleta.</div></div>
+  </div>
+</div>
+
+<!-- 11. GAMIFICAÇÃO -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">11</div>
+    <div class="section-title">Gamificação e Engajamento</div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Métricas que o atleta quer melhorar de verdade</div>
+      <div class="card-body mt-10" style="display:flex; flex-direction:column; gap:6px;">
+        <div style="display:flex; gap:8px; font-size:12px;"><span style="color:var(--accent);">✦</span> Streak de sono Score acima de 75</div>
+        <div style="display:flex; gap:8px; font-size:12px;"><span style="color:var(--accent);">✦</span> Semanas dentro da janela ACWR saudável</div>
+        <div style="display:flex; gap:8px; font-size:12px;"><span style="color:var(--accent);">✦</span> Nota de sono diária (como Garmin)</div>
+        <div style="display:flex; gap:8px; font-size:12px;"><span style="color:var(--accent);">✦</span> Consistência de mobilidade 15min/dia</div>
+        <div style="display:flex; gap:8px; font-size:12px;"><span style="color:var(--accent);">✦</span> VO2max estimado — evolução semanal</div>
+        <div style="display:flex; gap:8px; font-size:12px;"><span style="color:var(--accent);">✦</span> HRV trend vs baseline pessoal</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Coach com nome personalizado</div>
+      <div class="card-body mt-10">
+        O atleta escolhe o nome do seu treinador virtual. "Pedro" manda a mensagem às 7am — não "o app".<br><br>
+        <span style="color:var(--accent2);">✦</span> Vínculo emocional com o produto<br>
+        <span style="color:var(--accent2);">✦</span> Percepção de coach pessoal, não software<br>
+        <span style="color:var(--accent2);">✦</span> Maior adesão e retenção<br>
+        <span style="color:var(--accent2);">✦</span> Diferencial de UX que nenhum concorrente tem<br><br>
+        <span style="color:var(--muted); font-size:12px;">Nota: Sem comunidade como foco. Somos ferramenta aliada ao Strava — não concorrente. Máximo: organização de treinos em grupo para assessorias.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 12. COMPLIANCE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">12</div>
+    <div class="section-title">Compliance, Segurança e Proteção</div>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">🔒 LGPD e privacidade</div>
+      <div class="card-body">Dados de saúde são sensíveis por lei. Consentimento explícito. Dados biométricos criptografados. Opção de exclusão total. Compliant desde o MVP.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🤝 Compliance de APIs</div>
+      <div class="card-body">Todas as integrações respeitam os termos oficiais de cada plataforma. Nenhum scraping ou uso não autorizado. Revisão de ToS antes de cada integração.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🛡️ Proteção competitiva</div>
+      <div class="card-body">Modo limitado para contas suspeitas. Detecção de benchmark por concorrentes. Propriedade intelectual da engine de correlação como vantagem defensável.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 13. HORIZONTES -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">13</div>
+    <div class="section-title">Horizontes de Desenvolvimento</div>
+  </div>
+  <div class="grid-3">
+    <div class="horizon" style="border-top:2px solid var(--accent);">
+      <div class="horizon-label" style="color:var(--accent);">Horizonte 1</div>
+      <div class="horizon-period">0–6 meses</div>
+      <div class="horizon-focus">MVP. Concorrente direto do athletedata. Validação com primeiros usuários reais.</div>
+      <ul class="horizon-items">
+        <li>Coros + Strava + Garmin + Oura + WHOOP</li>
+        <li>Calendário Google / Apple integrado</li>
+        <li>WhatsApp — coach diário com nome personalizado</li>
+        <li>Web app — visão macro e periodização completa</li>
+        <li>Envio de treino pro relógio</li>
+        <li>Verde / Amarelo / Vermelho automático</li>
+        <li>Plano periodizado por prova — sem limite de distância</li>
+        <li>Força + endurance integrados para todos os perfis</li>
+        <li>Ciclo hormonal feminino</li>
+        <li>Anamnese completa desde o dia zero</li>
+        <li>Lesão ativa → plano adaptado (input manual)</li>
+        <li>Nutrição por input manual + foto</li>
+        <li>Carbo de performance fora do déficit</li>
+        <li>Mobilidade 15min diária gerada por contexto</li>
+        <li>Zonas calibradas por atleta</li>
+        <li>LGPD compliant</li>
+      </ul>
+    </div>
+    <div class="horizon" style="border-top:2px solid var(--accent2);">
+      <div class="horizon-label" style="color:var(--accent2);">Horizonte 2</div>
+      <div class="horizon-period">6–18 meses</div>
+      <div class="horizon-focus">Profundidade. Modo treinador. Produto premium consolidado.</div>
+      <ul class="horizon-items">
+        <li>Modo treinador — múltiplos atletas</li>
+        <li>API de nutrição (MyFitnessPal ou similar)</li>
+        <li>Nix — eletrólitos integrados</li>
+        <li>Polar / Suunto integrados</li>
+        <li>Leitura de exames médicos PDF</li>
+        <li>Race intelligence completo</li>
+        <li>Benchmark atletas elite</li>
+        <li>Marketplace clínicas de recovery</li>
+        <li>App mobile completo</li>
+        <li>Protocolos TDAH + exercício</li>
+        <li>Dashboard de longevidade</li>
+        <li>KPIs específicos HYROX</li>
+        <li>Gamificação avançada</li>
+      </ul>
+    </div>
+    <div class="horizon" style="border-top:2px solid var(--accent3);">
+      <div class="horizon-label" style="color:var(--accent3);">Horizonte 3</div>
+      <div class="horizon-period">18 meses – 3 anos</div>
+      <div class="horizon-focus">Sistema operacional do atleta. Plataforma de saúde longitudinal.</div>
+      <ul class="horizon-items">
+        <li>Sistema próprio de nutrição</li>
+        <li>Preditor de saúde longitudinal</li>
+        <li>Integração médica (sistemas de prontuário)</li>
+        <li>Longevidade personalizada por perfil</li>
+        <li>IA de segunda geração (aprende com todos os usuários)</li>
+        <li>Outros esportes além de endurance</li>
+        <li>Bem-estar contextual não-físico</li>
+        <li>Expansão internacional</li>
+        <li>TrainingPeaks integrado</li>
+        <li>Bases biológicas avançadas por gênero e idade</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 14. MODELO DE RECEITA -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">14</div>
+    <div class="section-title">Modelo de Receita</div>
+  </div>
+
+  <div class="highlight" style="margin-bottom:16px;">
+    <div class="highlight-title">Freemium com conversão progressiva</div>
+    <div class="highlight-body">Plano gratuito com funcionalidades reais para gerar volume e aquisição orgânica. Conversão natural conforme o atleta cresce e precisa de mais. Preços competitivos com Runna para o mercado brasileiro. Preços diferenciados para mercado internacional.</div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px;">
+    <div class="pricing-card pricing-free">
+      <div class="pricing-tier">Free</div>
+      <div class="pricing-name">Começando</div>
+      <div class="pricing-price">R$0</div>
+      <div class="pricing-price-sub">Para sempre</div>
+      <ul class="pricing-items">
+        <li><span>✓</span> Foco em provas até 10km</li>
+        <li><span>✓</span> Plano básico de treino</li>
+        <li><span>✓</span> 1 wearable integrado</li>
+        <li><span>✓</span> Check-in diário</li>
+        <li><span>✓</span> Mobilidade básica</li>
+        <li><span>✓</span> Nutrição por input manual</li>
+      </ul>
+    </div>
+    <div class="pricing-card pricing-starter">
+      <div class="pricing-tier">Starter</div>
+      <div class="pricing-name">Atleta</div>
+      <div class="pricing-price" style="color:var(--accent2);">R$29</div>
+      <div class="pricing-price-sub">/mês · BR &nbsp;|&nbsp; ~$9 internacional</div>
+      <ul class="pricing-items">
+        <li><span>✓</span> Provas até maratona</li>
+        <li><span>✓</span> Plano adaptativo completo</li>
+        <li><span>✓</span> Multi-wearable</li>
+        <li><span>✓</span> WhatsApp coach</li>
+        <li><span>✓</span> Força + endurance</li>
+        <li><span>✓</span> Verde/Amarelo/Vermelho</li>
+      </ul>
+    </div>
+    <div class="pricing-card pricing-pro">
+      <div class="pricing-tier">Pro</div>
+      <div class="pricing-name">Performance</div>
+      <div class="pricing-price">R$59</div>
+      <div class="pricing-price-sub">/mês · BR &nbsp;|&nbsp; ~$15 internacional</div>
+      <ul class="pricing-items">
+        <li><span>✓</span> Ultra trail sem limite</li>
+        <li><span>✓</span> Treino enviado pro relógio</li>
+        <li><span>✓</span> Race intelligence</li>
+        <li><span>✓</span> Ciclo hormonal</li>
+        <li><span>✓</span> Carbo de performance</li>
+        <li><span>✓</span> Dashboard web completo</li>
+      </ul>
+    </div>
+    <div class="pricing-card pricing-elite">
+      <div class="pricing-tier">Elite</div>
+      <div class="pricing-name">Sem Limites</div>
+      <div class="pricing-price" style="color:var(--accent3);">R$99</div>
+      <div class="pricing-price-sub">/mês · BR &nbsp;|&nbsp; ~$25 internacional</div>
+      <ul class="pricing-items">
+        <li><span>✓</span> Tudo do Pro</li>
+        <li><span>✓</span> Exames médicos · H2</li>
+        <li><span>✓</span> Nix eletrólitos · H2</li>
+        <li><span>✓</span> Benchmark atletas elite</li>
+        <li><span>✓</span> Longevidade · H2</li>
+        <li><span>✓</span> Clínicas parceiras · H2</li>
+      </ul>
+    </div>
+    <div class="pricing-card pricing-coach">
+      <div class="pricing-tier">B2B · H2</div>
+      <div class="pricing-name">Treinador</div>
+      <div class="pricing-price" style="color:var(--yellow);">A def.</div>
+      <div class="pricing-price-sub">por atleta/mês ou flat fee</div>
+      <ul class="pricing-items">
+        <li><span>✓</span> Até 30+ atletas</li>
+        <li><span>✓</span> IA assiste o treinador</li>
+        <li><span>✓</span> Dashboard multi-atleta</li>
+        <li><span>✓</span> Planos personalizados</li>
+        <li><span>✓</span> Revenue share clínicas</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 15. GO-TO-MARKET -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">15</div>
+    <div class="section-title">Go-to-Market</div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Estratégia de lançamento</div>
+      <div class="card-body">
+        <span style="color:var(--accent);">Fase 0 — Agora:</span> Fundador como laboratório vivo. Validação interna com dados reais. Construção silenciosa.<br><br>
+        <span style="color:var(--accent);">Fase 1 — 30 dias:</span> Grupo fechado de atletas de ponta e treinadores convidados. Validação de produto + coleta de feedback real + identificação de novos casos de uso.<br><br>
+        <span style="color:var(--accent);">Fase 2 — 90 dias:</span> MVP público. Atletas de ponta como embaixadores. Assessorias como canal B2B. Freemium para volume.<br><br>
+        <span style="color:var(--muted); font-size:12px;">O produto não depende de um único rosto — cresce via credibilidade de atletas e treinadores parceiros com audiências já estabelecidas.</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Canais de aquisição</div>
+      <div class="card-body" style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
+        <div class="mini-card">
+          <div class="mini-card-title">Atletas de ponta parceiros</div>
+          <div class="mini-card-body">Atletas amadores de elite com audiência. Credibilidade via resultado real, não marketing.</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-title">Assessorias de corrida e triathlon</div>
+          <div class="mini-card-body">Canal B2B. Um treinador traz toda a base de alunos. Alto volume com baixo custo de aquisição.</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-title">Freemium orgânico</div>
+          <div class="mini-card-body">Plano gratuito real gera volume, word-of-mouth e base para conversão.</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-title">Comunidade de provas</div>
+          <div class="mini-card-body">Presença em provas de trail, triathlon e HYROX. O produto onde o atleta está.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  AI Endurance Coach · Documento Executivo v2.0 · Confidencial<br>
+  Junho 2026 · Todos os direitos reservados · Sem limite de distância — ∞
+</div>
+
+</body>
+</html>
