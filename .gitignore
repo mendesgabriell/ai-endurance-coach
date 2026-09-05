@@ -1,0 +1,40 @@
+# Dependências
+node_modules/
+.pnpm-store/
+
+# Build
+.next/
+dist/
+build/
+out/
+
+# Ambiente — NUNCA commitar
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Dados de atleta — NUNCA commitar (dado pessoal sensível, LGPD art. 11)
+dados/
+*.fit
+*.tcx
+*.gpx
+export-atleta*
+
+# Sistema
+.DS_Store
+.icloud
+*.icloud
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# build e dependencias
+.vercel
+*.tsbuildinfo
