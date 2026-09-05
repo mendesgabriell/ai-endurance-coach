@@ -35,6 +35,20 @@ tabelas e chaves de API em **inglês**.
 Camada de coach usa a **Claude API** com `claude-opus-5` e adaptive thinking.
 Detalhes, alternativas de custo e desenho do loop: `docs/03-arquitetura.md` → Camada 4.
 
+## Fonte única do plano
+
+`src/plan/plan.ts` é a **única** fonte do plano de treino. O artefato Calendário
+Macela é gerado dele:
+
+```
+npx tsx scripts/build-calendar.ts <caminho-do-html>
+```
+
+**Nunca editar o array `SESS` do HTML na mão.** Em 05/09 o plano existia nos dois
+lugares, o calendário mudou, o `plan.ts` não, e o bot mandou o treino errado para
+o atleta. O gerador substitui só `SESS` e `WEEKS` — notas, CSS e o
+`<script id="state">` com as marcações do atleta ficam intactos.
+
 ## Decisões
 
 Toda decisão de arquitetura que seja cara de reverter vira um ADR em `docs/adr/`,

@@ -7,7 +7,9 @@ export interface PlannedSession {
   date: string;
   kind: SessionKind;
   text: string;
-  /** o porquê, quando existe. Vai no rodapé da mensagem, não no corpo */
+  /** lista de exercícios ou blocos, um por linha, quando a sessão tem */
+  exercises?: string[];
+  /** o porquê, quando existe. Renderizado logo abaixo da própria sessão */
   why?: string;
 }
 
