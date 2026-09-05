@@ -1,8 +1,8 @@
 import { desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { checkins, messages } from "./schema.js";
-import type { Turn } from "@/coach/reply.js";
+import { checkins, messages } from "./schema";
+import type { Turn } from "@/coach/reply";
 
 const url = process.env.DATABASE_URL;
 

@@ -1,5 +1,5 @@
-import { blockFor, daysToRace, RACE_NAME, sessionsOn } from "@/plan/plan.js";
-import type { PlannedSession, SessionKind } from "@/plan/types.js";
+import { blockFor, daysToRace, RACE_NAME, sessionsOn } from "@/plan/plan";
+import type { PlannedSession, SessionKind } from "@/plan/types";
 
 const LABEL: Record<SessionKind, string> = {
   corrida: "🏃 Corrida",

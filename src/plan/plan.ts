@@ -1,4 +1,4 @@
-import type { Block, PlannedSession } from "./types.js";
+import type { Block, PlannedSession } from "./types";
 
 export const RACE_DATE = "2026-09-19";
 export const RACE_NAME = "UTMB Paraty 58K";

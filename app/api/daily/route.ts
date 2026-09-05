@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { dailyMessage } from "@/channels/telegram/format.js";
-import { sendMessage } from "@/channels/telegram/client.js";
-import { saveTurn } from "@/db/client.js";
-import { sessionsOn, todayISO } from "@/plan/plan.js";
+import { dailyMessage } from "@/channels/telegram/format";
+import { sendMessage } from "@/channels/telegram/client";
+import { saveTurn } from "@/db/client";
+import { sessionsOn, todayISO } from "@/plan/plan";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;

@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { answerCallback, isAthlete, sendMessage, sendTyping } from "@/channels/telegram/client.js";
-import { reply } from "@/coach/reply.js";
-import { recentTurns, saveCheckin, saveTurn } from "@/db/client.js";
-import { dailyMessage } from "@/channels/telegram/format.js";
-import { todayISO } from "@/plan/plan.js";
+import { answerCallback, isAthlete, sendMessage, sendTyping } from "@/channels/telegram/client";
+import { reply } from "@/coach/reply";
+import { recentTurns, saveCheckin, saveTurn } from "@/db/client";
+import { dailyMessage } from "@/channels/telegram/format";
+import { todayISO } from "@/plan/plan";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;

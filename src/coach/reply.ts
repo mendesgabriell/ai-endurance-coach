@@ -1,8 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { planContext } from "@/channels/telegram/format.js";
-import { SYSTEM_STABLE } from "./prompt.js";
-
-const client = new Anthropic();
+import { dailyMessage, planContext } from "@/channels/telegram/format";
+import { SYSTEM_STABLE } from "./prompt";
 
 export interface Turn {
   role: "user" | "assistant";
@@ -10,11 +8,39 @@ export interface Turn {
 }
 
 /**
+ * O cliente só é construído quando existe chave. Sem ela, `new Anthropic()`
+ * lança na importação e derruba a rota inteira do Telegram — inclusive o log,
+ * que não precisa de modelo nenhum.
+ */
+let client: Anthropic | null = null;
+function getClient(): Anthropic | null {
+  if (!process.env.ANTHROPIC_API_KEY) return null;
+  if (!client) client = new Anthropic();
+  return client;
+}
+
+export function conversationEnabled(): boolean {
+  return Boolean(process.env.ANTHROPIC_API_KEY);
+}
+
+/**
  * Responde uma mensagem livre do atleta.
  * O prefixo estável fica cacheado; o contexto do dia vai depois do breakpoint.
+ *
+ * Sem chave da Anthropic, devolve o resumo determinístico do dia. Ligar a
+ * conversa depois é só acrescentar a variável no Vercel — nada muda aqui.
  */
 export async function reply(date: string, history: Turn[], message: string): Promise<string> {
-  const res = await client.messages.create({
+  const anthropic = getClient();
+  if (!anthropic) {
+    return [
+      "Anotado. A conversa está desligada (sem chave da Anthropic), então vai o plano do dia:",
+      "",
+      dailyMessage(date),
+    ].join("\n");
+  }
+
+  const res = await anthropic.messages.create({
     model: "claude-opus-5",
     max_tokens: 2000,
     thinking: { type: "adaptive" },
