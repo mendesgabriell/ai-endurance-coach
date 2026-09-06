@@ -33,21 +33,44 @@ export interface InlineButton {
   data: string;
 }
 
+function keyboard(rows?: InlineButton[][]) {
+  return rows?.length
+    ? { inline_keyboard: rows.map((r) => r.map((b) => ({ text: b.text, callback_data: b.data }))) }
+    : undefined;
+}
+
+/** Envia texto. Os botões vão só no último pedaço, para não repetirem. */
 export async function sendMessage(
   text: string,
-  opts: { chatId?: string; buttons?: InlineButton[] } = {},
+  opts: { chatId?: string; buttons?: InlineButton[][] } = {},
 ): Promise<void> {
   // Telegram corta em 4096 caracteres; parte em pedaços por parágrafo.
-  for (const chunk of split(text, 3900)) {
+  const chunks = split(text, 3900);
+  for (let i = 0; i < chunks.length; i++) {
     await call("sendMessage", {
       chat_id: opts.chatId ?? athleteChatId(),
-      text: chunk,
+      text: chunks[i],
       parse_mode: "HTML",
       link_preview_options: { is_disabled: true },
-      reply_markup: opts.buttons?.length
-        ? { inline_keyboard: [opts.buttons.map((b) => ({ text: b.text, callback_data: b.data }))] }
-        : undefined,
+      reply_markup: i === chunks.length - 1 ? keyboard(opts.buttons) : undefined,
     });
+  }
+}
+
+/** Troca só os botões de uma mensagem já enviada — usado ao marcar sessão. */
+export async function editButtons(
+  chatId: number | string,
+  messageId: number,
+  rows: InlineButton[][],
+): Promise<void> {
+  try {
+    await call("editMessageReplyMarkup", {
+      chat_id: chatId,
+      message_id: messageId,
+      reply_markup: keyboard(rows) ?? { inline_keyboard: [] },
+    });
+  } catch {
+    // "message is not modified" e afins não são erro que interesse ao atleta
   }
 }
 

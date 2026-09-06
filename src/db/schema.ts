@@ -26,3 +26,15 @@ export const messages = pgTable(
   },
   (t) => [index("messages_created_idx").on(t.createdAt)],
 );
+
+/** Observação livre do atleta, por dia. Espelha o campo do Calendário Macela. */
+export const notes = pgTable(
+  "notes",
+  {
+    id: serial("id").primaryKey(),
+    day: date("day").notNull(),
+    text: text("text").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("notes_day_idx").on(t.day)],
+);

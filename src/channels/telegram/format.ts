@@ -79,3 +79,68 @@ function shift(iso: string, days: number): string {
   d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString().slice(0, 10);
 }
+
+/* ---------- botões de check-in ---------- */
+
+export interface CheckinRow {
+  text: string;
+  data: string;
+}
+
+/** Um botão por sessão do dia. Marcado vira ✅ e o toque desfaz. */
+export function checkinRows(date: string, done: Set<string>): CheckinRow[][] {
+  return sessionsOn(date).map((s) => [
+    { text: `${done.has(s.id) ? "✅" : ICON[s.kind]} ${short(s.text)}`, data: `ck:${s.id}` },
+  ]);
+}
+
+function short(s: string, limit = 34): string {
+  const clean = s.split(" — ")[0]!.split(" · ")[0]!;
+  return clean.length > limit ? `${clean.slice(0, limit - 1)}…` : clean;
+}
+
+/* ---------- outras mensagens ---------- */
+
+const DOW = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+
+/** Os próximos 7 dias em uma tela. */
+export function weekMessage(from: string): string {
+  const days = [0, 1, 2, 3, 4, 5, 6].map((o) => shift(from, o));
+  const body = days
+    .map((d) => {
+      const list = sessionsOn(d);
+      const head = `<b>${DOW[new Date(`${d}T00:00:00Z`).getUTCDay()]} ${d.slice(8)}/${d.slice(5, 7)}</b>${d === from ? " · hoje" : ""}`;
+      if (!list.length) return `${head}\n   descanso`;
+      return `${head}\n${list.map((s) => `   ${ICON[s.kind]} ${escapeHtml(s.text)}`).join("\n")}`;
+    })
+    .join("\n\n");
+  return `<b>Próximos 7 dias</b>\n\n${body}`;
+}
+
+/** O que ainda não foi marcado hoje. */
+export function pendingMessage(date: string, done: Set<string>): string {
+  const open = sessionsOn(date).filter((s) => !done.has(s.id));
+  if (!open.length) return "<b>Dia fechado.</b> Tudo marcado. 💪";
+  return `<b>Ainda em aberto hoje</b>\n${open.map((s) => `${ICON[s.kind]} ${escapeHtml(s.text)}`).join("\n")}`;
+}
+
+export function helpMessage(conversation: boolean): string {
+  return [
+    "<b>O que eu faço</b>",
+    "",
+    "/hoje — o treino de hoje, com botão para marcar",
+    "/amanha — o de amanhã",
+    "/semana — os próximos 7 dias",
+    "/feito — marca tudo de hoje como feito",
+    "/pendente — o que falta hoje",
+    "/ajuda — isto aqui",
+    "",
+    "<b>Ou escreve solto</b> e eu entendo:",
+    "<i>“corri 8k em 48min”</i> · <i>“fiz perna, agachamento pesado”</i> · <i>“sauna 20 min”</i>",
+    "Eu anoto o número, marco a sessão que bate e guardo o texto.",
+    "",
+    conversation
+      ? "A conversa está <b>ligada</b>: pode perguntar o porquê de qualquer coisa."
+      : "A conversa está <b>desligada</b> para não gastar API. Eu registro e aviso; o porquê a gente vê no Claude.",
+  ].join("\n");
+}
