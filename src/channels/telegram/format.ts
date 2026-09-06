@@ -135,12 +135,61 @@ export function helpMessage(conversation: boolean): string {
     "/pendente — o que falta hoje",
     "/ajuda — isto aqui",
     "",
-    "<b>Ou escreve solto</b> e eu entendo:",
+    "<b>Registrar, escrevendo solto</b>",
     "<i>“corri 8k em 48min”</i> · <i>“fiz perna, agachamento pesado”</i> · <i>“sauna 20 min”</i>",
-    "Eu anoto o número, marco a sessão que bate e guardo o texto.",
+    "Anoto o número, marco a sessão que bate e guardo o texto.",
+    "",
+    "<b>Perguntar, escrevendo solto</b>",
+    "<i>“qual era o treino de esteira de ontem?”</i>",
+    "<i>“o que tá pendente de ontem?”</i>",
+    "<i>“o que teve no sábado?”</i> · <i>“como fica o resto da semana?”</i>",
+    "Entendo <b>hoje, ontem, anteontem, amanhã</b> e o nome do dia da semana.",
     "",
     conversation
       ? "A conversa está <b>ligada</b>: pode perguntar o porquê de qualquer coisa."
       : "A conversa está <b>desligada</b> para não gastar API. Eu registro e aviso; o porquê a gente vê no Claude.",
   ].join("\n");
+}
+
+/** Sessões de um dia, opcionalmente filtradas por tipo, com ✅ no que foi feito. */
+export function answerMessage(
+  day: string,
+  label: string,
+  kinds: SessionKind[],
+  done: Set<string>,
+): string {
+  const all = sessionsOn(day);
+  const list = kinds.length ? all.filter((s) => kinds.includes(s.kind)) : all;
+
+  if (!all.length) return `<b>${escapeHtml(label)}</b>\n\nDescanso — nada programado.`;
+  if (!list.length) {
+    return (
+      `<b>${escapeHtml(label)}</b>\n\nNão tinha nada desse tipo nesse dia. O que tinha:\n` +
+      all.map((s) => `${ICON[s.kind]} ${escapeHtml(s.text)}`).join("\n")
+    );
+  }
+
+  const body = list
+    .map((s) => {
+      const mark = done.has(s.id) ? "✅" : ICON[s.kind];
+      const ex = s.exercises?.length
+        ? `\n<blockquote${s.exercises.length > 4 ? " expandable" : ""}>${s.exercises.map(escapeHtml).join("\n")}</blockquote>`
+        : "";
+      const why = s.why ? `\n<i>${escapeHtml(s.why)}</i>` : "";
+      return `${mark} <b>${escapeHtml(s.text)}</b>${ex}${why}`;
+    })
+    .join("\n\n");
+
+  return `<b>${escapeHtml(label)}</b>\n\n${body}`;
+}
+
+/** O que ficou sem marcar num dia qualquer. */
+export function pendingOn(day: string, label: string, done: Set<string>): string {
+  const open = sessionsOn(day).filter((s) => !done.has(s.id));
+  if (!sessionsOn(day).length) return `<b>${escapeHtml(label)}</b>\n\nNão tinha nada programado.`;
+  if (!open.length) return `<b>${escapeHtml(label)}</b>\n\nNada em aberto. Tudo marcado. 💪`;
+  return (
+    `<b>${escapeHtml(label)}</b> · em aberto\n\n` +
+    open.map((s) => `${ICON[s.kind]} ${escapeHtml(s.text)}`).join("\n")
+  );
 }

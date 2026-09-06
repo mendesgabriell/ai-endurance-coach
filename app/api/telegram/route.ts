@@ -7,12 +7,15 @@ import {
   sendTyping,
 } from "@/channels/telegram/client";
 import {
+  answerMessage,
   checkinRows,
   dailyMessage,
   helpMessage,
   pendingMessage,
+  pendingOn,
   weekMessage,
 } from "@/channels/telegram/format";
+import { classify, dayLabel } from "@/coach/intent";
 import { conversationEnabled, reply } from "@/coach/reply";
 import { describeLog, hasNumbers, parseLog } from "@/coach/parse";
 import { checkinsOn, recentTurns, saveCheckin, saveNote, saveTurn } from "@/db/client";
@@ -121,6 +124,23 @@ export async function POST(req: Request): Promise<NextResponse> {
 
   /* ---------- texto livre ---------- */
   await saveTurn("user", text);
+  const intent = classify(text, day);
+
+  // Pergunta não é registro de treino: responde e não suja o log do dia.
+  if (intent.type === "ask" && !conversationEnabled()) {
+    const label = dayLabel(intent.day, day);
+    const done = await doneSet(intent.day);
+    const answer =
+      intent.scope === "semana"
+        ? weekMessage(day)
+        : intent.scope === "pendente"
+          ? pendingOn(intent.day, label, done)
+          : answerMessage(intent.day, label, intent.kinds, done);
+    await sendMessage(answer, {
+      buttons: intent.day === day ? checkinRows(day, done) : undefined,
+    });
+    return NextResponse.json({ ok: true });
+  }
 
   // Com chave da Anthropic, o coach conversa. Sem ela, o registro determinístico.
   if (conversationEnabled()) {
