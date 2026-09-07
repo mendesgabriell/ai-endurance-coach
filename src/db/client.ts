@@ -2,7 +2,7 @@ import { and, desc, eq, lt } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { agentJobs, checkins, messages, notes, workerStatus } from "./schema";
-import type { Turn } from "@/coach/reply";
+import type { Turn } from "@/coach/types";
 
 const url = process.env.DATABASE_URL;
 

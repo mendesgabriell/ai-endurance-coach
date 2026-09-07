@@ -124,7 +124,7 @@ export function pendingMessage(date: string, done: Set<string>): string {
   return `<b>Ainda em aberto hoje</b>\n${open.map((s) => `${ICON[s.kind]} ${escapeHtml(s.text)}`).join("\n")}`;
 }
 
-export function helpMessage(conversation: boolean): string {
+export function helpMessage(macOnline: boolean): string {
   return [
     "<b>O que eu faço</b>",
     "",
@@ -145,9 +145,9 @@ export function helpMessage(conversation: boolean): string {
     "<i>“o que teve no sábado?”</i> · <i>“como fica o resto da semana?”</i>",
     "Entendo <b>hoje, ontem, anteontem, amanhã</b> e o nome do dia da semana.",
     "",
-    conversation
-      ? "A conversa está <b>ligada</b>: pode perguntar o porquê de qualquer coisa."
-      : "A conversa está <b>desligada</b> para não gastar API. Eu registro e aviso; o porquê a gente vê no Claude.",
+    macOnline
+      ? "O computador do coach está <b>ligado</b>: pode perguntar o porquê de qualquer coisa."
+      : "O computador do coach está <b>desligado</b>. Registro, marco e respondo pelo plano; o raciocínio volta quando ele ligar.",
   ].join("\n");
 }
 

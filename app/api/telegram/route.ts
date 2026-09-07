@@ -16,8 +16,10 @@ import {
   weekMessage,
 } from "@/channels/telegram/format";
 import { classify, dayLabel } from "@/coach/intent";
-import { conversationEnabled, reply } from "@/coach/reply";
 import { describeLog, hasNumbers, parseLog } from "@/coach/parse";
+
+const OFFLINE =
+  "Essa é a resposta do plano — o computador do coach está desligado. Manda de novo quando ele voltar se quiser o raciocínio.";
 import {
   checkinsOn,
   enqueue,
@@ -89,6 +91,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   /* ---------- comandos ---------- */
   const cmd = text.split(/\s+/)[0]!.toLowerCase().replace(/@\w+$/, "");
   if (cmd.startsWith("/")) {
+    const macOnline = await workerOnline();
     switch (cmd) {
       case "/start":
       case "/hoje":
@@ -121,11 +124,11 @@ export async function POST(req: Request): Promise<NextResponse> {
 
       case "/ajuda":
       case "/help":
-        await sendMessage(helpMessage(conversationEnabled()));
+        await sendMessage(helpMessage(macOnline));
         return NextResponse.json({ ok: true });
 
       default:
-        await sendMessage(`Não conheço <code>${cmd}</code>.\n\n${helpMessage(conversationEnabled())}`);
+        await sendMessage(`Não conheço <code>${cmd}</code>.\n\n${helpMessage(macOnline)}`);
         return NextResponse.json({ ok: true });
     }
   }
@@ -148,23 +151,9 @@ export async function POST(req: Request): Promise<NextResponse> {
     return NextResponse.json({ ok: true });
   }
 
-  // Caminho 2: Mac offline, mas com chave da Anthropic — conversa pela API paga.
-  if (conversationEnabled()) {
-    await sendTyping();
-    try {
-      const answer = await reply(day, await recentTurns(), text);
-      await saveTurn("assistant", answer);
-      await sendMessage(answer);
-    } catch (err) {
-      console.error("coach falhou", err);
-      await sendMessage("Deu erro aqui do meu lado. Tenta de novo em um minuto.");
-    }
-    return NextResponse.json({ ok: true });
-  }
-
-  // Caminho 3: sem Mac e sem chave. Pergunta é respondida do plano,
-  // deterministicamente, e não suja o log do dia.
-  if (intent.type === "ask" && !conversationEnabled()) {
+  // Caminho 2: Mac desligado. Pergunta é respondida do plano, na hora e de
+  // graça. Não suja o log do dia, porque pergunta não é registro de treino.
+  if (intent.type === "ask") {
     const label = dayLabel(intent.day, day);
     const done = await doneSet(intent.day);
     const answer =
@@ -173,13 +162,13 @@ export async function POST(req: Request): Promise<NextResponse> {
         : intent.scope === "pendente"
           ? pendingOn(intent.day, label, done)
           : answerMessage(intent.day, label, intent.kinds, done);
-    await sendMessage(answer, {
+    await sendMessage(`${answer}\n\n<i>${OFFLINE}</i>`, {
       buttons: intent.day === day ? checkinRows(day, done) : undefined,
     });
     return NextResponse.json({ ok: true });
   }
 
-  // Caminho 4: é registro de treino. Anota, marca o que bate, confirma.
+  // Caminho 3: é registro de treino. Anota, marca o que bate, confirma.
   await saveNote(day, text);
   const parsed = parseLog(text);
   const done = await doneSet(day);

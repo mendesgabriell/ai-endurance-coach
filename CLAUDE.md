@@ -32,8 +32,17 @@ tabelas e chaves de API em **inglês**.
 
 ## Modelo de IA
 
-Camada de coach usa a **Claude API** com `claude-opus-5` e adaptive thinking.
-Detalhes, alternativas de custo e desenho do loop: `docs/03-arquitetura.md` → Camada 4.
+A camada de coach roda **Claude Code headless** (`claude -p`) no Mac do Gabriel,
+pelo worker em `scripts/worker.mjs` — gastando a **assinatura**, não a API por token.
+Decisão de 06/09: ele não quer custo por token, nem como reserva.
+
+Com o computador desligado, o bot responde **deterministicamente** a partir do plano:
+comando, botão de check-in, registro de treino e pergunta sobre qualquer dia. Nada de
+API paga como fallback.
+
+O modelo **nunca** calcula métrica — ver a regra dura acima e `docs/adr/0004`.
+As ferramentas que ele pode chamar estão em `src/coach/tools.ts` e são servidas
+por `/api/bridge`.
 
 ## Fonte única do plano
 
