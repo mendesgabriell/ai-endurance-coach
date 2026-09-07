@@ -1,0 +1,24 @@
+# Mantém o relógio em dia sem esperar a manhã seguinte.
+#
+# O cron da Vercel no plano Hobby dispara uma vez ao dia. Este agendador é
+# gratuito e chama a rota de sincronia de 2 em 2 horas. Se nada mudou no plano,
+# a chamada não escreve nada.
+name: sync relógio
+
+on:
+  schedule:
+    - cron: "0 */2 * * *"
+  workflow_dispatch: # permite disparar na mão pela aba Actions
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: chama /api/sync
+        run: |
+          resposta=$(curl -sS --max-time 90 -w '\n%{http_code}' \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://ai-endurance-coach-omega.vercel.app/api/sync)
+          codigo=$(echo "$resposta" | tail -1)
+          echo "$resposta" | sed '$d'
+          test "$codigo" = "200"
