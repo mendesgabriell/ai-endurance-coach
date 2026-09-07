@@ -3,9 +3,10 @@ import { checkinRows, dailyMessage } from "@/channels/telegram/format";
 import { sendMessage } from "@/channels/telegram/client";
 import { checkinsOn, saveTurn } from "@/db/client";
 import { sessionsOn, todayISO } from "@/plan/plan";
+import { clientFromEnv, shift, syncRange } from "@/integrations/intervals/sync";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 /**
  * Cron da manhã (ver vercel.json). No plano Hobby o Vercel dispara uma vez ao
@@ -30,7 +31,21 @@ export async function GET(req: Request): Promise<NextResponse> {
   });
   await saveTurn("assistant", text, true);
 
-  return NextResponse.json({ ok: true, day, sessions: sessions.length });
+  // O relógio se conserta sozinho todo dia: o plano mudou ontem, o COROS sabe hoje.
+  // Escreve só a diferença, então dia sem mudança custa um GET. Falha aqui não
+  // pode derrubar a mensagem da manhã, que é o que o atleta realmente lê.
+  let watch: unknown = "desligado";
+  const api = clientFromEnv();
+  if (api) {
+    try {
+      watch = await syncRange(api, day, shift(day, 14));
+    } catch (err) {
+      watch = { erro: err instanceof Error ? err.message : String(err) };
+      console.error("sync intervals.icu falhou:", err);
+    }
+  }
+
+  return NextResponse.json({ ok: true, day, sessions: sessions.length, watch });
 }
 
 function doneSet(map: Map<string, string>): Set<string> {

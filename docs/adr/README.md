@@ -14,3 +14,4 @@ raciocínio é o que dá valor ao registro.
 | [0003](0003-integracao-direta-vs-agregador.md) | Integração direta com wearables, sem agregador | Aceito |
 | [0004](0004-llm-nao-decide-o-semaforo.md) | O LLM não decide o semáforo | Aceito |
 | [0005](0005-telegram-canal-do-atleta-zero.md) | Telegram como canal do atleta-zero | Aceito |
+| [0006](0006-intervals-icu-ponte-para-o-relogio.md) | intervals.icu como ponte para o relógio do atleta-zero | Aceito |
