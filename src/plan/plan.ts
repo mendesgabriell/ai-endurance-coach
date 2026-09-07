@@ -82,7 +82,7 @@ export const PLAN: PlannedSession[] = [
   { id: "n3", date: "2026-09-07", kind: "recovery", text: "Pernas para cima + refeição em 60'. Sem gelo." },
 
   { id: "o1", date: "2026-09-08", kind: "corrida", text: "Regenerativo 40' bem fácil — dia depois da trilha" },
-  { id: "o2", date: "2026-09-08", kind: "superiores", text: "Superiores · Pull", exercises: ["Barra fixa ou puxada alta — 4 × 8–10", "Remada curvada — 4 × 10", "Remada baixa — 3 × 10–12", "Face pull — 3 × 15", "Rosca direta — 3 × 10–12 + drop set na última", "Rosca martelo — 3 × 12"] },
+  { id: "o2", date: "2026-09-08", kind: "superiores", text: "Superiores · Push — peito, ombro e tríceps", exercises: ["Supino reto com halteres — 4 × 8–10", "Desenvolvimento — 4 × 8–10", "Supino inclinado — 3 × 10–12", "Elevação lateral — 3 × 12–15 + drop set na última", "Tríceps corda — 3 × 12 + drop set na última", "Tríceps testa — 3 × 10–12"], why: "Último peito foi 31/08. Terça e quinta estavam as duas em costas, e o peito só voltaria em 15/09 — quinze dias. Push não disputa nada com a perna: é o volume mais barato do bloco." },
   { id: "o3", date: "2026-09-08", kind: "nutricao", text: "Calor · 5 de 6 — 20' pós-treino" },
 
   { id: "p1", date: "2026-09-09", kind: "corrida", text: "Base 50' fácil — na ESTEIRA a 6–8% se der", why: "Mesmo tempo, mesmo esforço, ~250 m de ganho de graça. É assim que se compra desnível sem sessão nova." },
@@ -104,7 +104,7 @@ export const PLAN: PlannedSession[] = [
   { id: "s2", date: "2026-09-12", kind: "corrida", text: "Subida: teto de 142 bpm. Vai perder posição — é o exercício." },
   { id: "s3", date: "2026-09-12", kind: "corrida", text: "Descida: solta. 3º estímulo excêntrico do ciclo." },
   { id: "s4", date: "2026-09-12", kind: "nutricao", text: "80 g carbo/h. Acaba o déficit calórico — de amanhã, manutenção." },
-  { id: "s5", date: "2026-09-12", kind: "superiores", text: "Academia · superiores DEPOIS da prova — zero perna", exercises: ["Puxada alta — 3 × 10 · RPE 6", "Remada baixa — 3 × 12", "Face pull — 3 × 15", "Rosca direta — 3 × 12"], why: "Academia todo dia, mas hoje a perna já foi a prova: 16 km com 900 m. Carga em perna agora custa o longão de amanhã." },
+  { id: "s5", date: "2026-09-12", kind: "superiores", text: "Academia · ombro, braço e core DEPOIS da prova — zero perna", exercises: ["Desenvolvimento com halteres — 3 × 10 · RPE 6", "Elevação lateral — 3 × 12", "Crucifixo inverso — 3 × 15", "Rosca alternada — 3 × 12", "Tríceps corda — 3 × 12", "Isometria: prancha — 3 × 45s"], why: "Academia todo dia, mas a perna já foi a prova: 16 km com 900 m. Puxada pesada também sai — as costas já trabalharam na subida. Fecha o rodízio: push terça, pull quinta, ombro e braço hoje." },
 
   { id: "t1", date: "2026-09-13", kind: "chave", text: "Longão em fadiga · 2h a 2h30 — 18 a 22 km com D+, aeróbico" },
   { id: "t2", date: "2026-09-13", kind: "chave", text: "REGRA: prova te esvaziou ontem? Hoje vira 50' e ponto" },
