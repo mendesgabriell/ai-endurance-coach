@@ -18,7 +18,15 @@ import {
 import { classify, dayLabel } from "@/coach/intent";
 import { conversationEnabled, reply } from "@/coach/reply";
 import { describeLog, hasNumbers, parseLog } from "@/coach/parse";
-import { checkinsOn, recentTurns, saveCheckin, saveNote, saveTurn } from "@/db/client";
+import {
+  checkinsOn,
+  enqueue,
+  recentTurns,
+  saveCheckin,
+  saveNote,
+  saveTurn,
+  workerOnline,
+} from "@/db/client";
 import { sessionsOn, todayISO } from "@/plan/plan";
 import type { SessionKind } from "@/plan/types";
 
@@ -26,7 +34,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 interface Update {
-  message?: { chat: { id: number }; text?: string };
+  message?: { message_id: number; chat: { id: number }; text?: string };
   callback_query?: {
     id: string;
     data?: string;
@@ -126,7 +134,36 @@ export async function POST(req: Request): Promise<NextResponse> {
   await saveTurn("user", text);
   const intent = classify(text, day);
 
-  // Pergunta não é registro de treino: responde e não suja o log do dia.
+  // Caminho 1: o Mac está vivo — o Claude Code da assinatura responde.
+  // O worker puxa o job em ~5 s e a bridge devolve a resposta no Telegram.
+  if (await workerOnline()) {
+    await sendTyping();
+    await enqueue({
+      kind: "chat",
+      params: { text },
+      notify: true,
+      requestedBy: "telegram",
+      tgUpdateId: msg.message_id,
+    });
+    return NextResponse.json({ ok: true });
+  }
+
+  // Caminho 2: Mac offline, mas com chave da Anthropic — conversa pela API paga.
+  if (conversationEnabled()) {
+    await sendTyping();
+    try {
+      const answer = await reply(day, await recentTurns(), text);
+      await saveTurn("assistant", answer);
+      await sendMessage(answer);
+    } catch (err) {
+      console.error("coach falhou", err);
+      await sendMessage("Deu erro aqui do meu lado. Tenta de novo em um minuto.");
+    }
+    return NextResponse.json({ ok: true });
+  }
+
+  // Caminho 3: sem Mac e sem chave. Pergunta é respondida do plano,
+  // deterministicamente, e não suja o log do dia.
   if (intent.type === "ask" && !conversationEnabled()) {
     const label = dayLabel(intent.day, day);
     const done = await doneSet(intent.day);
@@ -142,20 +179,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     return NextResponse.json({ ok: true });
   }
 
-  // Com chave da Anthropic, o coach conversa. Sem ela, o registro determinístico.
-  if (conversationEnabled()) {
-    await sendTyping();
-    try {
-      const answer = await reply(day, await recentTurns(), text);
-      await saveTurn("assistant", answer);
-      await sendMessage(answer);
-    } catch (err) {
-      console.error("coach falhou", err);
-      await sendMessage("Deu erro aqui do meu lado. Tenta de novo em um minuto.");
-    }
-    return NextResponse.json({ ok: true });
-  }
-
+  // Caminho 4: é registro de treino. Anota, marca o que bate, confirma.
   await saveNote(day, text);
   const parsed = parseLog(text);
   const done = await doneSet(day);

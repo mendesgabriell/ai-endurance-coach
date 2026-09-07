@@ -1,4 +1,14 @@
-import { boolean, date, index, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  bigint,
+  boolean,
+  date,
+  index,
+  jsonb,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 /** Check-in do atleta numa sessão do plano. */
 export const checkins = pgTable(
@@ -38,3 +48,34 @@ export const notes = pgTable(
   },
   (t) => [index("notes_day_idx").on(t.day)],
 );
+
+/** Fila de trabalhos do agente. O worker no Mac puxa daqui. */
+export const agentJobs = pgTable(
+  "agent_jobs",
+  {
+    id: serial("id").primaryKey(),
+    kind: text("kind").notNull(),
+    params: jsonb("params").$type<Record<string, unknown>>().notNull().default({}),
+    status: text("status", { enum: ["pending", "running", "done", "error"] })
+      .notNull()
+      .default("pending"),
+    notify: boolean("notify").notNull().default(true),
+    requestedBy: text("requested_by"),
+    /** id do update do Telegram — impede processar a mesma mensagem duas vezes */
+    tgUpdateId: bigint("tg_update_id", { mode: "number" }).unique(),
+    claimedBy: text("claimed_by"),
+    startedAt: timestamp("started_at", { withTimezone: true }),
+    finishedAt: timestamp("finished_at", { withTimezone: true }),
+    result: text("result"),
+    error: text("error"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("agent_jobs_status_idx").on(t.status, t.createdAt)],
+);
+
+/** Sinal de vida do worker. Sem sinal há 3 minutos = Mac offline. */
+export const workerStatus = pgTable("worker_status", {
+  name: text("name").primaryKey(),
+  lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull(),
+  info: jsonb("info").$type<Record<string, unknown>>().notNull().default({}),
+});
