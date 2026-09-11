@@ -95,12 +95,12 @@ export const PLAN: PlannedSession[] = [
   { id: "q3", date: "2026-09-10", kind: "nutricao", text: "Calor · folga — só repõe se perdeu algum dia", why: "Bloco fechou ontem. Esta é a margem que não existia." },
   { id: "q4", date: "2026-09-10", kind: "recovery", text: "Ventosa 20'" },
 
-  { id: "r1", date: "2026-09-11", kind: "corrida", text: "25' destravante ou off — véspera de prova" },
-  { id: "r3", date: "2026-09-11", kind: "superiores", text: "Core + mobilidade — sem carga", exercises: ["Prancha — 3 × 45s", "Pallof press — 3 × 12 cada lado", "Mobilidade de quadril e tornozelo — 10'"] },
+  { id: "r1", date: "2026-09-11", kind: "corrida", text: "25–30' destravante conhecendo a cidade — bem fácil, sem cronômetro", why: "Poços de Caldas é ladeira em todo lugar: se pegar subida no caminho, sobe caminhando e desce solto. Isso é acordar a perna para sábado, não treinar." },
+  { id: "r3", date: "2026-09-11", kind: "superiores", text: "Core + mobilidade — sem carga. NÃO é dia de repor o que faltou.", exercises: ["Prancha — 3 × 45s", "Pallof press — 3 × 12 cada lado", "Mobilidade de quadril e tornozelo — 10'"], why: "Ficaram para trás a esteira de segunda e a perna de quarta. As duas eram para CONSTRUIR, e construção leva semanas — fazer hoje não devolve nada e tira a perna de sábado. Volume perdido é perdido." },
   { id: "r4", date: "2026-09-11", kind: "nutricao", text: "Calor: não. Véspera de prova — você entra hidratado." },
   { id: "r2", date: "2026-09-11", kind: "recovery", text: "Gelo liberado a partir de hoje — 10'" },
 
-  { id: "s1", date: "2026-09-12", kind: "chave", text: "WTR TERRAS VULCÂNICAS · 16 km / ~900 m" },
+  { id: "s1", date: "2026-09-12", kind: "chave", text: "WTR TERRAS VULCÂNICAS · 17 km / ~900 m" },
   { id: "s2", date: "2026-09-12", kind: "corrida", text: "Subida: teto de 142 bpm. Vai perder posição — é o exercício." },
   { id: "s3", date: "2026-09-12", kind: "corrida", text: "Descida: solta. 3º estímulo excêntrico do ciclo." },
   { id: "s4", date: "2026-09-12", kind: "nutricao", text: "80 g carbo/h. Acaba o déficit calórico — de amanhã, manutenção." },
