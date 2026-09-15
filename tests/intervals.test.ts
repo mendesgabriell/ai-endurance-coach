@@ -88,3 +88,36 @@ test("corrida sem duração é instrução, não treino no relógio", () => {
   const real = mustEvent({ id: "o1", date: "2026-09-08", kind: "corrida", text: "Regenerativo 40' bem fácil" });
   assert.equal(real.type, "Run");
 });
+
+test("formato numerado vira passo cronometrado, e o texto sai limpo", () => {
+  const { description, movingTime } = buildWorkout([
+    "0 · ANTES DE SAIR — põe a FC na tela do relógio.",
+    "1 · AQUECE — 10' de trote bem fácil e solto. Sem pressa.",
+    "2 · TIRO 1 — 20\" rápido e leve.",
+    "3 · Recupera — 60\" caminhando.",
+    "4 · DESAQUECE — 8 a 10' de trote bem devagar.",
+  ]);
+  // linha sem duração é comentário, não passo
+  assert.match(description, /^# ANTES DE SAIR — põe a FC na tela do relógio\.$/m);
+  assert.match(description, /^- 10m AQUECE — trote bem fácil e solto\. Sem pressa\.$/m);
+  assert.match(description, /^- 20s TIRO 1 — rápido e leve\.$/m);
+  assert.match(description, /^- 60s Recupera — caminhando\.$/m);
+  // travessão órfão antes de pontuação some
+  assert.equal(buildWorkout(["1 · Recupera — 90\" ."]).description, "- 90s Recupera.");
+  assert.match(description, /^- 10m DESAQUECE — trote bem devagar\.$/m);
+  assert.equal(movingTime, 10 * 60 + 20 + 60 + 10 * 60);
+});
+
+test("número solto numa instrução não vira duração", () => {
+  const { description, movingTime } = buildWorkout([
+    "3 · A REGRA: passou de 142, você ANDA até voltar para 135.",
+  ]);
+  assert.match(description, /^# A REGRA/m);
+  assert.equal(movingTime, 0);
+});
+
+test("distância em km vira passo de distância, sem somar tempo", () => {
+  const { description, movingTime } = buildWorkout(["1 · SHAKEOUT 1 — 5 km de trote bem leve."]);
+  assert.match(description, /^- 5km SHAKEOUT 1 — trote bem leve\.$/m);
+  assert.equal(movingTime, 0);
+});
