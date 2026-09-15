@@ -110,20 +110,20 @@ export const PLAN: PlannedSession[] = [
   { id: "t2", date: "2026-09-13", kind: "chave", text: "REGRA: prova te esvaziou ontem? Hoje vira 50' e ponto" },
   { id: "t3", date: "2026-09-13", kind: "superiores", text: "Academia · core e mobilidade — zero perna, zero carga", exercises: ["Prancha — 3 × 45s", "Pallof press — 3 × 12 cada lado", "Elevação de pernas — 3 × 12", "Mobilidade de quadril e tornozelo — 10'"], why: "Prova ontem + longão hoje é a semana dupla inteira. Academia sim, perna não." },
 
-  { id: "u1", date: "2026-09-14", kind: "corrida", text: "Off completo — você vem de prova + longão" },
+  { id: "u1", date: "2026-09-14", kind: "corrida", text: "Off de corrida — academia sim", why: "O longão de domingo não aconteceu, então você está mais descansado do que este dia previa. Isso não é problema a 5 dias: treino acabou, o que constrói agora é dormir." },
   { id: "u2", date: "2026-09-14", kind: "superiores", text: "Academia · superiores leve + glúteo em ativação", exercises: ["Supino reto com halteres — 3 × 10 · RPE 6", "Puxada alta — 3 × 10", "Elevação lateral — 3 × 12", "Elevação pélvica — 3 × 12 leve, só ativação", "Cadeira abdutora — 3 × 15 leve", "Cadeira adutora — 3 × 15 leve", "Prancha — 3 × 45s"], why: "Off é de corrida, não de academia. Glúteo entra sem carga: a perna vem de prova + longão." },
-  { id: "u3", date: "2026-09-14", kind: "recovery", text: "Massagem leve, drenagem" },
+  { id: "u3", date: "2026-09-14", kind: "recovery", text: "8h30 de sono. É o único recovery que você controla — e é o melhor." },
 
   { id: "v1", date: "2026-09-15", kind: "corrida", text: "40' com 6 × 30\" em ritmo de prova" },
-  { id: "v2", date: "2026-09-15", kind: "superiores", text: "Superiores · Push leve — metade das séries, sem falha", exercises: ["Supino reto com halteres — 2 × 8–10 · RPE 6", "Desenvolvimento — 2 × 8–10 · RPE 6", "Elevação lateral — 2 × 12–15", "Tríceps corda — 2 × 12"] },
+  { id: "v2", date: "2026-09-15", kind: "superiores", text: "Superiores · Push leve — metade das séries, sem falha. PERNA PESADA: NÃO.", exercises: ["Supino reto com halteres — 2 × 8–10 · RPE 6", "Desenvolvimento — 2 × 8–10 · RPE 6", "Elevação lateral — 2 × 12–15", "Tríceps corda — 2 × 12"], why: "Perna pesada a 4 dias da prova não constrói nada — adaptação leva 10 a 14 dias — e a dor muscular tardia bate justamente na quinta e sexta. A última perna pesada foi 07/09, 8,4 t: essa é a boa despedida." },
   { id: "v3", date: "2026-09-15", kind: "nutricao", text: "Manutenção · ~2.900 kcal" },
   { id: "v4", date: "2026-09-15", kind: "nutricao", text: "Calor · manutenção — 15'" },
 
-  { id: "w1", date: "2026-09-16", kind: "corrida", text: "30' fácil" },
+  { id: "w1", date: "2026-09-16", kind: "corrida", text: "30' fácil com TETO DE 142 BPM o tempo todo — ensaio da regra de sábado", why: "Na Terras Vulcânicas você correu a FC média de 153, com máxima de 168: 91% do teto, exatamente o número de 2025. O teto de 142 não foi ensaiado em lugar nenhum. Esta é a última chance de sentir esse ritmo antes de precisar dele sob adrenalina." },
   { id: "w5", date: "2026-09-16", kind: "superiores", text: "Core leve + mobilidade 20' — sem carga" },
   { id: "w2", date: "2026-09-16", kind: "nutricao", text: "Carb load dia 1 · 7 g/kg = 530 g" },
   { id: "w3", date: "2026-09-16", kind: "nutricao", text: "Calor · manutenção final — 15'. Última do ciclo." },
-  { id: "w4", date: "2026-09-16", kind: "recovery", text: "Bota 20'" },
+  { id: "w4", date: "2026-09-16", kind: "recovery", text: "Pernas para cima 15' + meia de compressão" },
 
   { id: "x1", date: "2026-09-17", kind: "corrida", text: "25' soltinho + 4 × 20\"" },
   { id: "x4", date: "2026-09-17", kind: "superiores", text: "Ativação leve 15' — elástico, glúteo, tornozelo" },
