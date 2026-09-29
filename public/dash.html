@@ -1,0 +1,604 @@
+<title>Dash do Coach AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  color-scheme: dark;
+  --ground:#0F1116; --surface:#171A21; --sunken:#0A0C10; --raised:#1F232C;
+  --ink:#E9EBF0; --ink-2:#A5ABBB; --ink-3:#6D7486;
+  --rule:#242833; --rule-2:#363C4A;
+  --rua:#3987e5; --esteira:#199e70; --trilha:#d95926; --leve:#565C6B;
+  --prova:#E0563F; --forca:#9A8CC4;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    color-scheme: light;
+    --ground:#F5F5F7; --surface:#FFFFFF; --sunken:#ECEDF1; --raised:#F0F1F5;
+    --ink:#14161C; --ink-2:#4A5060; --ink-3:#757C8D;
+    --rule:#E1E3E9; --rule-2:#C5C9D3;
+    --rua:#2a78d6; --esteira:#1baf7a; --trilha:#eb6834; --leve:#9BA1AE;
+    --prova:#C4402B; --forca:#6A5BA8;
+  }
+}
+:root[data-theme="light"]{
+  color-scheme: light;
+  --ground:#F5F5F7; --surface:#FFFFFF; --sunken:#ECEDF1; --raised:#F0F1F5;
+  --ink:#14161C; --ink-2:#4A5060; --ink-3:#757C8D;
+  --rule:#E1E3E9; --rule-2:#C5C9D3;
+  --rua:#2a78d6; --esteira:#1baf7a; --trilha:#eb6834; --leve:#9BA1AE;
+  --prova:#C4402B; --forca:#6A5BA8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+.disp{font-family:Archivo,system-ui,sans-serif;font-variation-settings:"wdth" 84}
+h1,h2,h3{font-family:Archivo,system-ui,sans-serif;margin:0;text-wrap:balance}
+
+/* topo */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+  background:var(--ground);border-bottom:1px solid var(--rule)}
+.hin{max-width:980px;margin:0 auto;padding:14px 16px 0}
+h1{font-variation-settings:"wdth" 80;font-weight:800;font-size:19px;letter-spacing:-.01em;
+  display:flex;align-items:baseline;gap:9px}
+h1 em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:400;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-top:10px}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;font-family:Archivo,sans-serif;font-variation-settings:"wdth" 88;
+  font-size:13px;font-weight:600;background:none;color:var(--ink-3);border:none;
+  border-bottom:2px solid transparent;padding:9px 12px;cursor:pointer;white-space:nowrap;
+  min-height:42px;transition:color .12s,border-color .12s}
+nav button[aria-current="true"]{color:var(--ink);border-bottom-color:var(--prova)}
+nav button:hover{color:var(--ink-2)}
+nav button:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
+
+main{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:22px 64px}
+h2{font-variation-settings:"wdth" 80;font-weight:800;font-size:clamp(23px,5.4vw,31px);
+  letter-spacing:-.02em;line-height:1.05}
+.sub{color:var(--ink-2);font-size:13px;margin:7px 0 0;max-width:62ch}
+.sechead{padding-bottom:18px;border-bottom:1px solid var(--rule);margin-bottom:20px}
+
+/* faixa de números */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);border-radius:7px;overflow:hidden;margin-bottom:22px}
+.stat{background:var(--surface);padding:12px 13px}
+.stat .k{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.stat .v{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 76;font-weight:800;
+  font-size:27px;line-height:1.05;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat .u{font-size:11px;color:var(--ink-3);margin-left:3px;font-family:"IBM Plex Mono",monospace;font-weight:400}
+
+h3{font-variation-settings:"wdth" 86;font-weight:700;font-size:12px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3);margin:26px 0 11px}
+
+/* gráfico */
+.scroller{overflow-x:auto;border:1px solid var(--rule);border-radius:7px;background:var(--surface)}
+.scroller svg{display:block;min-width:760px;width:100%;height:auto}
+.grid{stroke:var(--rule);stroke-width:1}
+.meta{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:2 4}
+.ylab{fill:var(--ink-3);font:400 10px "IBM Plex Mono",monospace;text-anchor:end}
+.xlab{fill:var(--ink-3);font:400 9px "IBM Plex Mono",monospace;text-anchor:middle}
+.blab{fill:var(--ink-3);font:500 9px "IBM Plex Mono",monospace;letter-spacing:.09em}
+.metalab{fill:var(--ink-3);font:400 9px "IBM Plex Mono",monospace}
+.hit{fill:transparent;cursor:pointer}
+.hit:focus-visible{outline:none}
+.seg{pointer-events:none}
+.sel .seg{stroke:var(--ink);stroke-width:1.5}
+.bband{fill:var(--rule)}
+.pmark{stroke:var(--prova);stroke-width:1;stroke-dasharray:3 3}
+.plab{fill:var(--prova);font:500 9px "IBM Plex Mono",monospace;text-anchor:middle}
+.hoje{stroke:var(--ink-2);stroke-width:1}
+.dim{opacity:.34}
+
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:11px;font-size:11.5px;color:var(--ink-3)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:2px;display:block}
+
+/* painel de semana */
+.painel{background:var(--surface);border:1px solid var(--rule);border-radius:7px;
+  margin-top:11px;overflow:hidden}
+.pt{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:13px 15px;
+  border-bottom:1px solid var(--rule);background:var(--raised)}
+.pt .n{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 80;font-weight:800;font-size:18px}
+.pt .dt{color:var(--ink-2);font-size:12.5px}
+.pt .bl{margin-left:auto;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.pd{display:grid;grid-template-columns:repeat(7,1fr)}
+.pd div{padding:11px 4px;text-align:center;border-right:1px solid var(--rule)}
+.pd div:last-child{border-right:none}
+.pd .d{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.pd .km{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 78;font-weight:800;
+  font-size:19px;margin:3px 0 2px;font-variant-numeric:tabular-nums}
+.pd .t{font-size:9px;color:var(--ink-3);line-height:1.25}
+.pd .sab .km{color:var(--trilha)}
+.ptot{padding:10px 15px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink-3);
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ptot b{color:var(--ink);font-weight:500}
+@media(max-width:560px){
+  .pd{grid-template-columns:repeat(4,1fr)}
+  .pd div{border-bottom:1px solid var(--rule)}
+}
+
+/* blocos */
+.blocos{display:flex;flex-direction:column;gap:1px;background:var(--rule);
+  border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.bloco{background:var(--surface);padding:13px 15px;display:grid;
+  grid-template-columns:auto 1fr auto;gap:4px 14px;align-items:baseline}
+.bloco .bn{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 80;font-weight:800;font-size:15px}
+.bloco .bd{font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.bloco .bq{grid-column:1/-1;font-size:12.5px;color:var(--ink-2);line-height:1.45;max-width:64ch}
+.bloco .bk{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2);
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* treino de força */
+.abas{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-bottom:16px;padding-bottom:3px}
+.abas::-webkit-scrollbar{display:none}
+.abas button{flex:0 0 auto;font-family:Archivo,sans-serif;font-variation-settings:"wdth" 86;
+  font-size:14px;font-weight:700;background:var(--surface);color:var(--ink-2);
+  border:1px solid var(--rule);border-radius:5px;padding:8px 13px;cursor:pointer;min-height:44px;
+  text-align:left;transition:border-color .12s,color .12s}
+.abas button small{display:block;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:400;
+  color:var(--ink-3);letter-spacing:.07em;text-transform:uppercase;margin-top:1px}
+.abas button[aria-selected="true"]{color:var(--ink);background:var(--raised);border-color:var(--forca)}
+.abas button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:5px}
+.shead .sn{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 80;font-weight:800;font-size:21px;letter-spacing:-.02em}
+.shead .sm{margin-left:auto;font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.stip{font-size:12.5px;color:var(--ink-3);margin:0 0 15px;max-width:64ch}
+
+ol.ex{list-style:none;margin:0;padding:0;counter-reset:e;
+  border:1px solid var(--rule);border-radius:7px;overflow:hidden;background:var(--rule);
+  display:flex;flex-direction:column;gap:1px}
+ol.ex li{background:var(--surface);padding:13px 15px 13px 46px;position:relative;counter-increment:e}
+ol.ex li::before{content:counter(e,decimal-leading-zero);position:absolute;left:15px;top:14px;
+  font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+ol.ex li.maq{box-shadow:inset 3px 0 0 var(--forca)}
+.exl{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.exn{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 92;font-weight:700;font-size:15.5px;letter-spacing:-.005em}
+.exs{margin-left:auto;font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.exa{font-size:11.5px;color:var(--forca);margin-top:3px;letter-spacing:.01em}
+.exnt{font-size:12.5px;color:var(--ink-3);line-height:1.42;margin-top:4px;max-width:66ch}
+.badge{font-size:8.5px;letter-spacing:.11em;text-transform:uppercase;padding:2px 5px;border-radius:2px;
+  background:var(--raised);color:var(--ink-3);font-weight:500;vertical-align:1px;margin-left:7px}
+
+.fases{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.fase{background:var(--surface);padding:12px 14px}
+.fase.now{background:var(--raised)}
+.fase .q{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.fase.now .q{color:var(--forca)}
+.fase .nn{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 82;font-weight:800;font-size:15px;margin:3px 0 4px}
+.fase .w{font-size:12px;color:var(--ink-3);line-height:1.42}
+@media(max-width:620px){.fases{grid-template-columns:1fr}}
+
+/* tabelas */
+.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:7px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:13px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);font-weight:500;
+  background:var(--raised);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.dt{white-space:nowrap;color:var(--ink-2);font-variant-numeric:tabular-nums}
+td.pv{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 90;font-weight:700;font-size:14px}
+td.al{color:var(--ink-3);font-size:12.5px}
+tr.alvo td.pv{color:var(--prova)}
+
+.aviso{border-left:3px solid var(--prova);background:var(--surface);border-radius:0 6px 6px 0;
+  padding:13px 16px;margin-top:20px;font-size:13px;color:var(--ink-2);line-height:1.5}
+.aviso b{color:var(--ink);font-weight:600}
+.aviso p{margin:0 0 9px}
+.aviso p:last-child{margin:0}
+.aviso.calmo{border-left-color:var(--rule-2)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header>
+  <div class="hin">
+    <h1>Dash do Coach AI <em id="hoje">—</em></h1>
+    <nav id="nav"></nav>
+  </div>
+</header>
+
+<main>
+
+<section id="forca">
+  <div class="sechead">
+    <h2>Treino de força</h2>
+    <p class="sub">Rodízio de seis sessões, sem dia travado. A meta da semana é fechar todo grupo duas vezes. Não olha o calendário de provas — o alvo é força total e composição corporal.</p>
+  </div>
+  <div class="abas" id="abas" role="tablist"></div>
+  <div class="shead"><span class="sn" id="sn">—</span><span class="sm" id="sm"></span></div>
+  <p class="stip" id="stip"></p>
+  <ol class="ex" id="exl"></ol>
+
+  <h3>Periodização da força</h3>
+  <div class="fases">
+    <div class="fase now">
+      <div class="q">Fase 1 · agora</div>
+      <div class="nn">Hipertrofia</div>
+      <div class="w">Out a dez · 12 semanas. Tudo em 8–12 repetições, RPE 8. Carga sobe toda semana, nem que seja 2 kg.</div>
+    </div>
+    <div class="fase">
+      <div class="q">Fase 2</div>
+      <div class="nn">Força máxima</div>
+      <div class="w">Jan e fev · 8 semanas. Os dois primeiros exercícios de cada sessão caem para 4–6 repetições. O resto fica igual.</div>
+    </div>
+    <div class="fase">
+      <div class="q">Fase 3</div>
+      <div class="nn">Densidade</div>
+      <div class="w">Março em diante. Carga mantida, intervalo reduzido para 60–75s. Déficit calórico entra aqui.</div>
+    </div>
+  </div>
+
+  <h3>Todo dia de academia</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Item</th><th>Prescrição</th><th>Alvo</th></tr></thead>
+      <tbody>
+        <tr><td class="pv">Esteira inclinada</td><td class="dt">20–30 min · 8–12% · FC &lt; 120</td><td class="al">Oxidação de gordura. Na perna vai antes; nos outros dias, depois.</td></tr>
+        <tr><td class="pv">Superman</td><td class="dt">3 × 15 · 2s de isometria no topo</td><td class="al">Eretores da espinha, multífidos</td></tr>
+        <tr><td class="pv">Abdominal do dia</td><td class="dt" id="abd">—</td><td class="al">Rotaciona reto abdominal, oblíquos e transverso ao longo da semana</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="aviso calmo">
+    <p><b>Seis dias fecham a conta.</b> A1, B, C, A2, D e T dão duas passadas por grupo na semana. Com cinco dias, corta o T. Com quatro, corta o D também — perna e costas nunca saem.</p>
+    <p><b>Corrida de manhã, força à noite.</b> Nunca o contrário no mesmo dia.</p>
+    <p><b>A prova toca isto uma vez só:</b> na semana de prova saem A1 e A2, entra o T no lugar.</p>
+  </div>
+</section>
+
+<section id="bau" hidden>
+  <div class="sechead">
+    <h2>Periodização para INDOMIT Pedra do Baú</h2>
+    <p class="sub">50 km · São Bento do Sapucaí · largada sábado 20/03/2027 às 05h. Vinte e cinco semanas, de 29/09/2026 até a prova.</p>
+  </div>
+  <div class="stats" id="stbau"></div>
+
+  <h3>Volume semanal de corrida</h3>
+  <div class="scroller" id="graf"></div>
+  <div class="legend">
+    <span><i style="background:var(--rua)"></i>rua · seg, qua, sex · Ibirapuera</span>
+    <span><i style="background:var(--esteira)"></i>esteira inclinada · ter, qui</span>
+    <span><i style="background:var(--trilha)"></i>trilha · sábado</span>
+    <span><i style="background:var(--leve)"></i>rodagem leve · domingo</span>
+  </div>
+  <div class="painel" id="painel"></div>
+
+  <h3>Blocos</h3>
+  <div class="blocos" id="blocos"></div>
+
+  <div class="aviso">
+    <p><b>Os 100 km/semana são média do ano, não piso de toda semana.</b> Pela estrutura de semana de prova — uma semana antes leve, semana da prova leve, seguinte de recuperação, +2 em −50% — cada prova custa quatro semanas reduzidas. Com cinco provas em 2027, as semanas cheias teriam que ficar perto de 130 km para a média do ano fechar em 100.</p>
+    <p>Ou a média de 100 vale só para as semanas cheias, e o ano fecha mais perto de 85. <b>Essa decisão ainda está aberta.</b></p>
+  </div>
+</section>
+
+<section id="ktr" hidden>
+  <div class="sechead">
+    <h2>Periodização para KTR Campos do Jordão</h2>
+    <p class="sub">50 km · largada sexta 09/04/2027 às 17h, noturna. Três semanas depois do Baú — não há bloco de preparação possível entre os dois.</p>
+  </div>
+  <div class="stats" id="stktr"></div>
+
+  <h3>As três semanas entre as provas</h3>
+  <div class="blocos" id="pontektr"></div>
+
+  <div class="aviso">
+    <p><b>Dois 50K com três semanas de intervalo não periodizam juntos.</b> O corpo não reconstrói em 21 dias o que um 50K de montanha gasta. O KTR vai ser corrido em cima da forma do Baú, seja qual for.</p>
+    <p>A decisão é qual dos dois é performance. Se o alvo é o Baú, o KTR é rodagem longa com número no peito. Se o alvo virar o KTR, o Baú passa a ser o rodaje de afinação e sai do plano como prova-alvo — e aí a periodização inteira das 25 semanas se desloca três semanas para a frente.</p>
+    <p><b>Contexto:</b> é a primeira ultra da Carol. Largar 17h e correr a noite não é trivial para uma estreia — a logística do casal pesa na escolha.</p>
+  </div>
+</section>
+
+<section id="calendario" hidden>
+  <div class="sechead">
+    <h2>Calendário 2027</h2>
+    <p class="sub">Datas levantadas em 28/09/2026. Marcas alvo: meia 1h40, maratona 3h30, 110 km sub-25h, 50K internacional sub-9h.</p>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Data</th><th>Prova</th><th>Distância</th><th>Alvo</th></tr></thead>
+      <tbody id="cal"></tbody>
+    </table>
+  </div>
+
+  <div class="aviso">
+    <p><b>Prazo com data: a Maratona do Rio é por sorteio.</b> Cadastro de 09 a 21/11/2026, sorteio em 25/11, resultado em 27/11. Ele quer só os 21 km. Perder a janela de cadastro tira a prova do calendário.</p>
+  </div>
+
+  <div class="aviso">
+    <p><b>O engarrafamento de agosto continua sem decisão.</b> La Misión 110 km (12–14/08), UTMB Chamonix (última semana de agosto, data 2027 não publicada) e Maratona de Floripa (29/08) se atropelam. Floripa e UTMB caem na mesma semana, e La Misión está a 10–16 dias de Chamonix.</p>
+    <p>Nada disso periodiza junto. Uma dessas três é performance; as outras duas são participação — ou saem.</p>
+  </div>
+
+  <div class="aviso calmo">
+    <p><b>Outros choques menores.</b> Rio (27–30/05) e Porto Alegre (05–06/06) com oito dias de intervalo. Matterhorn Ultraks (Zermatt, 49 km SKY) é o candidato para a semana seguinte ao UTMB — inscrição 2027 abre no outono de 2026. Não existe um 50K em Courmayeur ou Aosta na janela de agosto: o Gran Trail Courmayeur é início de julho.</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+var D=[{"n":"Sem 1","dt":"29/09 – 04/10","b":"Bloco 0","tag":"","dias":[{"d":"seg","t":"rua","km":3.8},{"d":"ter","t":"esteira","km":4.5},{"d":"qua","t":"rua","km":4.5},{"d":"qui","t":"esteira","km":5.1},{"d":"sex","t":"rua","km":3.8},{"d":"sáb","t":"trilha","km":8.3},{"d":"dom","t":"leve","km":1.9}]},{"n":"Sem 2","dt":"05 – 11/10","b":"Bloco 0","tag":"teste","dias":[{"d":"seg","t":"rua","km":4.8},{"d":"ter","t":"esteira","km":5.6},{"d":"qua","t":"rua","km":5.6},{"d":"qui","t":"esteira","km":6.4},{"d":"sex","t":"rua","km":4.8},{"d":"sáb","t":"trilha","km":10.4},{"d":"dom","t":"leve","km":2.4}]},{"n":"Sem 3","dt":"12 – 18/10","b":"Bloco 0","tag":"WTR","dias":[{"d":"seg","t":"rua","km":5.4},{"d":"ter","t":"esteira","km":6.3},{"d":"qua","t":"rua","km":6.3},{"d":"qui","t":"esteira","km":7.2},{"d":"sex","t":"rua","km":5.4},{"d":"sáb","t":"trilha","km":11.7},{"d":"dom","t":"leve","km":2.7}]},{"n":"Sem 4","dt":"19 – 25/10","b":"Bloco 1","tag":"","dias":[{"d":"seg","t":"rua","km":6.0},{"d":"ter","t":"esteira","km":7.0},{"d":"qua","t":"rua","km":7.0},{"d":"qui","t":"esteira","km":8.0},{"d":"sex","t":"rua","km":6.0},{"d":"sáb","t":"trilha","km":13.0},{"d":"dom","t":"leve","km":3.0}]},{"n":"Sem 5","dt":"26/10 – 01/11","b":"Bloco 1","tag":"","dias":[{"d":"seg","t":"rua","km":6.7},{"d":"ter","t":"esteira","km":7.8},{"d":"qua","t":"rua","km":7.8},{"d":"qui","t":"esteira","km":9.0},{"d":"sex","t":"rua","km":6.7},{"d":"sáb","t":"trilha","km":14.6},{"d":"dom","t":"leve","km":3.4}]},{"n":"Sem 6","dt":"02 – 08/11","b":"Bloco 1","tag":"","dias":[{"d":"seg","t":"rua","km":7.4},{"d":"ter","t":"esteira","km":8.7},{"d":"qua","t":"rua","km":8.7},{"d":"qui","t":"esteira","km":9.9},{"d":"sex","t":"rua","km":7.4},{"d":"sáb","t":"trilha","km":16.1},{"d":"dom","t":"leve","km":3.7}]},{"n":"Sem 7","dt":"09 – 15/11","b":"Bloco 1","tag":"desc","dias":[{"d":"seg","t":"rua","km":6.2},{"d":"ter","t":"esteira","km":7.3},{"d":"qua","t":"rua","km":7.3},{"d":"qui","t":"esteira","km":8.3},{"d":"sex","t":"rua","km":6.2},{"d":"sáb","t":"trilha","km":13.5},{"d":"dom","t":"leve","km":3.1}]},{"n":"Sem 8","dt":"16 – 22/11","b":"Bloco 1","tag":"","dias":[{"d":"seg","t":"rua","km":8.2},{"d":"ter","t":"esteira","km":9.5},{"d":"qua","t":"rua","km":9.5},{"d":"qui","t":"esteira","km":10.9},{"d":"sex","t":"rua","km":8.2},{"d":"sáb","t":"trilha","km":17.7},{"d":"dom","t":"leve","km":4.1}]},{"n":"Sem 9","dt":"23 – 29/11","b":"Bloco 1","tag":"","dias":[{"d":"seg","t":"rua","km":9.0},{"d":"ter","t":"esteira","km":10.5},{"d":"qua","t":"rua","km":10.5},{"d":"qui","t":"esteira","km":12.0},{"d":"sex","t":"rua","km":9.0},{"d":"sáb","t":"trilha","km":19.5},{"d":"dom","t":"leve","km":4.5}]},{"n":"Sem 10","dt":"30/11 – 06/12","b":"Bloco 1","tag":"","dias":[{"d":"seg","t":"rua","km":9.8},{"d":"ter","t":"esteira","km":11.5},{"d":"qua","t":"rua","km":11.5},{"d":"qui","t":"esteira","km":13.1},{"d":"sex","t":"rua","km":9.8},{"d":"sáb","t":"trilha","km":21.3},{"d":"dom","t":"leve","km":4.9}]},{"n":"Sem 11","dt":"07 – 13/12","b":"Bloco 1","tag":"88 km","dias":[{"d":"seg","t":"rua","km":10.6},{"d":"ter","t":"esteira","km":12.3},{"d":"qua","t":"rua","km":12.3},{"d":"qui","t":"esteira","km":14.1},{"d":"sex","t":"rua","km":10.6},{"d":"sáb","t":"trilha","km":22.9},{"d":"dom","t":"leve","km":5.3}]},{"n":"Sem 12","dt":"14 – 20/12","b":"Bloco 2","tag":"","dias":[{"d":"seg","t":"rua","km":10.8},{"d":"ter","t":"esteira","km":12.6},{"d":"qua","t":"rua","km":12.6},{"d":"qui","t":"esteira","km":14.4},{"d":"sex","t":"rua","km":10.8},{"d":"sáb","t":"trilha","km":23.4},{"d":"dom","t":"leve","km":5.4}]},{"n":"Sem 13","dt":"21 – 27/12","b":"Bloco 2","tag":"desc","dias":[{"d":"seg","t":"rua","km":8.4},{"d":"ter","t":"esteira","km":9.8},{"d":"qua","t":"rua","km":9.8},{"d":"qui","t":"esteira","km":11.2},{"d":"sex","t":"rua","km":8.4},{"d":"sáb","t":"trilha","km":18.2},{"d":"dom","t":"leve","km":4.2}]},{"n":"Sem 14","dt":"28/12 – 03/01","b":"Bloco 2","tag":"","dias":[{"d":"seg","t":"rua","km":11.0},{"d":"ter","t":"esteira","km":12.9},{"d":"qua","t":"rua","km":12.9},{"d":"qui","t":"esteira","km":14.7},{"d":"sex","t":"rua","km":11.0},{"d":"sáb","t":"trilha","km":23.9},{"d":"dom","t":"leve","km":5.5}]},{"n":"Sem 15","dt":"04 – 10/01","b":"Bloco 2","tag":"","dias":[{"d":"seg","t":"rua","km":11.5},{"d":"ter","t":"esteira","km":13.4},{"d":"qua","t":"rua","km":13.4},{"d":"qui","t":"esteira","km":15.4},{"d":"sex","t":"rua","km":11.5},{"d":"sáb","t":"trilha","km":25.0},{"d":"dom","t":"leve","km":5.8}]},{"n":"Sem 16","dt":"11 – 17/01","b":"Bloco 2","tag":"100 km","dias":[{"d":"seg","t":"rua","km":12.0},{"d":"ter","t":"esteira","km":14.0},{"d":"qua","t":"rua","km":14.0},{"d":"qui","t":"esteira","km":16.0},{"d":"sex","t":"rua","km":12.0},{"d":"sáb","t":"trilha","km":26.0},{"d":"dom","t":"leve","km":6.0}]},{"n":"Sem 17","dt":"18 – 24/01","b":"Bloco 2","tag":"desc","dias":[{"d":"seg","t":"rua","km":9.6},{"d":"ter","t":"esteira","km":11.2},{"d":"qua","t":"rua","km":11.2},{"d":"qui","t":"esteira","km":12.8},{"d":"sex","t":"rua","km":9.6},{"d":"sáb","t":"trilha","km":20.8},{"d":"dom","t":"leve","km":4.8}]},{"n":"Sem 18","dt":"25 – 31/01","b":"Bloco 2","tag":"","dias":[{"d":"seg","t":"rua","km":12.0},{"d":"ter","t":"esteira","km":14.0},{"d":"qua","t":"rua","km":14.0},{"d":"qui","t":"esteira","km":16.0},{"d":"sex","t":"rua","km":12.0},{"d":"sáb","t":"trilha","km":26.0},{"d":"dom","t":"leve","km":6.0}]},{"n":"Sem 19","dt":"01 – 07/02","b":"Bloco 3","tag":"","dias":[{"d":"seg","t":"rua","km":12.0},{"d":"ter","t":"esteira","km":14.0},{"d":"qua","t":"rua","km":14.0},{"d":"qui","t":"esteira","km":16.0},{"d":"sex","t":"rua","km":12.0},{"d":"sáb","t":"trilha","km":26.0},{"d":"dom","t":"leve","km":6.0}]},{"n":"Sem 20","dt":"08 – 14/02","b":"Bloco 3","tag":"","dias":[{"d":"seg","t":"rua","km":12.0},{"d":"ter","t":"esteira","km":14.0},{"d":"qua","t":"rua","km":14.0},{"d":"qui","t":"esteira","km":16.0},{"d":"sex","t":"rua","km":12.0},{"d":"sáb","t":"trilha","km":26.0},{"d":"dom","t":"leve","km":6.0}]},{"n":"Sem 21","dt":"15 – 21/02","b":"Bloco 3","tag":"desc","dias":[{"d":"seg","t":"rua","km":9.6},{"d":"ter","t":"esteira","km":11.2},{"d":"qua","t":"rua","km":11.2},{"d":"qui","t":"esteira","km":12.8},{"d":"sex","t":"rua","km":9.6},{"d":"sáb","t":"trilha","km":20.8},{"d":"dom","t":"leve","km":4.8}]},{"n":"Sem 22","dt":"22 – 28/02","b":"Bloco 3","tag":"","dias":[{"d":"seg","t":"rua","km":12.0},{"d":"ter","t":"esteira","km":14.0},{"d":"qua","t":"rua","km":14.0},{"d":"qui","t":"esteira","km":16.0},{"d":"sex","t":"rua","km":12.0},{"d":"sáb","t":"trilha","km":26.0},{"d":"dom","t":"leve","km":6.0}]},{"n":"Sem 23","dt":"01 – 07/03","b":"Bloco 3","tag":"","dias":[{"d":"seg","t":"rua","km":10.8},{"d":"ter","t":"esteira","km":12.6},{"d":"qua","t":"rua","km":12.6},{"d":"qui","t":"esteira","km":14.4},{"d":"sex","t":"rua","km":10.8},{"d":"sáb","t":"trilha","km":23.4},{"d":"dom","t":"leve","km":5.4}]},{"n":"Sem 24","dt":"08 – 14/03","b":"Bloco 4","tag":"","dias":[{"d":"seg","t":"rua","km":7.2},{"d":"ter","t":"esteira","km":8.4},{"d":"qua","t":"rua","km":8.4},{"d":"qui","t":"esteira","km":9.6},{"d":"sex","t":"rua","km":7.2},{"d":"sáb","t":"trilha","km":15.6},{"d":"dom","t":"leve","km":3.6}]},{"n":"Sem 25","dt":"15 – 20/03","b":"Bloco 4","tag":"BAÚ","dias":[{"d":"seg","t":"rua","km":3.6},{"d":"ter","t":"esteira","km":4.2},{"d":"qua","t":"rua","km":4.2},{"d":"qui","t":"esteira","km":4.8},{"d":"sex","t":"rua","km":3.6},{"d":"sáb","t":"trilha","km":7.8},{"d":"dom","t":"leve","km":1.8}]}];
+
+var BLOCOS=[
+ {n:"Bloco 0",nm:"Retomada",dt:"29/09 – 18/10",q:"Reconstruir a rotina de seis dias e aferir o estado atual. Teste de limiar na semana 2 e a WTR Campos do Jordão de 19 km na semana 3, corrida sem preparo específico."},
+ {n:"Bloco 1",nm:"Base aeróbia",dt:"19/10 – 13/12",q:"Volume sobe em degraus de 10% com uma semana de descarga a cada quatro. Subida na esteira inclinada terça e quinta, independente de chuva. Fecha o ano lambendo os 88 km."},
+ {n:"Bloco 2",nm:"Volume",dt:"14/12 – 31/01",q:"Cruza os 100 km pela primeira vez. O longão de trilha de sábado passa de 25 km e passa a ter D+ de prova."},
+ {n:"Bloco 3",nm:"Específico",dt:"01/02 – 07/03",q:"Cem quilômetros sustentados. Longão com desnível de prova, ensaio de ritmo e de alimentação. É aqui que o Baú é decidido."},
+ {n:"Bloco 4",nm:"Polimento",dt:"08/03 – 20/03",q:"Volume cai 40% e depois 70%. Nada de carga nova. Perna pesada sai da academia e entra o treino T no lugar."}
+];
+
+var PONTE=[
+ {n:"Semana 1",nm:"Recuperação",dt:"22 – 28/03",bk:"40 km",q:"Só rodagem leve na rua. Sem trilha, sem esteira inclinada, sem A1 nem A2 na academia. O dano muscular de um 50K de montanha leva de 10 a 14 dias para fechar."},
+ {n:"Semana 2",nm:"Retomada",dt:"29/03 – 04/04",bk:"65 km",q:"Volta a semana normal de seis dias. Um longão de trilha de 18 km no sábado, em ritmo de conversa. Força volta completa."},
+ {n:"Semana 3",nm:"Polimento",dt:"05 – 10/04",bk:"35 km",q:"Rodagens curtas. Quinta e sexta em off. Prova sexta 09/04 às 17h — o longão de sábado desta semana é a própria prova."}
+];
+
+var PROVAS=[
+ {dt:"17–18/10/2026",p:"WTR Campos do Jordão",d:"19 km · 687 m D+",a:"Perto de 2h, sem preparo específico. Aferição do Bloco 0.",alvo:0},
+ {dt:"18–20/03/2027",p:"INDOMIT Pedra do Baú",d:"50 km",a:"Prova-alvo do ciclo. São Bento do Sapucaí, largada sábado 05h.",alvo:1},
+ {dt:"09–10/04/2027",p:"KTR Campos do Jordão",d:"50 km",a:"Noturna, largada sexta 17h. Primeira ultra da Carol.",alvo:0},
+ {dt:"27–30/05/2027",p:"Maratona do Rio",d:"21 km",a:"1h40. Vaga por sorteio — cadastro 09 a 21/11/2026.",alvo:0},
+ {dt:"05–06/06/2027",p:"Maratona de Porto Alegre",d:"42 km",a:"3h30. Quadragésima segunda edição.",alvo:0},
+ {dt:"12–14/08/2027",p:"La Misión Brasil",d:"110 km",a:"Sub-25h, mirando 20h. Passa Quatro, Serra Fina. A prova do ano.",alvo:1},
+ {dt:"~24–30/08/2027",p:"UTMB Chamonix",d:"a definir",a:"Data 2027 não publicada. O padrão é a última semana de agosto.",alvo:0},
+ {dt:"29/08/2027",p:"Maratona de Floripa",d:"42 km",a:"Projeto uma maratona por estado. Mesma semana do UTMB.",alvo:0},
+ {dt:"meados/fim 08/2027",p:"Matterhorn Ultraks",d:"49 km SKY",a:"Zermatt, Suíça. Inscrição 2027 abre no outono de 2026.",alvo:0}
+];
+
+var W={
+ A1:{nome:"A1 · Perna, quadríceps",sub:"quadríceps",tip:"Básico pesado primeiro, isolador com drop no fim. Intervalo de 2 min nos três primeiros, 90s no resto.",ex:[
+  {n:"Cadeira extensora",s:"3 × 20 leve",a:"Quadríceps femoral",nt:"Aquecimento articular. Sem falha — só irriga o joelho antes da carga."},
+  {n:"Agachamento livre",s:"4 × 8",a:"Quadríceps, glúteo máximo, eretores da espinha",nt:"RPE 8, sobram duas no tanque. Fase excêntrica de 3s."},
+  {n:"Leg press 45°",s:"4 × 10",a:"Vasto lateral, vasto medial, glúteo máximo",nt:"Pé baixo e junto na plataforma. Amplitude até 90° de joelho."},
+  {n:"Hack machine",s:"3 × 10",maq:1,a:"Vasto lateral",nt:"Sem hack: agachamento no Smith com pé à frente."},
+  {n:"Afundo caminhando com halteres",s:"3 × 12 passos",a:"Quadríceps, glúteo máximo",nt:"Passada longa, joelho de trás quase no chão."},
+  {n:"Cadeira extensora",s:"4 × 12",a:"Reto femoral, vastos",nt:"Agora pesado. Drop duplo na última: falha, −30%, falha, −30%, falha."},
+  {n:"Cadeira abdutora",s:"4 × 15",a:"Glúteo médio e mínimo",nt:"Tronco inclinado à frente. Drop na última."},
+  {n:"Cadeira adutora",s:"4 × 15",a:"Adutor magno, longo e curto",nt:"Drop na última."},
+  {n:"Panturrilha em pé",s:"4 × 12",a:"Gastrocnêmio",nt:"Pausa de 1s no alongamento máximo."}]},
+ A2:{nome:"A2 · Perna, posterior e glúteo",sub:"posterior",tip:"Mesma densidade do A1, cadeia posterior. Excêntrica lenta é o ponto da sessão.",ex:[
+  {n:"Mesa flexora",s:"3 × 15 leve",a:"Isquiotibiais",nt:"Aquecimento. Sem carga real."},
+  {n:"Levantamento terra romeno",s:"4 × 8",a:"Isquiotibiais, glúteo máximo, eretores",nt:"Excêntrica de 4s. Joelho quase estendido, quadril para trás."},
+  {n:"Elevação pélvica com barra",s:"4 × 8 pesado",a:"Glúteo máximo",nt:"Isometria de 2s no topo. É o exercício que constrói glúteo."},
+  {n:"Búlgaro com halteres",s:"3 × 10 cada",a:"Glúteo máximo, quadríceps",nt:"Pé de trás no banco. Descida controlada."},
+  {n:"Mesa flexora deitada",s:"4 × 12",a:"Bíceps femoral, cabeça longa e curta",nt:"Quadril colado no aparelho."},
+  {n:"Flexora sentada",s:"3 × 12",a:"Semitendinoso, semimembranoso",nt:"Drop na última. Pega a porção que a deitada não alcança."},
+  {n:"Glúteo na máquina (coice)",s:"3 × 15 cada",maq:1,a:"Glúteo máximo",nt:"Isometria de 1s na extensão máxima do quadril."},
+  {n:"Cadeira abdutora",s:"4 × 15",a:"Glúteo médio e mínimo",nt:"Tronco inclinado. Drop na última."},
+  {n:"Panturrilha sentada",s:"4 × 15",a:"Sóleo",nt:"Joelho flexionado isola o sóleo."}]},
+ B:{nome:"B · Costas e lombar",sub:"costas",tip:"Largura primeiro, espessura depois, lombar no fim. Articuladas pesadas para a carga subir sem a lombar ser o limite.",ex:[
+  {n:"Barra fixa",s:"4 × máximo",a:"Latíssimo do dorso, redondo maior",nt:"Passou de 12 limpas? Põe peso no cinto."},
+  {n:"Remada articulada",s:"4 × 8 pesado",maq:1,a:"Latíssimo, romboides, trapézio médio",nt:"Hammer ou plate-loaded."},
+  {n:"Puxada articulada unilateral",s:"4 × 10 cada",maq:1,a:"Latíssimo do dorso",nt:"Um lado por vez. Corrige assimetria e dá amplitude."},
+  {n:"Remada curvada com barra",s:"4 × 8",a:"Romboides, trapézio médio, latíssimo",nt:"Tronco a 45°."},
+  {n:"Extensão lombar no banco romano",s:"4 × 12",a:"Eretores da espinha, multífidos",nt:"COM ANILHA no peito, não só o peso do corpo."},
+  {n:"Good morning com barra",s:"3 × 10",a:"Eretores da espinha, isquiotibiais",nt:"Carga leve, execução perfeita. Lombar é o elo fraco declarado."},
+  {n:"Remada baixa",s:"3 × 12",a:"Trapézio médio, romboides",nt:"Retração escapular completa no fim de cada repetição."},
+  {n:"Crucifixo inverso",s:"3 × 15",a:"Deltoide posterior, trapézio",nt:"Compensa a postura fechada do computador."},
+  {n:"Rosca direta + martelo",s:"3 × 10 · 3 × 12",a:"Bíceps braquial, braquiorradial"}]},
+ C:{nome:"C · Peito e ombro",sub:"peito",tip:"Articulada pesada abrindo, barra em seguida. Porção clavicular é a prioridade — é onde falta desenho no colo.",ex:[
+  {n:"Supino articulado",s:"4 × 8 pesado",maq:1,a:"Peitoral maior",nt:"Abre com ele: dá para carregar sem estabilizador limitando."},
+  {n:"Supino reto com barra",s:"4 × 8",a:"Peitoral maior, tríceps, deltoide anterior",nt:"Depois da máquina o peito já está quente."},
+  {n:"Supino inclinado articulado",s:"4 × 10",maq:1,a:"Peitoral maior, porção clavicular"},
+  {n:"Crucifixo inclinado com halteres",s:"3 × 12",a:"Peitoral maior, porção clavicular",nt:"Amplitude completa, sem hiperextender o ombro embaixo."},
+  {n:"Crossover na polia alta",s:"3 × 15",a:"Peitoral maior, porção esternal",nt:"Drop na última."},
+  {n:"Desenvolvimento militar em pé",s:"4 × 8",a:"Deltoide anterior e medial, tríceps",nt:"Em pé. O core trabalha junto."},
+  {n:"Elevação lateral",s:"4 × 15",a:"Deltoide medial",nt:"Carga leve, execução limpa. Drop na última."},
+  {n:"Tríceps testa + corda",s:"3 × 10 · 3 × 12",a:"Tríceps, cabeça longa e lateral",nt:"Drop na corda."}]},
+ D:{nome:"D · Ombro e braço",sub:"ombro/braço",tip:"Sessão inteira para a metade de cima. Largura de ombro é o que mais muda a silhueta em quem já é magro.",ex:[
+  {n:"Desenvolvimento militar em pé",s:"4 × 8",a:"Deltoide anterior, tríceps"},
+  {n:"Elevação lateral com halteres",s:"4 × 15",a:"Deltoide medial",nt:"Drop na última."},
+  {n:"Elevação lateral na polia, unilateral",s:"3 × 12 cada",a:"Deltoide medial",nt:"A polia mantém tensão embaixo, onde o halter alivia."},
+  {n:"Crucifixo inverso",s:"3 × 15",a:"Deltoide posterior"},
+  {n:"Encolhimento com halteres",s:"3 × 12",a:"Trapézio superior",nt:"Isometria de 1s no topo."},
+  {n:"Rosca direta com barra",s:"4 × 10",a:"Bíceps braquial",nt:"Sem balanço de tronco."},
+  {n:"Rosca scott",s:"3 × 12",a:"Bíceps braquial, cabeça curta"},
+  {n:"Rosca martelo",s:"3 × 12",a:"Braquial, braquiorradial"},
+  {n:"Tríceps testa",s:"4 × 10",a:"Tríceps, cabeça longa"},
+  {n:"Tríceps corda",s:"3 × 12",a:"Tríceps, cabeça lateral",nt:"Drop na última."}]},
+ T:{nome:"T · Torso, costas e peito",sub:"costas+peito",tip:"O sexto dia. Volume médio nos dois maiores grupos, para fechar a semana com todos em duas passadas. É também o treino da semana de prova.",ex:[
+  {n:"Barra fixa",s:"3 × máximo",a:"Latíssimo do dorso"},
+  {n:"Supino articulado",s:"4 × 10",maq:1,a:"Peitoral maior"},
+  {n:"Remada articulada",s:"4 × 10",maq:1,a:"Latíssimo, romboides"},
+  {n:"Supino inclinado com halteres",s:"3 × 12",a:"Peitoral maior, porção clavicular",nt:"Halter aqui, porque a articulada já veio no C."},
+  {n:"Puxada aberta",s:"3 × 12",a:"Latíssimo do dorso",nt:"Pegada larga, puxa até o peito."},
+  {n:"Crossover na polia alta",s:"3 × 15",a:"Peitoral maior, porção esternal",nt:"Drop na última."},
+  {n:"Remada baixa",s:"3 × 12",a:"Trapézio médio, romboides"},
+  {n:"Crucifixo inverso",s:"3 × 15",a:"Deltoide posterior"}]}
+};
+
+var ABD=["Prancha — 3 × 60s","Elevação de pernas suspenso — 3 × 12","Pallof press — 3 × 12 cada lado",
+         "Ab wheel — 3 × 10","Prancha lateral — 3 × 45s cada","Canivete — 3 × 15","Dead bug — 3 × 12 cada"];
+
+var TIPO={rua:"rua",esteira:"esteira ↗",trilha:"TRILHA",leve:"leve"};
+var ORDEM=["rua","esteira","trilha","leve"];
+var INICIO=new Date(2026,8,29), BAU=new Date(2027,2,20), KTRD=new Date(2027,3,9);
+var DIA=864e5;
+
+function nm(v){ return (Math.round(v*10)/10).toString().replace(".",","); }
+function soma(w){ var o={rua:0,esteira:0,trilha:0,leve:0};
+  w.dias.forEach(function(d){ o[d.t]+=d.km; }); return o; }
+function total(w){ return w.dias.reduce(function(a,d){ return a+d.km; },0); }
+function dias(ate){ return Math.max(0, Math.ceil((ate-new Date())/DIA)); }
+
+/* ---------- navegação ---------- */
+var SEC=[{id:"forca",t:"Treino de força"},{id:"bau",t:"Periodização · Pedra do Baú"},
+         {id:"ktr",t:"Periodização · KTR Campos"},{id:"calendario",t:"Calendário 2027"}];
+var nav=document.getElementById("nav");
+SEC.forEach(function(s){
+  var b=document.createElement("button");
+  b.type="button"; b.textContent=s.t; b.dataset.id=s.id;
+  b.addEventListener("click",function(){ mostra(s.id); try{history.replaceState(null,"","#"+s.id);}catch(e){} });
+  nav.appendChild(b);
+});
+function mostra(id){
+  SEC.forEach(function(s){ document.getElementById(s.id).hidden = s.id!==id; });
+  Array.prototype.forEach.call(nav.children,function(b){
+    b.setAttribute("aria-current", b.dataset.id===id ? "true":"false"); });
+  window.scrollTo(0,0);
+}
+
+/* ---------- cabeçalho ---------- */
+var iSem = Math.min(24, Math.max(0, Math.floor((new Date()-INICIO)/(7*DIA))));
+document.getElementById("hoje").textContent = D[iSem].n + " · " + D[iSem].b;
+document.getElementById("abd").textContent = ABD[new Date().getDay()];
+
+/* ---------- treino de força ---------- */
+var aba="A1";
+var abas=document.getElementById("abas");
+Object.keys(W).forEach(function(k){
+  var b=document.createElement("button");
+  b.type="button"; b.dataset.k=k; b.setAttribute("role","tab");
+  b.innerHTML=k+"<small>"+W[k].sub+"</small>";
+  b.addEventListener("click",function(){ aba=k; pintaForca(); });
+  abas.appendChild(b);
+});
+function nSer(s){ var m=/^(\d+)/.exec(s); return m?+m[1]:3; }
+function pintaForca(){
+  Array.prototype.forEach.call(abas.children,function(b){
+    b.setAttribute("aria-selected", b.dataset.k===aba?"true":"false"); });
+  var t=W[aba], ser=0;
+  t.ex.forEach(function(e){ ser+=nSer(e.s); });
+  document.getElementById("sn").textContent=t.nome;
+  document.getElementById("sm").textContent=t.ex.length+" exercícios · "+ser+" séries · ~"+Math.round(ser*2.4)+" min";
+  document.getElementById("stip").textContent=t.tip;
+  var ol=document.getElementById("exl"); ol.textContent="";
+  t.ex.forEach(function(e){
+    var li=document.createElement("li");
+    if(e.maq) li.className="maq";
+    li.innerHTML='<div class="exl"><span class="exn">'+e.n
+      +(e.maq?'<span class="badge">máquina</span>':'')+'</span><span class="exs">'+e.s+'</span></div>'
+      +'<div class="exa">'+e.a+'</div>'
+      +(e.nt?'<div class="exnt">'+e.nt+'</div>':'');
+    ol.appendChild(li);
+  });
+}
+
+/* ---------- gráfico ---------- */
+var sel=iSem;
+function grafico(){
+  var Wd=980,H=316,L=38,R=12,T=32,B=46;
+  var ph=H-T-B, pw=Wd-L-R, n=D.length, slot=pw/n, bw=Math.min(25,slot-9), ymax=110;
+  var y=function(v){ return T+ph-(v/ymax)*ph; };
+  var cx=function(i){ return L+slot*i+slot/2; };
+  var s=['<svg viewBox="0 0 '+Wd+' '+H+'" role="img" aria-label="Volume semanal de corrida ao longo das 25 semanas do ciclo">'];
+
+  var bs=[],cur=null;
+  D.forEach(function(w,i){ if(w.b!==cur){ cur=w.b; bs.push({b:cur,i0:i,i1:i}); } else bs[bs.length-1].i1=i; });
+  bs.forEach(function(g){
+    var x0=L+slot*g.i0+3, x1=L+slot*(g.i1+1)-3;
+    s.push('<rect class="bband" x="'+x0+'" y="8" width="'+(x1-x0)+'" height="3" rx="1.5"/>');
+    s.push('<text class="blab" x="'+x0+'" y="22">'+g.b.toUpperCase()+'</text>');
+  });
+
+  [0,25,50,75,100].forEach(function(v){
+    s.push('<line class="grid" x1="'+L+'" y1="'+y(v)+'" x2="'+(Wd-R)+'" y2="'+y(v)+'"/>');
+    s.push('<text class="ylab" x="'+(L-7)+'" y="'+(y(v)+3.5)+'">'+v+'</text>');
+  });
+  s.push('<line class="meta" x1="'+L+'" y1="'+y(100)+'" x2="'+(Wd-R)+'" y2="'+y(100)+'"/>');
+  s.push('<text class="metalab" x="'+(L+4)+'" y="'+(y(100)-5)+'">meta 100 km/sem</text>');
+
+  D.forEach(function(w,i){
+    var c=soma(w), acc=0, x=cx(i)-bw/2;
+    var g='<g class="bar'+(i===sel?' sel':'')+(i<iSem?' dim':'')+'" data-i="'+i+'">';
+    ORDEM.forEach(function(k){
+      if(c[k]<=0) return;
+      var h=(c[k]/ymax)*ph, yy=T+ph-((acc+c[k])/ymax)*ph;
+      g+='<rect class="seg" x="'+x+'" y="'+yy+'" width="'+bw+'" height="'+h+'" fill="var(--'+k+')"/>';
+      acc+=c[k];
+    });
+    g+='<rect class="hit" x="'+(L+slot*i)+'" y="'+T+'" width="'+slot+'" height="'+ph+'" tabindex="0" role="button" aria-label="'+w.n+', '+Math.round(total(w))+' quilômetros"/></g>';
+    s.push(g);
+    if(i%2===0||i===n-1) s.push('<text class="xlab" x="'+cx(i)+'" y="'+(H-B+16)+'">'+(i+1)+'</text>');
+  });
+
+  [{i:2,l:"WTR"},{i:24,l:"BAÚ"}].forEach(function(p){
+    s.push('<line class="pmark" x1="'+cx(p.i)+'" y1="'+T+'" x2="'+cx(p.i)+'" y2="'+(T+ph)+'"/>');
+    s.push('<text class="plab" x="'+cx(p.i)+'" y="'+(H-B+30)+'">'+p.l+'</text>');
+  });
+  s.push('<line class="hoje" x1="'+(L+slot*iSem)+'" y1="'+(T+ph)+'" x2="'+(L+slot*(iSem+1))+'" y2="'+(T+ph)+'"/>');
+  s.push('</svg>');
+  document.getElementById("graf").innerHTML=s.join("");
+
+  document.querySelectorAll("#graf .hit").forEach(function(h){
+    var i=+h.parentNode.dataset.i;
+    h.addEventListener("pointerenter",function(){ escolhe(i); });
+    h.addEventListener("click",function(){ escolhe(i); });
+    h.addEventListener("focus",function(){ escolhe(i); });
+  });
+}
+function escolhe(i){
+  if(i===sel) return;
+  sel=i;
+  document.querySelectorAll("#graf .bar").forEach(function(g){
+    g.classList.toggle("sel", +g.dataset.i===sel); });
+  painel();
+}
+function painel(){
+  var w=D[sel], c=soma(w), tt=total(w);
+  var h='<div class="pt"><span class="n">'+w.n+'</span><span class="dt">'+w.dt+'</span>'
+      +'<span class="bl">'+w.b+(w.tag?' · '+w.tag:'')+'</span></div><div class="pd">';
+  w.dias.forEach(function(d){
+    h+='<div class="'+(d.d==="sáb"?"sab":"")+'"><div class="d">'+d.d+'</div>'
+      +'<div class="km">'+nm(d.km)+'</div><div class="t">'+TIPO[d.t]+'</div></div>';
+  });
+  h+='</div><div class="ptot"><span>total <b>'+nm(tt)+' km</b></span>'
+    +'<span>rua <b>'+nm(c.rua)+'</b></span><span>esteira <b>'+nm(c.esteira)+'</b></span>'
+    +'<span>trilha <b>'+nm(c.trilha)+'</b></span><span>leve <b>'+nm(c.leve)+'</b></span></div>';
+  document.getElementById("painel").innerHTML=h;
+}
+
+/* ---------- números ---------- */
+function stats(){
+  var tot=0,pico=0;
+  D.forEach(function(w){ var t=total(w); tot+=t; if(t>pico) pico=t; });
+  document.getElementById("stbau").innerHTML=
+    tile("Faltam",dias(BAU),"dias")+tile("Semanas",D.length,"")+
+    tile("Volume do ciclo",Math.round(tot),"km")+tile("Pico semanal",Math.round(pico),"km")+
+    tile("Média",Math.round(tot/D.length),"km/sem");
+  document.getElementById("stktr").innerHTML=
+    tile("Faltam",dias(KTRD),"dias")+tile("Depois do Baú",3,"semanas")+
+    tile("Volume da ponte",140,"km")+tile("Largada","17h","sexta");
+}
+function tile(k,v,u){
+  return '<div class="stat"><div class="k">'+k+'</div><div class="v">'+v
+    +(u?'<span class="u">'+u+'</span>':'')+'</div></div>';
+}
+
+/* ---------- blocos e tabelas ---------- */
+function linhas(el,arr,km){
+  document.getElementById(el).innerHTML=arr.map(function(b){
+    return '<div class="bloco"><span class="bn">'+b.n+(b.nm?' · '+b.nm:'')+'</span>'
+      +'<span class="bd">'+b.dt+'</span><span class="bk">'+(b.bk||km(b))+'</span>'
+      +'<span class="bq">'+b.q+'</span></div>';
+  }).join("");
+}
+linhas("blocos",BLOCOS,function(b){
+  var f=D.filter(function(w){ return w.b===b.n; });
+  var lo=Math.round(Math.min.apply(null,f.map(total))), hi=Math.round(Math.max.apply(null,f.map(total)));
+  return lo+" – "+hi+" km";
+});
+linhas("pontektr",PONTE,function(){ return ""; });
+
+document.getElementById("cal").innerHTML=PROVAS.map(function(p){
+  return '<tr'+(p.alvo?' class="alvo"':'')+'><td class="dt">'+p.dt+'</td><td class="pv">'+p.p
+    +'</td><td class="dt">'+p.d+'</td><td class="al">'+p.a+'</td></tr>';
+}).join("");
+
+/* ---------- arranque ---------- */
+pintaForca();
+grafico();
+painel();
+stats();
+var h=(location.hash||"").replace("#","");
+mostra(SEC.some(function(s){return s.id===h;}) ? h : "forca");
+})();
