@@ -173,6 +173,37 @@ ol.ex li.maq{box-shadow:inset 3px 0 0 var(--forca)}
 .fase .w{font-size:12px;color:var(--ink-3);line-height:1.42}
 @media(max-width:620px){.fases{grid-template-columns:1fr}}
 
+
+/* a semana */
+.semana{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.sd{background:var(--surface);padding:0}
+.sd.longo{background:var(--raised)}
+.sd .dn{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 84;font-weight:800;
+  font-size:13px;padding:9px 13px;border-bottom:1px solid var(--rule);display:flex;
+  justify-content:space-between;align-items:baseline;gap:8px}
+.sd .dn small{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:400;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.sd .ses{padding:10px 13px;border-bottom:1px solid var(--rule)}
+.sd .ses:last-child{border-bottom:none}
+.sd .hr{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.sd .st{font-family:Archivo,sans-serif;font-variation-settings:"wdth" 90;font-weight:700;
+  font-size:13.5px;margin-top:3px;display:flex;align-items:center;gap:6px}
+.sd .st i{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+.sd .sx{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.35}
+.sd .vazio .st{color:var(--ink-3);font-weight:500}
+
+/* sessão de corrida */
+.passos{list-style:none;margin:0;padding:0;counter-reset:p;
+  border:1px solid var(--rule);border-radius:7px;overflow:hidden;background:var(--rule);
+  display:flex;flex-direction:column;gap:1px}
+.passos li{background:var(--surface);padding:12px 15px 12px 46px;position:relative;counter-increment:p;
+  font-size:13.5px;line-height:1.45}
+.passos li::before{content:counter(p);position:absolute;left:17px;top:12px;
+  font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.passos li b{color:var(--ink);font-weight:600}
+.passos li em{font-style:normal;color:var(--ink-3)}
+
 /* tabelas */
 .tw{overflow-x:auto;border:1px solid var(--rule);border-radius:7px}
 table{border-collapse:collapse;width:100%;min-width:520px;font-size:13px}
@@ -203,7 +234,57 @@ tr.alvo td.pv{color:var(--prova)}
 
 <main>
 
-<section id="forca">
+<section id="semana">
+  <div class="sechead">
+    <h2>A semana</h2>
+    <p class="sub">Duas sessões de segunda a sexta: corrida de manhã, entre 5h e 9h, e força à noite. Sábado é uma sessão só — o longão de trilha. Domingo são duas, ambas de manhã, emendadas.</p>
+  </div>
+  <div class="semana" id="sem7"></div>
+
+  <h3>As regras que mandam na semana</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Regra</th><th>Por quê</th></tr></thead>
+      <tbody>
+        <tr><td class="pv">Segunda, quarta e sexta na rua</td><td class="al">Ibirapuera. São os dias de corrida em plano — volume e ritmo, sem desnível.</td></tr>
+        <tr><td class="pv">Terça e quinta na esteira, com inclinação</td><td class="al">O específico de subida. Chuva não cancela: esteira é o único jeito de ter desnível no meio da semana morando em São Paulo.</td></tr>
+        <tr><td class="pv">Sábado é trilha, sempre</td><td class="al">O foco do ciclo é trilha. É o único dia com terreno de verdade e o único com tempo para o longão.</td></tr>
+        <tr><td class="pv">Corrida de manhã, força à noite</td><td class="al">Nunca o contrário no mesmo dia. Perna cansada correndo é onde lesão acontece.</td></tr>
+        <tr><td class="pv">Teto de 142 bpm nas rodagens</td><td class="al">Mesmo teto das primeiras três horas de prova. Foi derivado de 166 observado numa prova de 12h30 — a FC máxima real ainda é desconhecida, e o teste de limiar da semana 2 ajusta o resto.</td></tr>
+        <tr><td class="pv">Deitar no máximo 23h, acordar 5h–6h</td><td class="al">Compromisso assumido em 28/09. A janela de corrida das 5h só existe se a noite anterior fechar.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="aviso calmo">
+    <p><b>O rodízio de força não tem dia travado.</b> A tabela acima mostra a ordem padrão — A1, B, C, A2, D, T. Se um dia furar, o rodízio anda, não pula. A meta é a semana fechar com todo grupo duas vezes, não o treino cair na terça.</p>
+    <p><b>A academia fica perto do trabalho e longe de casa.</b> É o furo de logística conhecido, e é o que derruba a sessão da noite quando o dia estica.</p>
+  </div>
+</section>
+
+<section id="corrida" hidden>
+  <div class="sechead">
+    <h2>Treino de corrida</h2>
+    <p class="sub">Sete sessões, uma por dia da semana. A forma de cada sessão não muda ao longo do ciclo — o que muda é a dose, que cresce bloco a bloco. Os quilômetros abaixo saem da periodização do Pedra do Baú.</p>
+  </div>
+  <div class="abas" id="cabas" role="tablist"></div>
+  <div class="shead"><span class="sn" id="cn">&mdash;</span><span class="sm" id="cm"></span></div>
+  <p class="stip" id="cobj"></p>
+
+  <h3>Como a sessão anda</h3>
+  <ol class="passos" id="cpassos"></ol>
+
+  <h3>A dose, bloco a bloco</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Bloco</th><th>Volume</th><th>Prescrição</th></tr></thead>
+      <tbody id="cdose"></tbody>
+    </table>
+  </div>
+  <div class="aviso" id="creg"></div>
+</section>
+
+<section id="forca" hidden>
   <div class="sechead">
     <h2>Treino de força</h2>
     <p class="sub">Rodízio de seis sessões, sem dia travado. A meta da semana é fechar todo grupo duas vezes. Não olha o calendário de provas — o alvo é força total e composição corporal.</p>
@@ -431,7 +512,8 @@ function total(w){ return w.dias.reduce(function(a,d){ return a+d.km; },0); }
 function dias(ate){ return Math.max(0, Math.ceil((ate-new Date())/DIA)); }
 
 /* ---------- navegação ---------- */
-var SEC=[{id:"forca",t:"Treino de força"},{id:"bau",t:"Periodização · Pedra do Baú"},
+var SEC=[{id:"semana",t:"A semana"},{id:"corrida",t:"Treino de corrida"},
+         {id:"forca",t:"Treino de força"},{id:"bau",t:"Periodização · Pedra do Baú"},
          {id:"ktr",t:"Periodização · KTR Campos"},{id:"calendario",t:"Calendário 2027"}];
 var nav=document.getElementById("nav");
 SEC.forEach(function(s){
@@ -594,11 +676,129 @@ document.getElementById("cal").innerHTML=PROVAS.map(function(p){
     +'</td><td class="dt">'+p.d+'</td><td class="al">'+p.a+'</td></tr>';
 }).join("");
 
+
+var CORRIDA={
+ seg:{dia:"Segunda",n:"Rodagem base",t:"rua",loc:"rua · Ibirapuera",
+  obj:"Volume aeróbio limpo. É a sessão mais barata da semana: constrói base sem cobrar recuperação, e é ela que segura o total semanal quando o resto aperta.",
+  passos:["<b>10' de trote progressivo</b> — FC subindo devagar até 130. Não comece no ritmo do treino.",
+          "<b>Corpo do treino em zona 2</b> — FC 130 a 142, ritmo em que dá para conversar em frase inteira.",
+          "<b>5' soltando</b> — trote leve, FC caindo abaixo de 120.",
+          "<b>4 educativos, 30 m cada</b> — skipping alto, anfersen, dribbling, passada. <em>É onde a técnica é corrigida, não no meio da rodagem.</em>"],
+  presc:{"Bloco 0":"Contínuo, sem variação de ritmo","Bloco 1":"Contínuo. Últimos 10' um pouco mais firmes, ainda abaixo de 142","Bloco 2":"Contínuo + 6 × 20\" de passada forte no fim, recuperação completa","Bloco 3":"Contínuo + 8 × 20\" de passada forte no fim","Bloco 4":"Contínuo, curto, nada além disso"},
+  reg:"<b>Se a FC passar de 142, anda.</b> O teto é o mesmo das três primeiras horas de prova. Correr acima dele aqui não antecipa nada — só atrasa a terça."},
+ ter:{dia:"Terça",n:"Subida na esteira",t:"esteira",loc:"esteira · inclinação",
+  obj:"O treino específico de subida, em intensidade. É esta sessão, repetida por 25 semanas, que resolve o \"virar monstro de subida\". Chuva não tem voto: é esteira.",
+  passos:["<b>15' de aquecimento</b> — trote em 3% de inclinação, FC até 135.",
+          "<b>As séries</b> — inclinação alta, ritmo forte mas sustentável. FC no topo de cada série até 155. <em>Não é sprint: é força de subida em ritmo.</em>",
+          "<b>Recuperação entre séries</b> — caminhada em 1%, FC descendo de 130.",
+          "<b>10' soltando</b> — trote em 1%, FC abaixo de 120."],
+  presc:{"Bloco 0":"6 × 2' a 10% · recuperação 2'","Bloco 1":"6 × 3' a 12% · recuperação 2'","Bloco 2":"5 × 5' a 12% · recuperação 2'30","Bloco 3":"4 × 8' a 14% · recuperação 3'","Bloco 4":"4 × 3' a 10% · recuperação 2' — só manter o estímulo"},
+  reg:"<b>Cadência acima de 170 nas séries.</b> Passo curto e rápido sobe melhor que passada longa. Se a cadência cair, a inclinação está alta demais para hoje — baixa 2% e termina a série."},
+ qua:{dia:"Quarta",n:"Rodagem com ritmo",t:"rua",loc:"rua · Ibirapuera",
+  obj:"A sessão de qualidade em plano. Sobe o limiar, que é o que segura ritmo nas partes corríveis da prova — e é o que leva a meia para 1h40.",
+  passos:["<b>15' de aquecimento</b> — trote progressivo + 4 educativos.",
+          "<b>Os blocos em limiar</b> — ritmo \"confortavelmente duro\": dá para falar três ou quatro palavras, não uma frase.",
+          "<b>Recuperação</b> — trote leve, não caminhada.",
+          "<b>10' soltando.</b>"],
+  presc:{"Bloco 0":"3 × 5' no limiar · recuperação 2'","Bloco 1":"4 × 6' no limiar · recuperação 2'","Bloco 2":"4 × 8' no limiar · recuperação 2'","Bloco 3":"3 × 12' no limiar · recuperação 3'","Bloco 4":"2 × 5' no limiar · recuperação 3'"},
+  reg:"<b>O limiar ainda não tem número.</b> Sai do teste da semana 2 — 30' contrarrelógio, e a FC média dos últimos 20' é o limiar. Até lá, corre por sensação e anota a FC que deu."},
+ qui:{dia:"Quinta",n:"Subida longa na esteira",t:"esteira",loc:"esteira · inclinação",
+  obj:"Volume de subida, não intensidade. É o ensaio do power hiking — a marcha forte que resolve as subidas longas que não dá para correr. Complementa a terça: uma dá potência, esta dá resistência.",
+  passos:["<b>10' de aquecimento</b> — trote em 2%.",
+          "<b>Bloco contínuo em inclinação alta</b> — caminhada forte ou trote, o que sustentar. FC teto de 145, sem picos.",
+          "<b>Mão fora do corrimão.</b> <em>Segurar tira metade do trabalho e ensina o corpo errado.</em>",
+          "<b>10' soltando</b> em 1%."],
+  presc:{"Bloco 0":"20' contínuo a 12%, caminhada forte","Bloco 1":"30' contínuo a 12–15%","Bloco 2":"45' contínuo a 15%, com mochila de 4 kg","Bloco 3":"60' contínuo a 15%, com mochila de 6 kg","Bloco 4":"20' a 10%, sem mochila"},
+  reg:"<b>A mochila entra no Bloco 2.</b> Antes disso o ombro e a lombar não estão prontos para carga em movimento repetido. A partir dali, é a mesma mochila da prova, com o mesmo peso de água."},
+ sex:{dia:"Sexta",n:"Rodagem leve",t:"rua",loc:"rua · Ibirapuera",
+  obj:"Existe para a sexta não roubar o sábado. Pernas soltas, sangue circulando, nada mais. É a sessão que a vontade manda acelerar e o plano manda segurar.",
+  passos:["<b>Trote contínuo em zona 1 e 2</b> — FC teto de 135.",
+          "<b>Nenhum bloco de ritmo.</b> <em>Nem no fim, nem \"só um pouquinho\".</em>",
+          "<b>4 educativos</b> no fim, se as pernas estiverem boas."],
+  presc:{"Bloco 0":"Contínuo leve","Bloco 1":"Contínuo leve","Bloco 2":"Contínuo leve","Bloco 3":"Contínuo leve","Bloco 4":"Contínuo muito leve, ou off na semana da prova"},
+  reg:"<b>Na semana de prova esta sessão vira shakeout:</b> 10 km bem leves a 130 bpm, ou menos, dependendo do dia."},
+ "sáb":{dia:"Sábado",n:"Longão de trilha",t:"trilha",loc:"trilha",
+  obj:"O treino da semana. É a única sessão com terreno de verdade e a única em que a descida técnica é treinada — que é justamente o que o arquivo do Strava não mostra e o que a prova cobra.",
+  passos:["<b>Ritmo de conversa do início ao fim.</b> Caminhar as subidas fortes é esperado, não é falha.",
+          "<b>Descida técnica em atenção</b> — passo curto, olhar três metros à frente. <em>A descida é onde o quadríceps é destruído e onde o tempo é ganho.</em>",
+          "<b>Comer a cada 40 min</b> a partir do Bloco 2, mesmo sem fome. É ensaio, não é necessidade do dia.",
+          "<b>Beber por relógio, não por sede.</b> A quebra de 2025 foi desidratação e cãibra no km 23, não perna."],
+  presc:{"Bloco 0":"Até 300 m de D+. Reconhecimento de terreno","Bloco 1":"600 a 900 m de D+. Mochila entra vazia","Bloco 2":"1000 a 1400 m de D+. Mochila completa, comida e água de prova","Bloco 3":"1500 a 1800 m de D+. Desnível e duração de prova","Bloco 4":"Sem D+ novo. Terreno conhecido, curto"},
+  reg:"<b>O VOTU fica a 40 km de casa e só dá em fim de semana — e nem sempre.</b> Quando o sábado não tiver trilha, a sessão vira o mesmo tempo em rua com o maior desnível que São Paulo der, e a quinta da semana seguinte ganha 15 min."},
+ dom:{dia:"Domingo",n:"Rodagem regenerativa",t:"leve",loc:"rua · leve",
+  obj:"Tirar o lixo das pernas do longão. É curta de propósito, e emenda com a força da manhã — as duas sessões de domingo são no mesmo bloco, antes do almoço.",
+  passos:["<b>20 a 30' bem fácil</b> — FC teto de 130.",
+          "<b>Se o sábado foi duro, anda.</b> <em>Caminhada de 30 min conta como a sessão.</em>",
+          "<b>Força em seguida</b> — o T, ou o que o rodízio devolver."],
+  presc:{"Bloco 0":"20' fácil","Bloco 1":"25 a 30' fácil","Bloco 2":"30 a 35' fácil","Bloco 3":"30 a 35' fácil","Bloco 4":"20' fácil ou off"},
+  reg:"<b>Esta é a sessão que mais vale cortar</b> quando a semana passou do limite. Nenhuma das outras seis é negociável antes dela."}
+};
+
+var FORCA_DIA={seg:"A1",ter:"B",qua:"C",qui:"A2",sex:"D","sáb":null,dom:"T"};
+var DIAS7=["seg","ter","qua","qui","sex","sáb","dom"];
+
+function semana7(){
+  var w=D[iSem];
+  document.getElementById("sem7").innerHTML=DIAS7.map(function(k){
+    var d=w.dias.filter(function(x){return x.d===k;})[0], c=CORRIDA[k], f=FORCA_DIA[k];
+    var ht='<div class="sd'+(k==="sáb"?" longo":"")+'">'
+      +'<div class="dn">'+c.dia+'<small>'+nm(d.km)+' km</small></div>'
+      +'<div class="ses"><div class="hr">'+(k==="dom"?"manhã · 1":"manhã")+'</div>'
+      +'<div class="st"><i style="background:var(--'+c.t+')"></i>'+c.n+'</div>'
+      +'<div class="sx">'+c.loc+'</div></div>';
+    if(f) ht+='<div class="ses"><div class="hr">'+(k==="dom"?"manhã · 2":"noite")+'</div>'
+      +'<div class="st"><i style="background:var(--forca)"></i>'+f+' · '+W[f].sub+'</div>'
+      +'<div class="sx">'+W[f].ex.length+' exercícios</div></div>';
+    else ht+='<div class="ses vazio"><div class="hr">sessão única</div>'
+      +'<div class="st">sem academia</div><div class="sx">o longão é a sessão do dia</div></div>';
+    return ht+'</div>';
+  }).join("");
+}
+
+var cdia="seg";
+var cabas=document.getElementById("cabas");
+DIAS7.forEach(function(k){
+  var b=document.createElement("button");
+  b.type="button"; b.dataset.k=k; b.setAttribute("role","tab");
+  b.innerHTML=CORRIDA[k].dia+"<small>"+CORRIDA[k].t+"</small>";
+  b.addEventListener("click",function(){ cdia=k; pintaCorrida(); });
+  cabas.appendChild(b);
+});
+function doseDia(dk){
+  var o={};
+  D.forEach(function(w){
+    var d=w.dias.filter(function(x){return x.d===dk;})[0];
+    if(!d) return;
+    if(!o[w.b]) o[w.b]=[d.km,d.km];
+    else { if(d.km<o[w.b][0])o[w.b][0]=d.km; if(d.km>o[w.b][1])o[w.b][1]=d.km; }
+  });
+  return o;
+}
+function pintaCorrida(){
+  Array.prototype.forEach.call(cabas.children,function(b){
+    b.setAttribute("aria-selected", b.dataset.k===cdia?"true":"false"); });
+  var c=CORRIDA[cdia], dz=doseDia(cdia), tot=0;
+  D.forEach(function(w){ var d=w.dias.filter(function(x){return x.d===cdia;})[0]; if(d) tot+=d.km; });
+  document.getElementById("cn").textContent=c.dia+" · "+c.n;
+  document.getElementById("cm").textContent=c.loc+" · "+Math.round(tot)+" km no ciclo";
+  document.getElementById("cobj").textContent=c.obj;
+  document.getElementById("cpassos").innerHTML=c.passos.map(function(p){
+    return "<li>"+p+"</li>"; }).join("");
+  document.getElementById("cdose").innerHTML=BLOCOS.map(function(b){
+    var r=dz[b.n]||[0,0];
+    var km=(r[0]===r[1]?nm(r[0]):nm(r[0])+" – "+nm(r[1]))+" km";
+    return '<tr><td class="pv">'+b.n+'</td><td class="dt">'+km+'</td><td class="al">'+c.presc[b.n]+'</td></tr>';
+  }).join("");
+  document.getElementById("creg").innerHTML="<p>"+c.reg+"</p>";
+}
+
 /* ---------- arranque ---------- */
 pintaForca();
+pintaCorrida();
+semana7();
 grafico();
 painel();
 stats();
 var h=(location.hash||"").replace("#","");
-mostra(SEC.some(function(s){return s.id===h;}) ? h : "forca");
+mostra(SEC.some(function(s){return s.id===h;}) ? h : "semana");
 })();
