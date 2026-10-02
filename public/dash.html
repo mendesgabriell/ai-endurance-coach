@@ -864,6 +864,7 @@ var W={
  {dt:"meados/fim 08/2027",p:"Matterhorn Ultraks",d:"49 km SKY",a:"Zermatt, Suíça. Inscrição 2027 abre no outono de 2026.",alvo:0}
 ];var FORCA_DIA={seg:"A1",ter:"B",qua:"C",qui:"A2",sex:"D","sáb":null,dom:"T"};var DIAS7=["seg","ter","qua","qui","sex","sáb","dom"];
 var COR={rua:"--s1",esteira:"--s3",trilha:"--s2",leve:"--ink-3"};
+var NOMES={}; DIAS7.forEach(function(k){ NOMES[k]=CORRIDA[k].dia; });
 var INICIO=new Date(2026,8,28), DIAMS=864e5;
 function nm(v){ return (Math.round(v*10)/10).toString().replace(".",","); }
 
@@ -900,7 +901,7 @@ function pintaSemana(){
   document.getElementById("sem7").innerHTML=DIAS7.map(function(k){
     var w=D[iSem], d=w.dias.filter(function(x){return x.d===k;})[0], c=CORRIDA[d.s||k], f=FORCA_DIA[k];
     var fu=!!d.f;
-    var h='<div class="sd'+(k==="s\u00e1b"?" longo":"")+'"><div class="dn">'+c.dia
+    var h='<div class="sd'+(k==="s\u00e1b"?" longo":"")+'"><div class="dn">'+NOMES[k]
      +(fu?'<small class="furou">n\u00e3o feito</small>':'<small>'+nm(d.km)+' km</small>')+'</div>'
      +'<button type="button" class="ses'+(fu?" furou":"")+'" data-t="c" data-k="'+k+'" aria-expanded="false">'
      +'<div class="hr">'+(k==="dom"?"manh\u00e3 \u00b7 1":"manh\u00e3")+'</div>'
@@ -931,8 +932,8 @@ function abre(t,k){
   var bloco=D[iSem].b;
   if(t==="c"){
     var d=D[iSem].dias.filter(function(x){return x.d===k;})[0], c=CORRIDA[d.s||k];
-    el.innerHTML='<div class="card"><div class="shead"><span class="sn">'+c.dia+' \u00b7 '+c.n
-     +'</span><span class="sm">'+c.loc+'</span></div>'
+    el.innerHTML='<div class="card"><div class="shead"><span class="sn">'+NOMES[k]+' \u00b7 '+c.n
+     +'</span><span class="sm">'+(d.s?'remarcada de '+NOMES[d.s].toLowerCase()+' \u00b7 ':'')+c.loc+'</span></div>'
      +'<p class="sub" style="margin-top:10px">'+c.obj+'</p>'
      +'<div class="presc"><div><span class="pk">hoje \u00b7 '+bloco+'</span><div class="pv">'
      +c.presc[bloco]+'</div></div><span class="pd">'+nm(d.km)+' km</span></div>'
