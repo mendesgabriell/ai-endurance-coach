@@ -945,7 +945,7 @@ function pintaSemana(){
      +'<div class="hr">'+(k==="dom"?"manh\u00e3 \u00b7 1":"manh\u00e3")+'</div>'
      +'<div class="st"><i style="background:var('+COR[c.t]+')"></i>'+c.n+'</div>'
      +'<div class="sx">'+(fu?'furou \u00b7 '+nm(d.km)+' km perdidos'
-       :(d.s?'remarcada de '+NOMES[d.s].toLowerCase():c.loc))+'</div></button>'
+       :((d.s&&NOMES[d.s])?'remarcada de '+NOMES[d.s].toLowerCase():c.loc))+'</div></button>'
      +chk(iso,"corrida",!!m.corrida)+'</div>';
     if(f) h+='<div class="seswrap'+(m.forca?" ok":"")+'">'
      +'<button type="button" class="ses" data-t="f" data-k="'+f+'" aria-expanded="false">'
@@ -964,6 +964,10 @@ function pintaSemana(){
     b.addEventListener("click",function(e){ e.stopPropagation(); alterna(b.dataset.d,b.dataset.c); });
   });
   marca(); conta();
+}
+function marca(){
+  Array.prototype.forEach.call(document.querySelectorAll("#sem7 button.ses"),function(b){
+    b.setAttribute("aria-expanded",(b.dataset.t+":"+b.dataset.k)===DET?"true":"false"); });
 }
 function alterna(iso,campo){
   var m=FEITO[iso]||{}; m[campo]=!m[campo]; FEITO[iso]=m;
@@ -992,7 +996,7 @@ function abre(t,k){
   if(t==="c"){
     var d=D[iSem].dias.filter(function(x){return x.d===k;})[0], c=CORRIDA[d.s||k];
     el.innerHTML='<div class="card"><div class="shead"><span class="sn">'+NOMES[k]+' \u00b7 '+c.n
-     +'</span><span class="sm">'+(d.s?'remarcada de '+NOMES[d.s].toLowerCase()+' \u00b7 ':'')+c.loc+'</span></div>'
+     +'</span><span class="sm">'+((d.s&&NOMES[d.s])?'remarcada de '+NOMES[d.s].toLowerCase()+' \u00b7 ':'')+c.loc+'</span></div>'
      +'<p class="sub" style="margin-top:10px">'+c.obj+'</p>'
      +'<div class="presc"><div><span class="pk">hoje \u00b7 '+bloco+'</span><div class="pv">'
      +c.presc[bloco]+'</div></div><span class="pd">'+nm(d.km)+' km</span></div>'
