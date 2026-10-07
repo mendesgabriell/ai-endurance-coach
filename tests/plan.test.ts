@@ -11,6 +11,12 @@ test("a prova é a única sessão do dia dela", () => {
   assert.match(dia[0]!.text, /INDOMIT/);
 });
 
+test("a WTR também substitui o dia inteiro", () => {
+  const dia = sessionsOn("2026-10-17");
+  assert.equal(dia.length, 1, "17/10 saía com longão de 11,7 km por cima da prova");
+  assert.match(dia[0]!.text, /WTR CAMPOS/);
+});
+
 test("nenhum dia do ciclo tem mais de uma corrida e uma força", () => {
   const porDia = new Map<string, number>();
   for (const s of expandirCiclo()) porDia.set(s.date, (porDia.get(s.date) ?? 0) + 1);

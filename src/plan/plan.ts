@@ -39,21 +39,34 @@ export const BLOCKS: Block[] = BLOCOS.map((b) => {
   };
 });
 
-const PROVA: PlannedSession = {
-  id: "prova-bau",
-  date: RACE_DATE,
-  kind: "chave",
-  text: "INDOMIT PEDRA DO BAÚ 50K — largada 05h",
-  why: "Meta 9h. Meta-sonho 8h. São Bento do Sapucaí.",
-};
+/**
+ * As provas que caem dentro do ciclo. O modelo de `ciclo-bau.ts` é um template
+ * de 25 × 7 e não sabe de prova nenhuma — sem esta lista, o sábado de prova sai
+ * como um sábado qualquer, com longão e academia por cima da largada.
+ */
+const PROVAS: PlannedSession[] = [
+  {
+    id: "prova-wtr-campos",
+    date: "2026-10-17",
+    kind: "chave",
+    text: "WTR CAMPOS DO JORDÃO 19K — 687 m de D+",
+    why: "Aferição do Bloco 0, sem preparo específico. Perto de 2h. Não é prova de meta: é medição.",
+  },
+  {
+    id: "prova-bau",
+    date: RACE_DATE,
+    kind: "chave",
+    text: "INDOMIT PEDRA DO BAÚ 50K — largada 05h",
+    why: "Meta 9h. Meta-sonho 8h. São Bento do Sapucaí.",
+  },
+];
 
-/** A prova é a sessão do dia: nada do template de 25 × 7 sai em 20/03. */
-const DIAS_DE_PROVA = new Set<string>([RACE_DATE]);
+const DIAS_DE_PROVA = new Set<string>(PROVAS.map((p) => p.date));
 
 export const PLAN: PlannedSession[] = [
   ...HISTORICO_PARATY,
   ...expandirCiclo(DIAS_DE_PROVA),
-  PROVA,
+  ...PROVAS,
 ];
 
 /** Data de hoje no fuso do atleta, como YYYY-MM-DD. */
