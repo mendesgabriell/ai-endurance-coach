@@ -650,7 +650,7 @@ export const SEMANAS: SemanaModelo[] = [
         "dp": 534
       }
     ],
-    "dp": 2428
+    "dp": 2898
   },
   {
     "n": "Sem 2",
@@ -703,14 +703,14 @@ export const SEMANAS: SemanaModelo[] = [
         "dp": 80
       }
     ],
-    "dp": 2180
+    "dp": 2650
   },
   {
     "n": "Sem 3",
     "dt": "12 – 18/10",
     "b": "Bloco 0",
     "km": 48,
-    "dp": 2496,
+    "dp": 2966,
     "tag": "WTR",
     "dias": [
       {
