@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Prumo</title>
+<meta name="description" content="O ciclo de treino do Gabriel até a Indomit, medido pelo relógio.">
+<meta name="theme-color" content="#EFEEEA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B0B0A" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="/prumo/manifest.json">
+<link rel="apple-touch-icon" href="/prumo/icone.svg">
+<link rel="icon" href="/prumo/icone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/prumo/prumo.css">
+<style>#carregando{min-height:60vh;display:grid;place-items:center;font:500 14px Geist,system-ui,sans-serif;color:#86847E}</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="#hoje" aria-label="Prumo, início">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 11l5 6.2L12 22l-5-4.8L12 11z" fill="#E5482B"/></svg>
+      Prumo
+    </a>
+    <nav class="tabs" id="tabs" aria-label="Seções"></nav>
+    <div class="acts">
+      <div class="seg" id="modo" role="group" aria-label="Visão" hidden>
+        <button type="button" data-m="priv" aria-pressed="true">Privado</button>
+        <button type="button" data-m="pub" aria-pressed="false">Público</button>
+      </div>
+      <button type="button" class="ico" id="tema" aria-label="Alternar tema claro e escuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+      <span class="ava" title="Gabriel Mendes">GM</span>
+    </div>
+  </div>
+</header>
+<main id="view" class="wrap"><div id="carregando">Carregando o dia…</div></main>
+<div id="tip" class="tip" role="tooltip" hidden></div>
+<script>
+(function(){
+  var tema=null; try{ tema=JSON.parse(localStorage.getItem("prumo:tema")||"null"); }catch(e){}
+  if(tema) document.documentElement.setAttribute("data-theme",tema);
+  fetch("/api/prumo",{credentials:"same-origin"}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(d){ window.PRUMO_DATA=d; var s=document.createElement("script"); s.src="/prumo/prumo.js?v="+(d.geradoEm||"").slice(0,13); document.body.appendChild(s); })
+    .catch(function(e){ document.getElementById("carregando").textContent="Não consegui carregar os dados ("+e.message+"). Tenta de novo em um minuto."; });
+})();
+</script>
+</body>
+</html>
