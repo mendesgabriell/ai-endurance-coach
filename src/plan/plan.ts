@@ -47,7 +47,14 @@ const PROVA: PlannedSession = {
   why: "Meta 9h. Meta-sonho 8h. São Bento do Sapucaí.",
 };
 
-export const PLAN: PlannedSession[] = [...HISTORICO_PARATY, ...expandirCiclo(), PROVA];
+/** A prova é a sessão do dia: nada do template de 25 × 7 sai em 20/03. */
+const DIAS_DE_PROVA = new Set<string>([RACE_DATE]);
+
+export const PLAN: PlannedSession[] = [
+  ...HISTORICO_PARATY,
+  ...expandirCiclo(DIAS_DE_PROVA),
+  PROVA,
+];
 
 /** Data de hoje no fuso do atleta, como YYYY-MM-DD. */
 export function todayISO(now: Date = new Date()): string {

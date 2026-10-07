@@ -47,7 +47,15 @@ const TERRENO: Record<string, string> = {
 
 const ehPerna = (cod: string) => cod.startsWith("P");
 
-export function expandirCiclo(): PlannedSession[] {
+/**
+ * `diasDeProva` são as datas em que a prova é a sessão do dia. O modelo é um
+ * template de 25 × 7 e não sabe de prova nenhuma: sem isto, 20/03/2027 sai com
+ * a prova, mais 7,8 km de trilha, mais academia de braço — três sessões no dia
+ * mais importante do ciclo. A prova substitui o dia inteiro, corrida e força.
+ */
+export function expandirCiclo(
+  diasDeProva: ReadonlySet<string> = new Set<string>(),
+): PlannedSession[] {
   const out: PlannedSession[] = [];
 
   SEMANAS.forEach((sem, w) => {
@@ -55,6 +63,7 @@ export function expandirCiclo(): PlannedSession[] {
 
     sem.dias.forEach((dia, i) => {
       const date = somaDias(INICIO, w * 7 + i);
+      if (diasDeProva.has(date)) return;
       const nomeDia = DIAS[i] ?? dia.d;
 
       /* ---- corrida ---- */
