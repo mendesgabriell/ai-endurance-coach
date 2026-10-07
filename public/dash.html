@@ -131,6 +131,10 @@ nav button:hover{color:var(--ink-2)}
 nav button:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
 .wrap{padding-inline:18px}
 section{display:flex;flex-direction:column;gap:40px}
+/* `section{display:flex}` vence o display:none que o atributo hidden traz do
+   navegador. Dentro do artefato isso passa batido, porque a plataforma injeta
+   a regra dela; servido pela Vercel, o dash abria com as oito seções empilhadas. */
+[hidden]{display:none!important}
 .andamento{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--s2);border:1px solid var(--s2);border-radius:3px;
   padding:1px 6px;display:inline-block;white-space:nowrap}
