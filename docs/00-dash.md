@@ -11,6 +11,85 @@ As seções abaixo são as mesmas do dash, na mesma ordem.
 
 ---
 
+## 0. Torre de Controle
+
+Acrescentada em 06/10/2026, inspirada na torre do João (`jppace.com/road2boston`).
+É o portão da manhã: um número decide se a sessão do dia sai como está, sai menor,
+ou não sai.
+
+### O semáforo
+
+Quatro perguntas de 1 a 7 — **sono, fadiga geral, dor, estresse** — somadas. Quatro
+é o melhor dia possível, 28 o pior. Depois o relógio acrescenta penalidade onde o
+corpo discorda da resposta:
+
+| Medida | Gatilho | Penalidade |
+|---|---|---|
+| HRV da noite | abaixo da média de 7 dias menos um desvio | +4 |
+| FC de repouso | 5 bpm acima da média de 7 dias | +4 |
+| Horas de sono | menos de 6h / menos de 5h | +3 / +6 |
+| Recuperação COROS | abaixo de 50% | +3 |
+
+| Nível | Faixa | Corrida | Força |
+|---|---|---|---|
+| 5 · Pronto para prova | 4–10 | a sessão como está, pode subir o alvo | pesado, pirâmide completa |
+| 4 · Liberado | 11–16 | a sessão como está | pesado, como prescrito |
+| 3 · Atenção | 17–23 | mantém o tempo, corta a intensidade | sai a série de 6, fica em 10–12 |
+| 2 · Segura | 24–31 | metade do tempo, zona 2 | só máquina e isolador |
+| 1 · Parado | 32+ | não corre | não levanta; abdominal e mobilidade valem |
+
+**A trava da dor passa por cima de tudo:** dor 6 ou 7 nunca libera acima do nível 2,
+mesmo com HRV ótimo e oito horas de sono. É regra de código, não julgamento.
+
+### A projeção e o buraco
+
+Única âncora real: Paraty 58K em 12h30, que dá **12:56/km**.
+
+| Prova | Quando | Meta | Ritmo médio | Contra Paraty |
+|---|---|---|---|---|
+| INDOMIT Pedra do Baú 50K | 20/03/2027 | sub-9h | 10:48/km | 2:08/km mais rápido |
+| | | sonho: sub-8h | 9:36/km | 3:20/km mais rápido |
+| La Misión Brasil 110K | 12–14/08/2027 | sub-25h | 13:38/km | 0:42/km mais lento |
+| | | mira: 20h | 10:54/km | 2:02/km mais rápido |
+
+São dois problemas diferentes. A INDOMIT pede **ritmo**; a La Misión sub-25h pede
+**duração** — o ritmo é mais lento que o de Paraty, mas por 110 km e uma noite. As
+20h da La Misión pedem as duas coisas juntas e são a meta mais dura por margem larga.
+
+### Os cinco portões
+
+| | Quando | Critério | Abre |
+|---|---|---|---|
+| G1 | semana 2 · 05–11/10 | teste de limiar feito inteiro, FC média dos últimos 20' | as zonas reais do ciclo |
+| G2 | semana 3 · 17–18/10 | WTR Campos 19 km sem dor | o Bloco 1 e a subida de 10% |
+| G3 | semana 11 · 07–13/12 | semana de 88 km sem furo | cruzar os 100 |
+| G4 | semana 16 · 11–17/01 | longão de 26 km com D+ no ritmo alvo | o Bloco 3 e a janela da meta-sonho |
+| G5 | 20/03/2027 | o tempo da INDOMIT | a meta da La Misión |
+
+### As quatorze rotinas
+
+Na ordem em que uma destrava a outra. **Nenhuma é o modelo calculando** — todas são
+código com teste, e o modelo só lê o resultado (ADR-0004).
+
+| | Rotina | O que faz | Onde |
+|---|---|---|---|
+| R1 | As quatro perguntas | cron manda as 4 no Telegram com botões 1–7 → `checkin_subjetivo` | rota + tabela |
+| R2 | Sincronia do COROS | HRV, FC repouso, sono, recuperação → `metricas_diarias` | rota + tabela |
+| R3 | `baseline.ts` | média móvel de 7 dias e desvio | módulo + teste |
+| R4 | `semaforo.ts` | soma, penalidades, trava da dor → nível 1–5 | módulo + teste |
+| R5 | `modula.ts` | aplica o nível à sessão do dia | módulo + teste |
+| R6 | Mensagem da manhã v2 | manda o nível e a sessão **já modulada** | formatador |
+| R7 | `carga.ts` | carga por FC e por tonelagem | módulo + teste |
+| R8 | `acwr.ts` · `fitness.ts` | agudo/crônico, CTL/ATL/TSB | módulo + teste |
+| R9 | `conformidade.ts` | alvo × executado; em dia fácil, rápido demais conta como fora | módulo + teste |
+| R10 | `projecao.ts` | tempo projetado com faixa, a partir do limiar medido | módulo + teste |
+| R11 | `portoes.ts` | avalia os cinco portões com motivo | módulo + teste |
+| R12 | O dash lendo o banco | a página deixa de ser estática | rota |
+| R13 | `tenis.ts` | km por par e vida útil | módulo + tabela |
+| R14 | O ciclo da La Misión | o modelo fecha em 21/03; de lá a 12/08 é outro ciclo | modelo |
+
+---
+
 ## 1. A semana
 
 Segunda a sexta, **duas sessões**: corrida de manhã entre 5h e 9h, força à noite.

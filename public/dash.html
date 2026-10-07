@@ -236,6 +236,21 @@ ol.ex li.maq{box-shadow:inset 3px 0 0 var(--rule-2)}
 .pend .tag.ok{color:var(--s3)}
 .pend .pn{font-family:Archivo,sans-serif;font-size:15.5px;font-weight:700;letter-spacing:-.012em}
 .pend p{grid-column:2;margin:4px 0 0;font-size:14.5px;color:var(--ink-2);line-height:1.45;max-width:64ch}
+
+/* ---- torre de controle ---- */
+#torre .tc-hoje{display:flex;flex-direction:column;gap:10px}
+#torre .tc-lab{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3)}
+#torre .tc-off{font-family:Archivo,sans-serif;font-size:30px;font-weight:800;letter-spacing:-.035em;
+  color:var(--ink-3);line-height:1}
+#torre .tc-p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.5;max-width:64ch}
+#torre .tc-n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:3px;
+  font-family:Archivo,sans-serif;font-size:12px;font-weight:800;color:#fff;margin-right:7px;
+  vertical-align:-4px}
+#torre .tc-5{background:#199e70}#torre .tc-4{background:#3987e5}#torre .tc-3{background:#c9922a}
+#torre .tc-2{background:#d95926}#torre .tc-1{background:#b23b3b}
+#torre code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--sunken);
+  padding:1px 5px;border-radius:2px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -246,6 +261,180 @@ ol.ex li.maq{box-shadow:inset 3px 0 0 var(--rule-2)}
   </div>
 </header>
 <div class="wrap">
+
+<section id="torre" hidden>
+  <div>
+    <p class="eyebrow">O portão da manhã</p>
+    <h2>Torre de Controle</h2>
+    <p class="lede">Todo dia, antes de treinar, um número decide se a sessão sai como está,
+    sai menor, ou não sai. O número vem de <b>quatro medidas do relógio</b> e <b>quatro
+    perguntas</b> — e sai de código, não de opinião.</p>
+  </div>
+
+  <div class="card tc-hoje">
+    <div class="tc-lab">Semáforo de hoje</div>
+    <div class="tc-off">sem leitura</div>
+    <p class="tc-p">Faltam as duas pontas: a <b>sincronia do COROS</b> (R2) para o lado objetivo
+    e as <b>quatro perguntas no Telegram</b> (R1) para o subjetivo. Até elas existirem, esta
+    caixa não inventa número — e é de propósito.</p>
+  </div>
+
+  <div>
+    <h2>Os cinco níveis</h2>
+    <p class="sub">O nível não é informativo: ele muda a sessão do dia. A coluna da força é
+    separada da corrida porque as duas não caem juntas — perna pesada em dia ruim é o que
+    custa semana, não rodagem leve.</p>
+    <div class="scroll"><table class="viz-min">
+      <thead><tr><th>Nível</th><th>Faixa</th><th>Corrida</th><th>Força</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tc-n tc-5">5</span> <b>Pronto para prova</b></td><td class="n">4 – 10</td>
+          <td>A sessão como está. Pode subir o alvo.</td><td>Pesado, pirâmide completa.</td></tr>
+        <tr><td><span class="tc-n tc-4">4</span> <b>Liberado</b></td><td class="n">11 – 16</td>
+          <td>A sessão como está.</td><td>Pesado, como prescrito.</td></tr>
+        <tr><td><span class="tc-n tc-3">3</span> <b>Atenção</b></td><td class="n">17 – 23</td>
+          <td>Mantém o tempo, corta a intensidade. Tiro vira rodagem.</td>
+          <td>Sai a série de 6. Fica em 10–12.</td></tr>
+        <tr><td><span class="tc-n tc-2">2</span> <b>Segura</b></td><td class="n">24 – 31</td>
+          <td>Metade do tempo, zona 2 e nada mais.</td>
+          <td>Só máquina e isolador. Sem básico pesado.</td></tr>
+        <tr><td><span class="tc-n tc-1">1</span> <b>Parado</b></td><td class="n">32 +</td>
+          <td>Não corre.</td><td>Não levanta. Abdominal e mobilidade valem.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note" style="margin-top:14px"><b>A trava da dor passa por cima de tudo.</b>
+    Dor 6 ou 7 nunca libera acima do nível 2, mesmo com HRV ótimo e sono de oito horas.
+    Isso é regra de código, não julgamento — é o que separa cansaço de lesão.</p>
+  </div>
+
+  <div>
+    <h2>Como o número sai</h2>
+    <p class="sub">Começa nas quatro perguntas, de 1 a 7, somadas. Quatro é o melhor dia
+    possível, 28 o pior. Depois o relógio acrescenta penalidade onde o corpo discorda do
+    que você respondeu.</p>
+    <div class="stats">
+      <div><span class="k">Sono</span><span class="v">1–7</span></div>
+      <div><span class="k">Fadiga geral</span><span class="v">1–7</span></div>
+      <div><span class="k">Dor</span><span class="v">1–7</span></div>
+      <div><span class="k">Estresse</span><span class="v">1–7</span></div>
+    </div>
+    <div class="scroll" style="margin-top:14px"><table class="viz-min">
+      <thead><tr><th>Medida do relógio</th><th>Gatilho</th><th>Penalidade</th></tr></thead>
+      <tbody>
+        <tr><td>HRV da noite</td><td>abaixo da média de 7 dias menos um desvio</td><td class="n">+4</td></tr>
+        <tr><td>FC de repouso</td><td>5 bpm acima da média de 7 dias</td><td class="n">+4</td></tr>
+        <tr><td>Horas de sono</td><td>menos de 6h / menos de 5h</td><td class="n">+3 / +6</td></tr>
+        <tr><td>Recuperação COROS</td><td>abaixo de 50%</td><td class="n">+3</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note" style="margin-top:14px">O teto de <b>142 bpm</b> que o plano usa hoje
+    não foi medido: saiu de uma prova de 12h30. O <b>teste de limiar da semana 2</b> é o que
+    troca esse chute por número — e dele saem todas as zonas do ciclo.</p>
+  </div>
+
+  <div>
+    <h2>A projeção e o buraco</h2>
+    <p class="sub">Duas provas com metas declaradas, e a única âncora real que existe:
+    Paraty 58K em 12h30, que dá <b>12:56 por km</b>. Tudo abaixo é aritmética sobre isso —
+    não é previsão de desempenho, é o tamanho do buraco.</p>
+    <div class="scroll"><table class="viz-min">
+      <thead><tr><th>Prova</th><th>Quando</th><th>Meta</th><th>Ritmo médio</th><th>Contra Paraty</th></tr></thead>
+      <tbody>
+        <tr><td><b>INDOMIT Pedra do Baú 50K</b></td><td>20/03/2027</td><td>sub-9h</td>
+          <td class="n">10:48/km</td><td>2:08/km mais rápido</td></tr>
+        <tr><td></td><td></td><td>sonho: sub-8h</td><td class="n">9:36/km</td><td>3:20/km mais rápido</td></tr>
+        <tr><td><b>La Misión Brasil 110K</b></td><td>12–14/08/2027</td><td>sub-25h</td>
+          <td class="n">13:38/km</td><td>0:42/km mais lento</td></tr>
+        <tr><td></td><td></td><td>mira: 20h</td><td class="n">10:54/km</td><td>2:02/km mais rápido</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note" style="margin-top:14px"><b>São dois problemas diferentes, e isso muda o
+    treino.</b> A INDOMIT pede ritmo: nove horas num 50K é mais rápido por quilômetro do que
+    você correu Paraty. A La Misión sub-25h pede o contrário — o ritmo é mais lento que o de
+    Paraty, mas por <b>110 km e uma noite inteira</b>. Ritmo se treina em subida e limiar;
+    duração se treina em longão e sono. <b>As 20h da La Misión, porém, pedem as duas coisas
+    ao mesmo tempo</b> — é a meta mais dura das quatro, por margem larga.</p>
+  </div>
+
+  <div>
+    <h2>Os cinco portões</h2>
+    <p class="sub">Critério binário, sem interpretação: cada portão abre ou não abre, e o que
+    vem depois dele depende disso. É o que impede o ciclo de seguir no automático quando o
+    corpo não acompanhou.</p>
+    <div class="blocks">
+      <article><span class="num">G1</span>
+        <h3>Teste de limiar</h3><span class="win">semana 2 · 05–11/10 · quarta</span>
+        <p><b>Critério:</b> 30' contrarrelógio feito inteiro, FC média dos últimos 20 minutos
+        registrada. <b>Abre:</b> as zonas reais do ciclo. Sem ele, todo o resto roda em cima
+        de um teto estimado.</p></article>
+      <article><span class="num">G2</span>
+        <h3>WTR Campos do Jordão · 19 km</h3><span class="win">semana 3 · 17–18/10</span>
+        <p><b>Critério:</b> terminar sem dor. <b>Abre:</b> o Bloco 1 e a subida de volume em
+        degraus de 10%.</p></article>
+      <article><span class="num">G3</span>
+        <h3>A semana de 88 km</h3><span class="win">semana 11 · 07–13/12</span>
+        <p><b>Critério:</b> semana fechada em 88 km sem furo. <b>Abre:</b> cruzar os 100.
+        Se não fechar, o teto do ciclo fica em 88 e a meta da INDOMIT vira sub-9h30.</p></article>
+      <article><span class="num">G4</span>
+        <h3>Longão de 26 km com D+ de prova</h3><span class="win">semana 16 · 11–17/01</span>
+        <p><b>Critério:</b> completar no ritmo alvo, sem andar fora das subidas.
+        <b>Abre:</b> o Bloco 3 e a janela da meta-sonho de 8h.</p></article>
+      <article><span class="num">G5</span>
+        <h3>INDOMIT Pedra do Baú</h3><span class="win">20/03/2027</span>
+        <p><b>Critério:</b> o tempo. <b>Abre:</b> a meta da La Misión. Sub-9h sustenta
+        sub-25h nos 110 km; acima disso, a meta de agosto vira terminar, e a de 20h sai
+        da mesa.</p></article>
+    </div>
+  </div>
+
+  <div>
+    <h2>As rotinas a desenvolver</h2>
+    <p class="sub">Quatorze rotinas, na ordem em que uma destrava a outra. As quatro primeiras
+    são a torre em si: sem elas o semáforo não tem número. <b>Nenhuma delas é o modelo
+    calculando</b> — todas são código com teste, e o modelo só lê o resultado.</p>
+    <ol class="passos">
+      <li><b>R1 · As quatro perguntas</b> <em>rota + tabela</em><br>
+        Cron da manhã manda as quatro no Telegram com botões de 1 a 7. Grava em
+        <code>checkin_subjetivo</code>. É a metade do semáforo que só você tem.</li>
+      <li><b>R2 · Sincronia do COROS</b> <em>rota + tabela</em><br>
+        Puxa HRV da noite, FC de repouso, horas de sono e status de recuperação para
+        <code>metricas_diarias</code>, passando pela normalização canônica.</li>
+      <li><b>R3 · <code>baseline.ts</code></b> <em>módulo + teste</em><br>
+        Média móvel de 7 dias e desvio de HRV e FC de repouso. Sem baseline não existe
+        "abaixo do normal" — só número solto.</li>
+      <li><b>R4 · <code>semaforo.ts</code></b> <em>módulo + teste</em><br>
+        Soma o subjetivo, aplica as penalidades do relógio, aplica a trava da dor e devolve
+        o nível de 1 a 5. É o coração da torre.</li>
+      <li><b>R5 · <code>modula.ts</code></b> <em>módulo + teste</em><br>
+        Pega o nível e a sessão do dia e devolve a sessão ajustada — corta intensidade,
+        corta volume, ou veta. É o que faz o nível valer algo.</li>
+      <li><b>R6 · Mensagem da manhã, versão 2</b> <em>formatador</em><br>
+        Manda o nível, o porquê em uma linha, e a sessão <b>já modulada</b> — não a
+        prescrita. Hoje ela manda o plano cru.</li>
+      <li><b>R7 · <code>carga.ts</code></b> <em>módulo + teste</em><br>
+        Carga da sessão por FC e por tonelagem. É a entrada de tudo que vem abaixo.</li>
+      <li><b>R8 · <code>acwr.ts</code> e <code>fitness.ts</code></b> <em>módulo + teste</em><br>
+        Agudo 7 ÷ crônico 28, e CTL/ATL/TSB. O que diz se o volume está subindo rápido
+        demais antes de o corpo avisar.</li>
+      <li><b>R9 · <code>conformidade.ts</code></b> <em>módulo + teste</em><br>
+        Compara alvo contra executado e marca na mira ou fora. Em dia fácil, correr
+        <b>mais rápido</b> que a faixa conta como fora — é o erro que você mais comete.</li>
+      <li><b>R10 · <code>projecao.ts</code></b> <em>módulo + teste</em><br>
+        Tempo projetado nas duas provas, com faixa, a partir do limiar medido e do histórico.
+        Substitui a aritmética desta página por número que se move.</li>
+      <li><b>R11 · <code>portoes.ts</code></b> <em>módulo + teste</em><br>
+        Avalia os cinco portões contra o dado e devolve aberto ou fechado, com o motivo.</li>
+      <li><b>R12 · O dash lendo o banco</b> <em>rota</em><br>
+        Hoje o ciclo está em JavaScript dentro da página. A rota passa a servir do Supabase,
+        e a página deixa de ser estática.</li>
+      <li><b>R13 · <code>tenis.ts</code></b> <em>módulo + tabela</em><br>
+        Quilometragem por par e vida útil. O João tem sete pares com barra de desgaste;
+        é a rotina mais barata da lista e evita correr com tênis morto.</li>
+      <li><b>R14 · O ciclo da La Misión</b> <em>modelo</em><br>
+        O modelo atual fecha em 21/03. De lá até 12/08 é outro ciclo, com outra lógica:
+        duração e noite no lugar de ritmo e subida.</li>
+    </ol>
+  </div>
+</section>
 
 <section id="semana">
   <div>
@@ -907,7 +1096,7 @@ var NOMES={}; DIAS7.forEach(function(k){ NOMES[k]=CORRIDA[k].dia; });
 var INICIO=new Date(2026,8,28), DIAMS=864e5;
 function nm(v){ return (Math.round(v*10)/10).toString().replace(".",","); }
 
-var SEC=[{id:"semana",t:"A semana"},{id:"calendario",t:"Calendário"},{id:"mapa",t:"Mapa do Ciclo"},
+var SEC=[{id:"torre",t:"Torre de Controle"},{id:"semana",t:"A semana"},{id:"calendario",t:"Calendário"},{id:"mapa",t:"Mapa do Ciclo"},
          {id:"corrida",t:"Treino de corrida"},{id:"forca",t:"Treino de força"},
          {id:"medico",t:"Acompanhamento médico"},{id:"nutricao",t:"Nutrição"}];
 var nav=document.getElementById("nav");
