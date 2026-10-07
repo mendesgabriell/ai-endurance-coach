@@ -11,6 +11,7 @@ export interface DiaModelo {
   /** dia da semana: seg..dom */ d: string;
   /** terreno: rua · esteira · trilha · leve */ t: string;
   km: number;
+  /** desnível positivo do dia, em metros */ dp: number;
   /** troca o template de corrida do dia — ex.: "teste" */ s?: string;
   /** registro de execução (força feita), não prescrição */ g?: string;
   /** registro de execução: 1 = furou */ f?: number;
@@ -21,6 +22,7 @@ export interface SemanaModelo {
   /** "28/09 – 04/10" */ dt: string;
   /** a qual bloco pertence: "Bloco 0" */ b: string;
   /** volume alvo da semana, em km */ km: number;
+  /** desnível positivo alvo da semana, em metros, já somada a caminhada diária */ dp: number;
   /** marcador: realizada · teste · WTR · desc · BAU · "" */ tag: string;
   dias: DiaModelo[];
 }

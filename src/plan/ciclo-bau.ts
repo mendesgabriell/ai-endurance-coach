@@ -600,25 +600,29 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "seg",
         "t": "rua",
         "km": 3.8,
-        "f": 1
+        "f": 1,
+        "dp": 53
       },
       {
         "d": "ter",
         "t": "esteira",
         "km": 4.5,
-        "f": 1
+        "f": 1,
+        "dp": 140
       },
       {
         "d": "qua",
         "t": "rua",
         "km": 5.1,
-        "g": ""
+        "g": "",
+        "dp": 71
       },
       {
         "d": "qui",
         "t": "esteira",
         "km": 7,
-        "f": 1
+        "f": 1,
+        "dp": 220
       },
       {
         "d": "sex",
@@ -626,23 +630,27 @@ export const SEMANAS: SemanaModelo[] = [
         "km": 7,
         "s": "ter",
         "f": 1,
-        "g": "C"
+        "g": "C",
+        "dp": 220
       },
       {
         "d": "sáb",
         "t": "rua",
         "km": 14.3,
         "s": "seg",
-        "g": "D"
+        "g": "D",
+        "dp": 200
       },
       {
         "d": "dom",
         "t": "trilha",
         "km": 9.7,
         "s": "sáb",
-        "g": ""
+        "g": "",
+        "dp": 466
       }
-    ]
+    ],
+    "dp": 2570
   },
   {
     "n": "Sem 2",
@@ -654,82 +662,98 @@ export const SEMANAS: SemanaModelo[] = [
       {
         "d": "seg",
         "t": "rua",
-        "km": 6
+        "km": 6,
+        "dp": 84
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 6
+        "km": 6,
+        "dp": 140
       },
       {
         "d": "qua",
         "t": "rua",
         "km": 8,
-        "s": "teste"
+        "s": "teste",
+        "dp": 112
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 5
+        "km": 5,
+        "dp": 220
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 3
+        "km": 3,
+        "dp": 42
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 10
+        "km": 10,
+        "dp": 480
       },
       {
         "d": "dom",
         "t": "leve",
-        "km": 4
+        "km": 4,
+        "dp": 56
       }
-    ]
+    ],
+    "dp": 2334
   },
   {
     "n": "Sem 3",
     "dt": "12 – 18/10",
     "b": "Bloco 0",
     "km": 48,
+    "dp": 2609,
     "tag": "WTR",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 5.8
+        "km": 6.3,
+        "dp": 88
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 5.8
+        "km": 5.8,
+        "dp": 140
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 6.7
+        "km": 6.8,
+        "dp": 95
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 5.8
+        "km": 5.3,
+        "dp": 220
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 3.4
+        "km": 3.4,
+        "dp": 48
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 15.8
+        "km": 15.6,
+        "dp": 749
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 4.8
+        "t": "rua",
+        "km": 4.9,
+        "dp": 69
       }
     ]
   },
@@ -738,42 +762,50 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "19 – 25/10",
     "b": "Bloco 1",
     "km": 54,
+    "dp": 3230,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 6.5
+        "km": 7.2,
+        "dp": 101
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 6.5
+        "km": 6.5,
+        "dp": 220
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 7.6
+        "km": 7.8,
+        "dp": 109
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 6.5
+        "km": 5.9,
+        "dp": 350
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 3.8
+        "km": 3.8,
+        "dp": 53
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 17.8
+        "km": 17.0,
+        "dp": 816
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 5.4
+        "t": "rua",
+        "km": 5.8,
+        "dp": 81
       }
     ]
   },
@@ -782,42 +814,50 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "26/10 – 01/11",
     "b": "Bloco 1",
     "km": 60,
+    "dp": 3344,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 7.2
+        "km": 8.1,
+        "dp": 113
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 7.2
+        "km": 7.2,
+        "dp": 220
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 8.4
+        "km": 8.7,
+        "dp": 122
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 7.2
+        "km": 6.6,
+        "dp": 350
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 4.2
+        "km": 4.2,
+        "dp": 59
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 19.8
+        "km": 18.5,
+        "dp": 888
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 6.0
+        "t": "rua",
+        "km": 6.6,
+        "dp": 92
       }
     ]
   },
@@ -826,42 +866,50 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "2 – 08/11",
     "b": "Bloco 1",
     "km": 66,
+    "dp": 3468,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 7.9
+        "km": 9.0,
+        "dp": 126
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 7.9
+        "km": 7.9,
+        "dp": 220
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 9.2
+        "km": 9.6,
+        "dp": 134
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 7.9
+        "km": 7.3,
+        "dp": 350
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 4.6
+        "km": 4.6,
+        "dp": 64
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 21.8
+        "km": 20.2,
+        "dp": 970
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 6.6
+        "t": "rua",
+        "km": 7.4,
+        "dp": 104
       }
     ]
   },
@@ -870,42 +918,50 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "9 – 15/11",
     "b": "Bloco 1",
     "km": 50,
+    "dp": 3170,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 6.0
+        "km": 6.5,
+        "dp": 91
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 6.0
+        "km": 6.0,
+        "dp": 220
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 7.0
+        "km": 7.0,
+        "dp": 98
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 6.0
+        "km": 5.5,
+        "dp": 350
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 3.5
+        "km": 3.5,
+        "dp": 49
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 16.5
+        "km": 16.5,
+        "dp": 792
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 5.0
+        "t": "rua",
+        "km": 5.0,
+        "dp": 70
       }
     ]
   },
@@ -913,43 +969,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 8",
     "dt": "16 – 22/11",
     "b": "Bloco 1",
-    "km": 70,
+    "km": 72,
+    "dp": 3593,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 8.4
+        "km": 9.8,
+        "dp": 137
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 8.4
+        "km": 8.6,
+        "dp": 220
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 9.8
+        "km": 10.5,
+        "dp": 147
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 8.4
+        "km": 7.9,
+        "dp": 350
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 4.9
+        "km": 5.0,
+        "dp": 70
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 23.1
+        "km": 22.0,
+        "dp": 1056
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 7.0
+        "t": "rua",
+        "km": 8.1,
+        "dp": 113
       }
     ]
   },
@@ -957,43 +1021,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 9",
     "dt": "23 – 29/11",
     "b": "Bloco 1",
-    "km": 76,
+    "km": 80,
+    "dp": 3748,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 9.1
+        "km": 11.0,
+        "dp": 154
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 9.1
+        "km": 9.6,
+        "dp": 220
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 10.6
+        "km": 11.8,
+        "dp": 165
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 9.1
+        "km": 8.8,
+        "dp": 350
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 5.3
+        "km": 5.6,
+        "dp": 78
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 25.1
+        "km": 24.0,
+        "dp": 1152
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 7.6
+        "t": "rua",
+        "km": 9.2,
+        "dp": 129
       }
     ]
   },
@@ -1001,43 +1073,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 10",
     "dt": "30/11 – 06/12",
     "b": "Bloco 1",
-    "km": 82,
+    "km": 88,
+    "dp": 3906,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 9.8
+        "km": 12.2,
+        "dp": 171
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 9.8
+        "km": 10.6,
+        "dp": 220
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 11.5
+        "km": 13.0,
+        "dp": 182
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 9.8
+        "km": 9.7,
+        "dp": 350
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 5.7
+        "km": 6.2,
+        "dp": 87
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 27.1
+        "km": 26.1,
+        "dp": 1253
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 8.2
+        "t": "rua",
+        "km": 10.2,
+        "dp": 143
       }
     ]
   },
@@ -1045,43 +1125,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 11",
     "dt": "7 – 13/12",
     "b": "Bloco 1",
-    "km": 62,
+    "km": 66,
+    "dp": 3521,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 7.4
+        "km": 8.6,
+        "dp": 120
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 7.4
+        "km": 7.9,
+        "dp": 220
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 8.7
+        "km": 9.2,
+        "dp": 129
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 7.4
+        "km": 7.3,
+        "dp": 350
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 4.3
+        "km": 4.6,
+        "dp": 64
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 20.5
+        "km": 21.8,
+        "dp": 1046
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 6.2
+        "t": "rua",
+        "km": 6.6,
+        "dp": 92
       }
     ]
   },
@@ -1089,43 +1177,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 12",
     "dt": "14 – 20/12",
     "b": "Bloco 2",
-    "km": 86,
+    "km": 94,
+    "dp": 4629,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 10.3
+        "km": 12.9,
+        "dp": 181
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 10.3
+        "km": 11.3,
+        "dp": 300
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 12.0
+        "km": 13.8,
+        "dp": 193
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 10.3
+        "km": 10.3,
+        "dp": 545
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 6.0
+        "km": 6.6,
+        "dp": 92
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 28.4
+        "km": 28.5,
+        "dp": 1368
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 8.6
+        "t": "rua",
+        "km": 10.7,
+        "dp": 150
       }
     ]
   },
@@ -1133,43 +1229,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 13",
     "dt": "21 – 27/12",
     "b": "Bloco 2",
-    "km": 92,
+    "km": 102,
+    "dp": 4802,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 11.0
+        "km": 13.9,
+        "dp": 195
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 11.0
+        "km": 12.2,
+        "dp": 300
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 12.9
+        "km": 14.9,
+        "dp": 209
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 11.0
+        "km": 11.2,
+        "dp": 545
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 6.4
+        "km": 7.1,
+        "dp": 99
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 30.4
+        "km": 31.1,
+        "dp": 1493
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 9.2
+        "t": "rua",
+        "km": 11.5,
+        "dp": 161
       }
     ]
   },
@@ -1177,43 +1281,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 14",
     "dt": "28/12 – 03/01",
     "b": "Bloco 2",
-    "km": 98,
+    "km": 110,
+    "dp": 4984,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 11.8
+        "km": 14.9,
+        "dp": 209
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 11.8
+        "km": 13.2,
+        "dp": 300
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 13.7
+        "km": 16.0,
+        "dp": 224
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 11.8
+        "km": 12.1,
+        "dp": 545
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 6.9
+        "km": 7.7,
+        "dp": 108
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 32.3
+        "km": 33.9,
+        "dp": 1627
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 9.8
+        "t": "rua",
+        "km": 12.2,
+        "dp": 171
       }
     ]
   },
@@ -1221,43 +1333,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 15",
     "dt": "4 – 10/01",
     "b": "Bloco 2",
-    "km": 72,
+    "km": 80,
+    "dp": 4405,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 8.6
+        "km": 10.4,
+        "dp": 146
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 8.6
+        "km": 9.6,
+        "dp": 300
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 10.1
+        "km": 11.2,
+        "dp": 157
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 8.6
+        "km": 8.8,
+        "dp": 545
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 5.0
+        "km": 5.6,
+        "dp": 78
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 23.8
+        "km": 26.4,
+        "dp": 1267
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 7.2
+        "t": "rua",
+        "km": 8.0,
+        "dp": 112
       }
     ]
   },
@@ -1265,43 +1385,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 16",
     "dt": "11 – 17/01",
     "b": "Bloco 2",
-    "km": 102,
+    "km": 116,
+    "dp": 5149,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 12.2
+        "km": 15.4,
+        "dp": 216
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 12.2
+        "km": 13.9,
+        "dp": 300
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 14.3
+        "km": 16.6,
+        "dp": 232
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 12.2
+        "km": 12.8,
+        "dp": 545
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 7.1
+        "km": 8.1,
+        "dp": 113
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 33.7
+        "km": 36.9,
+        "dp": 1771
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 10.2
+        "t": "rua",
+        "km": 12.3,
+        "dp": 172
       }
     ]
   },
@@ -1309,43 +1437,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 17",
     "dt": "18 – 24/01",
     "b": "Bloco 2",
-    "km": 108,
+    "km": 126,
+    "dp": 5370,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 13.0
+        "km": 16.7,
+        "dp": 234
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 13.0
+        "km": 15.1,
+        "dp": 300
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 15.1
+        "km": 18.0,
+        "dp": 252
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 13.0
+        "km": 13.9,
+        "dp": 545
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 7.6
+        "km": 8.8,
+        "dp": 123
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 35.6
+        "km": 40.2,
+        "dp": 1930
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 10.8
+        "t": "rua",
+        "km": 13.3,
+        "dp": 186
       }
     ]
   },
@@ -1353,43 +1489,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 18",
     "dt": "25 – 31/01",
     "b": "Bloco 2",
-    "km": 80,
+    "km": 94,
+    "dp": 4713,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 9.6
+        "km": 12.2,
+        "dp": 171
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 9.6
+        "km": 11.3,
+        "dp": 300
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 11.2
+        "km": 13.2,
+        "dp": 185
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 9.6
+        "km": 10.3,
+        "dp": 545
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 5.6
+        "km": 6.6,
+        "dp": 92
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 26.4
+        "km": 31.0,
+        "dp": 1488
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 8.0
+        "t": "rua",
+        "km": 9.4,
+        "dp": 132
       }
     ]
   },
@@ -1397,43 +1541,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 19",
     "dt": "1 – 07/02",
     "b": "Bloco 3",
-    "km": 112,
+    "km": 132,
+    "dp": 5967,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 11.2
+        "km": 15.8,
+        "dp": 221
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 12.3
+        "km": 13.2,
+        "dp": 360
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 13.4
+        "km": 17.2,
+        "dp": 241
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 11.2
+        "km": 11.9,
+        "dp": 875
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 5.6
+        "km": 7.9,
+        "dp": 111
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 39.2
+        "km": 42.2,
+        "dp": 2026
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 19.0
+        "t": "rua",
+        "km": 23.8,
+        "dp": 333
       }
     ]
   },
@@ -1441,43 +1593,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 20",
     "dt": "8 – 14/02",
     "b": "Bloco 3",
-    "km": 118,
-    "tag": "118",
+    "km": 140,
+    "dp": 6146,
+    "tag": "pico",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 11.8
+        "km": 16.8,
+        "dp": 235
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 13.0
+        "km": 14.0,
+        "dp": 360
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 14.2
+        "km": 18.2,
+        "dp": 255
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 11.8
+        "km": 12.6,
+        "dp": 875
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 5.9
+        "km": 8.4,
+        "dp": 118
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 41.3
+        "km": 44.8,
+        "dp": 2150
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 20.1
+        "t": "rua",
+        "km": 25.2,
+        "dp": 353
       }
     ]
   },
@@ -1485,43 +1645,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 21",
     "dt": "15 – 21/02",
     "b": "Bloco 3",
-    "km": 88,
+    "km": 104,
+    "dp": 5346,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 8.8
+        "km": 12.5,
+        "dp": 175
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 9.7
+        "km": 10.4,
+        "dp": 360
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 10.6
+        "km": 13.5,
+        "dp": 189
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 8.8
+        "km": 9.4,
+        "dp": 875
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 4.4
+        "km": 6.2,
+        "dp": 87
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 30.8
+        "km": 33.3,
+        "dp": 1598
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 15.0
+        "t": "rua",
+        "km": 18.7,
+        "dp": 262
       }
     ]
   },
@@ -1529,43 +1697,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 22",
     "dt": "22 – 28/02",
     "b": "Bloco 3",
-    "km": 112,
+    "km": 134,
+    "dp": 6012,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 11.2
+        "km": 16.1,
+        "dp": 225
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 12.3
+        "km": 13.4,
+        "dp": 360
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 13.4
+        "km": 17.4,
+        "dp": 244
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 11.2
+        "km": 12.1,
+        "dp": 875
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 5.6
+        "km": 8.0,
+        "dp": 112
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 39.2
+        "km": 42.9,
+        "dp": 2059
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 19.0
+        "t": "rua",
+        "km": 24.1,
+        "dp": 337
       }
     ]
   },
@@ -1573,43 +1749,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 23",
     "dt": "1 – 07/03",
     "b": "Bloco 3",
-    "km": 95,
+    "km": 114,
+    "dp": 5568,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 9.5
+        "km": 13.7,
+        "dp": 192
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 10.4
+        "km": 11.4,
+        "dp": 360
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 11.4
+        "km": 14.8,
+        "dp": 207
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 9.5
+        "km": 10.3,
+        "dp": 875
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 4.8
+        "km": 6.8,
+        "dp": 95
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 33.2
+        "km": 36.5,
+        "dp": 1752
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 16.2
+        "t": "rua",
+        "km": 20.5,
+        "dp": 287
       }
     ]
   },
@@ -1617,43 +1801,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 24",
     "dt": "8 – 14/03",
     "b": "Bloco 4",
-    "km": 60,
+    "km": 70,
+    "dp": 2895,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 6.0
+        "km": 8.4,
+        "dp": 118
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 6.6
+        "km": 7.0,
+        "dp": 120
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 7.2
+        "km": 9.1,
+        "dp": 127
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 6.0
+        "km": 6.3,
+        "dp": 220
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 3.0
+        "km": 4.2,
+        "dp": 59
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 21.0
+        "km": 22.4,
+        "dp": 1075
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 10.2
+        "t": "rua",
+        "km": 12.6,
+        "dp": 176
       }
     ]
   },
@@ -1661,43 +1853,51 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 25",
     "dt": "15 – 21/03",
     "b": "Bloco 4",
-    "km": 32,
+    "km": 36,
+    "dp": 2140,
     "tag": "BAU",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
-        "km": 3.2
+        "km": 4.3,
+        "dp": 60
       },
       {
         "d": "ter",
         "t": "esteira",
-        "km": 3.5
+        "km": 3.6,
+        "dp": 120
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 3.8
+        "km": 4.7,
+        "dp": 66
       },
       {
         "d": "qui",
         "t": "esteira",
-        "km": 3.2
+        "km": 3.2,
+        "dp": 220
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 1.6
+        "km": 2.2,
+        "dp": 31
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 11.2
+        "km": 11.5,
+        "dp": 552
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 5.4
+        "t": "rua",
+        "km": 6.5,
+        "dp": 91
       }
     ]
   }
