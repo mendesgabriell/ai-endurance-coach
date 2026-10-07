@@ -601,7 +601,7 @@ export const SEMANAS: SemanaModelo[] = [
         "t": "rua",
         "km": 3.8,
         "f": 1,
-        "dp": 53
+        "dp": 76
       },
       {
         "d": "ter",
@@ -615,7 +615,7 @@ export const SEMANAS: SemanaModelo[] = [
         "t": "rua",
         "km": 5.1,
         "g": "",
-        "dp": 71
+        "dp": 102
       },
       {
         "d": "qui",
@@ -639,7 +639,7 @@ export const SEMANAS: SemanaModelo[] = [
         "km": 14.3,
         "s": "seg",
         "g": "D",
-        "dp": 200
+        "dp": 286
       },
       {
         "d": "dom",
@@ -647,10 +647,10 @@ export const SEMANAS: SemanaModelo[] = [
         "km": 9.7,
         "s": "sáb",
         "g": "",
-        "dp": 466
+        "dp": 534
       }
     ],
-    "dp": 2570
+    "dp": 2428
   },
   {
     "n": "Sem 2",
@@ -663,7 +663,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "seg",
         "t": "rua",
         "km": 6,
-        "dp": 84
+        "dp": 120
       },
       {
         "d": "ter",
@@ -676,7 +676,7 @@ export const SEMANAS: SemanaModelo[] = [
         "t": "rua",
         "km": 8,
         "s": "teste",
-        "dp": 112
+        "dp": 160
       },
       {
         "d": "qui",
@@ -688,36 +688,36 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 3,
-        "dp": 42
+        "dp": 60
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 10,
-        "dp": 480
+        "dp": 550
       },
       {
         "d": "dom",
         "t": "leve",
         "km": 4,
-        "dp": 56
+        "dp": 80
       }
     ],
-    "dp": 2334
+    "dp": 2180
   },
   {
     "n": "Sem 3",
     "dt": "12 – 18/10",
     "b": "Bloco 0",
     "km": 48,
-    "dp": 2609,
+    "dp": 2496,
     "tag": "WTR",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 6.3,
-        "dp": 88
+        "dp": 126
       },
       {
         "d": "ter",
@@ -729,7 +729,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 6.8,
-        "dp": 95
+        "dp": 136
       },
       {
         "d": "qui",
@@ -741,19 +741,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 3.4,
-        "dp": 48
+        "dp": 68
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 15.6,
-        "dp": 749
+        "dp": 858
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 4.9,
-        "dp": 69
+        "dp": 98
       }
     ]
   },
@@ -762,14 +762,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "19 – 25/10",
     "b": "Bloco 1",
     "km": 54,
-    "dp": 3230,
+    "dp": 3347,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 7.2,
-        "dp": 101
+        "dp": 144
       },
       {
         "d": "ter",
@@ -781,7 +781,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 7.8,
-        "dp": 109
+        "dp": 156
       },
       {
         "d": "qui",
@@ -793,19 +793,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 3.8,
-        "dp": 53
+        "dp": 76
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 17.0,
-        "dp": 816
+        "dp": 935
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 5.8,
-        "dp": 81
+        "dp": 116
       }
     ]
   },
@@ -814,14 +814,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "26/10 – 01/11",
     "b": "Bloco 1",
     "km": 60,
-    "dp": 3344,
+    "dp": 3490,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 8.1,
-        "dp": 113
+        "dp": 162
       },
       {
         "d": "ter",
@@ -833,7 +833,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 8.7,
-        "dp": 122
+        "dp": 174
       },
       {
         "d": "qui",
@@ -845,19 +845,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 4.2,
-        "dp": 59
+        "dp": 84
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 18.5,
-        "dp": 888
+        "dp": 1018
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 6.6,
-        "dp": 92
+        "dp": 132
       }
     ]
   },
@@ -866,14 +866,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "2 – 08/11",
     "b": "Bloco 1",
     "km": 66,
-    "dp": 3468,
+    "dp": 3643,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 9.0,
-        "dp": 126
+        "dp": 180
       },
       {
         "d": "ter",
@@ -885,7 +885,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 9.6,
-        "dp": 134
+        "dp": 192
       },
       {
         "d": "qui",
@@ -897,19 +897,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 4.6,
-        "dp": 64
+        "dp": 92
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 20.2,
-        "dp": 970
+        "dp": 1111
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 7.4,
-        "dp": 104
+        "dp": 148
       }
     ]
   },
@@ -918,14 +918,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "9 – 15/11",
     "b": "Bloco 1",
     "km": 50,
-    "dp": 3170,
+    "dp": 3268,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 6.5,
-        "dp": 91
+        "dp": 130
       },
       {
         "d": "ter",
@@ -937,7 +937,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 7.0,
-        "dp": 98
+        "dp": 140
       },
       {
         "d": "qui",
@@ -949,19 +949,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 3.5,
-        "dp": 49
+        "dp": 70
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 16.5,
-        "dp": 792
+        "dp": 908
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 5.0,
-        "dp": 70
+        "dp": 100
       }
     ]
   },
@@ -970,14 +970,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "16 – 22/11",
     "b": "Bloco 1",
     "km": 72,
-    "dp": 3593,
+    "dp": 3798,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 9.8,
-        "dp": 137
+        "dp": 196
       },
       {
         "d": "ter",
@@ -989,7 +989,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 10.5,
-        "dp": 147
+        "dp": 210
       },
       {
         "d": "qui",
@@ -1001,19 +1001,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 5.0,
-        "dp": 70
+        "dp": 100
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 22.0,
-        "dp": 1056
+        "dp": 1210
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 8.1,
-        "dp": 113
+        "dp": 162
       }
     ]
   },
@@ -1022,14 +1022,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "23 – 29/11",
     "b": "Bloco 1",
     "km": 80,
-    "dp": 3748,
+    "dp": 3992,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 11.0,
-        "dp": 154
+        "dp": 220
       },
       {
         "d": "ter",
@@ -1041,7 +1041,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 11.8,
-        "dp": 165
+        "dp": 236
       },
       {
         "d": "qui",
@@ -1053,19 +1053,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 5.6,
-        "dp": 78
+        "dp": 112
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 24.0,
-        "dp": 1152
+        "dp": 1320
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 9.2,
-        "dp": 129
+        "dp": 184
       }
     ]
   },
@@ -1074,14 +1074,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "30/11 – 06/12",
     "b": "Bloco 1",
     "km": 88,
-    "dp": 3906,
+    "dp": 4188,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 12.2,
-        "dp": 171
+        "dp": 244
       },
       {
         "d": "ter",
@@ -1093,7 +1093,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 13.0,
-        "dp": 182
+        "dp": 260
       },
       {
         "d": "qui",
@@ -1105,19 +1105,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 6.2,
-        "dp": 87
+        "dp": 124
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 26.1,
-        "dp": 1253
+        "dp": 1436
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 10.2,
-        "dp": 143
+        "dp": 204
       }
     ]
   },
@@ -1126,14 +1126,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "7 – 13/12",
     "b": "Bloco 1",
     "km": 66,
-    "dp": 3521,
+    "dp": 3699,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 8.6,
-        "dp": 120
+        "dp": 172
       },
       {
         "d": "ter",
@@ -1145,7 +1145,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 9.2,
-        "dp": 129
+        "dp": 184
       },
       {
         "d": "qui",
@@ -1157,19 +1157,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 4.6,
-        "dp": 64
+        "dp": 92
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 21.8,
-        "dp": 1046
+        "dp": 1199
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 6.6,
-        "dp": 92
+        "dp": 132
       }
     ]
   },
@@ -1178,14 +1178,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "14 – 20/12",
     "b": "Bloco 2",
     "km": 94,
-    "dp": 4629,
+    "dp": 4913,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 12.9,
-        "dp": 181
+        "dp": 258
       },
       {
         "d": "ter",
@@ -1197,7 +1197,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 13.8,
-        "dp": 193
+        "dp": 276
       },
       {
         "d": "qui",
@@ -1209,19 +1209,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 6.6,
-        "dp": 92
+        "dp": 132
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 28.5,
-        "dp": 1368
+        "dp": 1568
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 10.7,
-        "dp": 150
+        "dp": 214
       }
     ]
   },
@@ -1230,14 +1230,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "21 – 27/12",
     "b": "Bloco 2",
     "km": 102,
-    "dp": 4802,
+    "dp": 5123,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 13.9,
-        "dp": 195
+        "dp": 278
       },
       {
         "d": "ter",
@@ -1249,7 +1249,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 14.9,
-        "dp": 209
+        "dp": 298
       },
       {
         "d": "qui",
@@ -1261,19 +1261,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 7.1,
-        "dp": 99
+        "dp": 142
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 31.1,
-        "dp": 1493
+        "dp": 1710
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 11.5,
-        "dp": 161
+        "dp": 230
       }
     ]
   },
@@ -1282,14 +1282,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "28/12 – 03/01",
     "b": "Bloco 2",
     "km": 110,
-    "dp": 4984,
+    "dp": 5345,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 14.9,
-        "dp": 209
+        "dp": 298
       },
       {
         "d": "ter",
@@ -1301,7 +1301,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 16.0,
-        "dp": 224
+        "dp": 320
       },
       {
         "d": "qui",
@@ -1313,19 +1313,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 7.7,
-        "dp": 108
+        "dp": 154
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 33.9,
-        "dp": 1627
+        "dp": 1864
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 12.2,
-        "dp": 171
+        "dp": 244
       }
     ]
   },
@@ -1334,14 +1334,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "4 – 10/01",
     "b": "Bloco 2",
     "km": 80,
-    "dp": 4405,
+    "dp": 4621,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 10.4,
-        "dp": 146
+        "dp": 208
       },
       {
         "d": "ter",
@@ -1353,7 +1353,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 11.2,
-        "dp": 157
+        "dp": 224
       },
       {
         "d": "qui",
@@ -1365,19 +1365,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 5.6,
-        "dp": 78
+        "dp": 112
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 26.4,
-        "dp": 1267
+        "dp": 1452
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 8.0,
-        "dp": 112
+        "dp": 160
       }
     ]
   },
@@ -1386,14 +1386,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "11 – 17/01",
     "b": "Bloco 2",
     "km": 116,
-    "dp": 5149,
+    "dp": 5543,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 15.4,
-        "dp": 216
+        "dp": 308
       },
       {
         "d": "ter",
@@ -1405,7 +1405,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 16.6,
-        "dp": 232
+        "dp": 332
       },
       {
         "d": "qui",
@@ -1417,19 +1417,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 8.1,
-        "dp": 113
+        "dp": 162
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 36.9,
-        "dp": 1771
+        "dp": 2030
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 12.3,
-        "dp": 172
+        "dp": 246
       }
     ]
   },
@@ -1438,14 +1438,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "18 – 24/01",
     "b": "Bloco 2",
     "km": 126,
-    "dp": 5370,
+    "dp": 5812,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 16.7,
-        "dp": 234
+        "dp": 334
       },
       {
         "d": "ter",
@@ -1457,7 +1457,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 18.0,
-        "dp": 252
+        "dp": 360
       },
       {
         "d": "qui",
@@ -1469,19 +1469,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 8.8,
-        "dp": 123
+        "dp": 176
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 40.2,
-        "dp": 1930
+        "dp": 2211
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 13.3,
-        "dp": 186
+        "dp": 266
       }
     ]
   },
@@ -1490,14 +1490,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "25 – 31/01",
     "b": "Bloco 2",
     "km": 94,
-    "dp": 4713,
+    "dp": 4998,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 12.2,
-        "dp": 171
+        "dp": 244
       },
       {
         "d": "ter",
@@ -1509,7 +1509,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 13.2,
-        "dp": 185
+        "dp": 264
       },
       {
         "d": "qui",
@@ -1521,19 +1521,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 6.6,
-        "dp": 92
+        "dp": 132
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 31.0,
-        "dp": 1488
+        "dp": 1705
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 9.4,
-        "dp": 132
+        "dp": 188
       }
     ]
   },
@@ -1542,14 +1542,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "1 – 07/02",
     "b": "Bloco 3",
     "km": 132,
-    "dp": 5967,
+    "dp": 6650,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 15.8,
-        "dp": 221
+        "dp": 316
       },
       {
         "d": "ter",
@@ -1561,7 +1561,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 17.2,
-        "dp": 241
+        "dp": 344
       },
       {
         "d": "qui",
@@ -1573,19 +1573,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 7.9,
-        "dp": 111
+        "dp": 158
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 42.2,
-        "dp": 2026
+        "dp": 2321
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 23.8,
-        "dp": 333
+        "dp": 476
       }
     ]
   },
@@ -1594,14 +1594,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "8 – 14/02",
     "b": "Bloco 3",
     "km": 140,
-    "dp": 6146,
+    "dp": 6871,
     "tag": "pico",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 16.8,
-        "dp": 235
+        "dp": 336
       },
       {
         "d": "ter",
@@ -1613,7 +1613,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 18.2,
-        "dp": 255
+        "dp": 364
       },
       {
         "d": "qui",
@@ -1625,19 +1625,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 8.4,
-        "dp": 118
+        "dp": 168
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 44.8,
-        "dp": 2150
+        "dp": 2464
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 25.2,
-        "dp": 353
+        "dp": 504
       }
     ]
   },
@@ -1646,14 +1646,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "15 – 21/02",
     "b": "Bloco 3",
     "km": 104,
-    "dp": 5346,
+    "dp": 5884,
     "tag": "desc",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 12.5,
-        "dp": 175
+        "dp": 250
       },
       {
         "d": "ter",
@@ -1665,7 +1665,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 13.5,
-        "dp": 189
+        "dp": 270
       },
       {
         "d": "qui",
@@ -1677,19 +1677,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 6.2,
-        "dp": 87
+        "dp": 124
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 33.3,
-        "dp": 1598
+        "dp": 1831
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 18.7,
-        "dp": 262
+        "dp": 374
       }
     ]
   },
@@ -1698,14 +1698,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "22 – 28/02",
     "b": "Bloco 3",
     "km": 134,
-    "dp": 6012,
+    "dp": 6707,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 16.1,
-        "dp": 225
+        "dp": 322
       },
       {
         "d": "ter",
@@ -1717,7 +1717,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 17.4,
-        "dp": 244
+        "dp": 348
       },
       {
         "d": "qui",
@@ -1729,19 +1729,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 8.0,
-        "dp": 112
+        "dp": 160
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 42.9,
-        "dp": 2059
+        "dp": 2360
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 24.1,
-        "dp": 337
+        "dp": 482
       }
     ]
   },
@@ -1750,14 +1750,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "1 – 07/03",
     "b": "Bloco 3",
     "km": 114,
-    "dp": 5568,
+    "dp": 6159,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 13.7,
-        "dp": 192
+        "dp": 274
       },
       {
         "d": "ter",
@@ -1769,7 +1769,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 14.8,
-        "dp": 207
+        "dp": 296
       },
       {
         "d": "qui",
@@ -1781,19 +1781,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 6.8,
-        "dp": 95
+        "dp": 136
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 36.5,
-        "dp": 1752
+        "dp": 2008
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 20.5,
-        "dp": 287
+        "dp": 410
       }
     ]
   },
@@ -1802,14 +1802,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "8 – 14/03",
     "b": "Bloco 4",
     "km": 70,
-    "dp": 2895,
+    "dp": 3158,
     "tag": "",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 8.4,
-        "dp": 118
+        "dp": 168
       },
       {
         "d": "ter",
@@ -1821,7 +1821,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 9.1,
-        "dp": 127
+        "dp": 182
       },
       {
         "d": "qui",
@@ -1833,19 +1833,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 4.2,
-        "dp": 59
+        "dp": 84
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 22.4,
-        "dp": 1075
+        "dp": 1232
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 12.6,
-        "dp": 176
+        "dp": 252
       }
     ]
   },
@@ -1854,14 +1854,14 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "15 – 21/03",
     "b": "Bloco 4",
     "km": 36,
-    "dp": 2140,
+    "dp": 2226,
     "tag": "BAU",
     "dias": [
       {
         "d": "seg",
         "t": "rua",
         "km": 4.3,
-        "dp": 60
+        "dp": 86
       },
       {
         "d": "ter",
@@ -1873,7 +1873,7 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "qua",
         "t": "rua",
         "km": 4.7,
-        "dp": 66
+        "dp": 94
       },
       {
         "d": "qui",
@@ -1885,19 +1885,19 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "sex",
         "t": "rua",
         "km": 2.2,
-        "dp": 31
+        "dp": 44
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 11.5,
-        "dp": 552
+        "dp": 632
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 6.5,
-        "dp": 91
+        "dp": 130
       }
     ]
   }
