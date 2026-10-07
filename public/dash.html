@@ -284,7 +284,7 @@ ol.ex li.maq{box-shadow:inset 3px 0 0 var(--rule-2)}
     <b>Consequência no Bloco 0.</b> A rampa de retomada 32 → 40 → 45 virou 44 → 40 → 45, ou seja, um bloco praticamente plano em torno de 43 km. Isso é aceitável porque ele não está reconstruindo do zero — está voltando do polimento e da recuperação de uma prova de 58K em 19/09. O que não é aceitável é repetir a compensação: volume perdido normalmente fica perdido.
   </div>
   <div class="note">
-    <b>O rodízio de força não tem dia travado.</b> A grade acima mostra a ordem padrão — A1, B, C, A2, D, T. Se um dia furar, o rodízio anda, não pula: a meta é a semana fechar com todo grupo duas vezes, não o treino cair na terça. <b>A academia fica perto do trabalho e longe de casa</b>, e é isso que derruba a sessão da noite quando o dia estica.
+    <b>O rodízio de força não tem dia travado.</b> A grade mostra a ordem padrão — P1, C1, T1, P2, C2, BO, T2. Se um dia furar, o rodízio anda, não pula: a meta é a semana fechar com perna, costas e peito duas vezes cada. <b>A academia fica perto do trabalho e longe de casa</b>, e é isso que derruba a sessão da noite quando o dia estica — por isso as sessões são de 45 min mais 30 de cardio, e não de duas horas.
   </div>
 </section>
 
@@ -630,7 +630,13 @@ ol.ex li.maq{box-shadow:inset 3px 0 0 var(--rule-2)}
     </table></div>
   </div>
   <div class="note">
-    <b>Seis dias fecham a conta.</b> A1, B, C, A2, D e T dão duas passadas por grupo na semana. Com cinco dias, corta o T. Com quatro, corta o D também — perna e costas nunca saem. <b>Pancada de fisiculturista</b>: 9 a 12 exercícios por sessão, isoladores sempre, drop set e negativa controlada. Nada de treino funcional de corredor.
+    <b>Sete sessões, e uma delas é descartável.</b> Perna 2×, costas 2×, peito 2× — esses seis são fixos. O <b>BO</b>, de braço e ombro, cai no sábado depois da trilha e é o que sai primeiro quando o dia foi longo: ombro e braço já pegam trabalho indireto quatro vezes na semana. O <b>CP</b> não tem dia: é o curinga que fecha costas e peito de uma vez quando um dia furou.
+  </div>
+  <div class="note">
+    <b>Variedade é coisa da semana, não da sessão.</b> Três remadas no mesmo dia não é variedade — é a mesma coisa três vezes, e a quarta série de remada rende menos que a primeira de puxada. Por isso cada sessão tem <b>quatro vagas do grupo principal, uma adjacente e uma de abdominal</b>, com os ângulos trocando entre C1 e C2, entre T1 e T2. Perna é a exceção com cinco vagas: tem mais sub-músculo que qualquer outro grupo, e abdutora, adutora e panturrilha não podem sair.
+  </div>
+  <div class="note">
+    <b>Pirâmide nos dois primeiros de cada sessão</b> — 12, 10, 8, 6, com a carga subindo. Dispensa aquecimento separado e dá estímulo de força e de hipertrofia na mesma série. Nos isoladores, carga fixa e drop na última: pirâmide em elevação lateral vira balanço.
   </div>
 </section>
 
@@ -744,121 +750,128 @@ box.addEventListener("touchend",function(){setTimeout(esconde,2600);},{passive:t
 (function(){
 "use strict";
 var W={
- A1:{nome:"A1 · Perna, quadríceps",sub:"quadríceps",tip:"Básico pesado primeiro, isolador com drop no fim. Intervalo de 2 min nos três primeiros, 90s no resto.",ex:[
-  {n:"Cadeira extensora",s:"3 × 20 leve",a:"Quadríceps femoral",nt:"Aquecimento articular. Sem falha — só irriga o joelho antes da carga."},
-  {n:"Agachamento livre",s:"4 × 8",a:"Quadríceps, glúteo máximo, eretores da espinha",nt:"RPE 8, sobram duas no tanque. Fase excêntrica de 3s."},
-  {n:"Leg press 45°",s:"4 × 10",a:"Vasto lateral, vasto medial, glúteo máximo",nt:"Pé baixo e junto na plataforma. Amplitude até 90° de joelho."},
-  {n:"Hack machine",s:"3 × 10",maq:1,a:"Vasto lateral",nt:"Sem hack: agachamento no Smith com pé à frente."},
-  {n:"Afundo caminhando com halteres",s:"3 × 12 passos",a:"Quadríceps, glúteo máximo",nt:"Passada longa, joelho de trás quase no chão."},
-  {n:"Cadeira extensora",s:"4 × 12",a:"Reto femoral, vastos",nt:"Agora pesado. Drop duplo na última: falha, −30%, falha, −30%, falha."},
-  {n:"Cadeira abdutora",s:"4 × 15",a:"Glúteo médio e mínimo",nt:"Tronco inclinado à frente. Drop na última."},
-  {n:"Cadeira adutora",s:"4 × 15",a:"Adutor magno, longo e curto",nt:"Drop na última."},
-  {n:"Panturrilha em pé",s:"4 × 12",a:"Gastrocnêmio",nt:"Pausa de 1s no alongamento máximo."}]},
- A2:{nome:"A2 · Perna, posterior e glúteo",sub:"posterior",tip:"Mesma densidade do A1, cadeia posterior. Excêntrica lenta é o ponto da sessão.",ex:[
-  {n:"Mesa flexora",s:"3 × 15 leve",a:"Isquiotibiais",nt:"Aquecimento. Sem carga real."},
-  {n:"Levantamento terra romeno",s:"4 × 8",a:"Isquiotibiais, glúteo máximo, eretores",nt:"Excêntrica de 4s. Joelho quase estendido, quadril para trás."},
-  {n:"Elevação pélvica com barra",s:"4 × 8 pesado",a:"Glúteo máximo",nt:"Isometria de 2s no topo. É o exercício que constrói glúteo."},
-  {n:"Búlgaro com halteres",s:"3 × 10 cada",a:"Glúteo máximo, quadríceps",nt:"Pé de trás no banco. Descida controlada."},
-  {n:"Mesa flexora deitada",s:"4 × 12",a:"Bíceps femoral, cabeça longa e curta",nt:"Quadril colado no aparelho."},
-  {n:"Flexora sentada",s:"3 × 12",a:"Semitendinoso, semimembranoso",nt:"Drop na última. Pega a porção que a deitada não alcança."},
-  {n:"Glúteo na máquina (coice)",s:"3 × 15 cada",maq:1,a:"Glúteo máximo",nt:"Isometria de 1s na extensão máxima do quadril."},
-  {n:"Cadeira abdutora",s:"4 × 15",a:"Glúteo médio e mínimo",nt:"Tronco inclinado. Drop na última."},
-  {n:"Panturrilha sentada",s:"4 × 15",a:"Sóleo",nt:"Joelho flexionado isola o sóleo."}]},
- B:{nome:"B · Costas e lombar",sub:"costas",tip:"Largura primeiro, espessura depois, lombar no fim. Articuladas pesadas para a carga subir sem a lombar ser o limite.",ex:[
-  {n:"Barra fixa",s:"4 × máximo",a:"Latíssimo do dorso, redondo maior",nt:"Passou de 12 limpas? Põe peso no cinto."},
-  {n:"Remada articulada",s:"4 × 8 pesado",maq:1,a:"Latíssimo, romboides, trapézio médio",nt:"Hammer ou plate-loaded."},
-  {n:"Puxada articulada unilateral",s:"4 × 10 cada",maq:1,a:"Latíssimo do dorso",nt:"Um lado por vez. Corrige assimetria e dá amplitude."},
-  {n:"Remada curvada com barra",s:"4 × 8",a:"Romboides, trapézio médio, latíssimo",nt:"Tronco a 45°."},
-  {n:"Extensão lombar no banco romano",s:"4 × 12",a:"Eretores da espinha, multífidos",nt:"COM ANILHA no peito, não só o peso do corpo."},
-  {n:"Good morning com barra",s:"3 × 10",a:"Eretores da espinha, isquiotibiais",nt:"Carga leve, execução perfeita. Lombar é o elo fraco declarado."},
-  {n:"Remada baixa",s:"3 × 12",a:"Trapézio médio, romboides",nt:"Retração escapular completa no fim de cada repetição."},
-  {n:"Crucifixo inverso",s:"3 × 15",a:"Deltoide posterior, trapézio",nt:"Compensa a postura fechada do computador."},
-  {n:"Rosca direta + martelo",s:"3 × 10 · 3 × 12",a:"Bíceps braquial, braquiorradial"}]},
- C:{nome:"C · Peito e ombro",sub:"peito",tip:"Articulada pesada abrindo, barra em seguida. Porção clavicular é a prioridade — é onde falta desenho no colo.",ex:[
-  {n:"Supino articulado",s:"4 × 8 pesado",maq:1,a:"Peitoral maior",nt:"Abre com ele: dá para carregar sem estabilizador limitando."},
-  {n:"Supino reto com barra",s:"4 × 8",a:"Peitoral maior, tríceps, deltoide anterior",nt:"Depois da máquina o peito já está quente."},
-  {n:"Supino inclinado articulado",s:"4 × 10",maq:1,a:"Peitoral maior, porção clavicular"},
-  {n:"Crucifixo inclinado com halteres",s:"3 × 12",a:"Peitoral maior, porção clavicular",nt:"Amplitude completa, sem hiperextender o ombro embaixo."},
-  {n:"Crossover na polia alta",s:"3 × 15",a:"Peitoral maior, porção esternal",nt:"Drop na última."},
-  {n:"Desenvolvimento militar em pé",s:"4 × 8",a:"Deltoide anterior e medial, tríceps",nt:"Em pé. O core trabalha junto."},
-  {n:"Elevação lateral",s:"4 × 15",a:"Deltoide medial",nt:"Carga leve, execução limpa. Drop na última."},
-  {n:"Tríceps testa + corda",s:"3 × 10 · 3 × 12",a:"Tríceps, cabeça longa e lateral",nt:"Drop na corda."}]},
- D:{nome:"D · Ombro e braço",sub:"ombro/braço",tip:"Sessão inteira para a metade de cima. Largura de ombro é o que mais muda a silhueta em quem já é magro.",ex:[
-  {n:"Desenvolvimento militar em pé",s:"4 × 8",a:"Deltoide anterior, tríceps"},
-  {n:"Elevação lateral com halteres",s:"4 × 15",a:"Deltoide medial",nt:"Drop na última."},
-  {n:"Elevação lateral na polia, unilateral",s:"3 × 12 cada",a:"Deltoide medial",nt:"A polia mantém tensão embaixo, onde o halter alivia."},
-  {n:"Crucifixo inverso",s:"3 × 15",a:"Deltoide posterior"},
-  {n:"Encolhimento com halteres",s:"3 × 12",a:"Trapézio superior",nt:"Isometria de 1s no topo."},
-  {n:"Rosca direta com barra",s:"4 × 10",a:"Bíceps braquial",nt:"Sem balanço de tronco."},
-  {n:"Rosca scott",s:"3 × 12",a:"Bíceps braquial, cabeça curta"},
-  {n:"Rosca martelo",s:"3 × 12",a:"Braquial, braquiorradial"},
-  {n:"Tríceps testa",s:"4 × 10",a:"Tríceps, cabeça longa"},
-  {n:"Tríceps corda",s:"3 × 12",a:"Tríceps, cabeça lateral",nt:"Drop na última."}]},
- T:{nome:"T · Torso, costas e peito",sub:"costas+peito",tip:"O sexto dia. Volume médio nos dois maiores grupos, para fechar a semana com todos em duas passadas. É também o treino da semana de prova.",ex:[
-  {n:"Barra fixa",s:"3 × máximo",a:"Latíssimo do dorso"},
-  {n:"Supino articulado",s:"4 × 10",maq:1,a:"Peitoral maior"},
-  {n:"Remada articulada",s:"4 × 10",maq:1,a:"Latíssimo, romboides"},
-  {n:"Supino inclinado com halteres",s:"3 × 12",a:"Peitoral maior, porção clavicular",nt:"Halter aqui, porque a articulada já veio no C."},
-  {n:"Puxada aberta",s:"3 × 12",a:"Latíssimo do dorso",nt:"Pegada larga, puxa até o peito."},
-  {n:"Crossover na polia alta",s:"3 × 15",a:"Peitoral maior, porção esternal",nt:"Drop na última."},
-  {n:"Remada baixa",s:"3 × 12",a:"Trapézio médio, romboides"},
-  {n:"Crucifixo inverso",s:"3 × 15",a:"Deltoide posterior"}]}
+ P1:{nome:"P1 · Perna, quadríceps",sub:"perna quad",tip:"Pirâmide nos dois primeiros: carga sobe, repetição cai. Isolador com carga fixa e drop na última. 17 séries, ~45 min.",ex:[
+  {n:"Agachamento livre",s:"4 × 12·10·8·6",a:"Quadríceps, glúteo máximo, eretores da espinha",nt:"Carga sobe a cada série. A última é RPE 9. Descanso 2 min."},
+  {n:"Leg press 45°",s:"4 × 12·10·8·8",a:"Vasto lateral, vasto medial, glúteo máximo",nt:"Pé baixo e junto. Descanso 2 min."},
+  {n:"Cadeira extensora",s:"3 × 12",a:"Reto femoral, vastos",nt:"Carga fixa, drop duplo na última. Descanso 75s."},
+  {n:"Panturrilha em pé",s:"3 × 12",a:"Gastrocnêmio",nt:"Pausa de 1s no alongamento. Descanso 60s."},
+  {n:"Cadeira abdutora + adutora",s:"3 × 15 cada",maq:1,a:"Glúteo médio e mínimo, adutores",nt:"Supersérie: emenda as duas sem descanso, 60s entre os pares. Tronco inclinado na abdutora."},
+  {n:"Abdominal do dia",s:"3 séries",a:"Reto abdominal, oblíquos, transverso"}]},
+ P2:{nome:"P2 · Perna, posterior e glúteo",sub:"perna post.",tip:"A lombar mora aqui, no terra romeno. 17 séries, ~45 min.",ex:[
+  {n:"Levantamento terra romeno",s:"4 × 12·10·8·6",a:"Isquiotibiais, glúteo máximo, eretores da espinha",nt:"Excêntrica de 3s. É o exercício de lombar com carga da semana. Descanso 2 min."},
+  {n:"Elevação pélvica com barra",s:"4 × 12·10·8·8",a:"Glúteo máximo",nt:"Isometria de 2s no topo. Descanso 2 min."},
+  {n:"Mesa flexora",s:"3 × 12",a:"Bíceps femoral, semitendinoso",nt:"Drop na última. Quadril colado no aparelho. Descanso 75s."},
+  {n:"Panturrilha sentada",s:"3 × 15",a:"Sóleo",nt:"Joelho flexionado isola o sóleo. Descanso 60s."},
+  {n:"Cadeira abdutora + adutora",s:"3 × 15 cada",maq:1,a:"Glúteo médio e mínimo, adutores",nt:"Supersérie, 60s entre os pares."},
+  {n:"Abdominal do dia",s:"3 séries",a:"Reto abdominal, oblíquos, transverso"}]},
+ C1:{nome:"C1 · Costas",sub:"costas",tip:"Duas puxadas, duas remadas, um adjacente. Nada de três remadas no mesmo dia. 17 séries.",ex:[
+  {n:"Puxada articulada unilateral",s:"4 × 12·10·8·6",maq:1,a:"Latíssimo do dorso",nt:"Um lado por vez. Carga sobe a cada série. Descanso 2 min."},
+  {n:"Remada articulada",s:"4 × 12·10·8·6",maq:1,a:"Latíssimo, romboides, trapézio médio",nt:"É onde a carga bruta sobe sem a lombar ser o limite. Descanso 2 min."},
+  {n:"Barra fixa",s:"3 × máximo",a:"Latíssimo, redondo maior",nt:"Passou de 12 limpas? Põe peso no cinto. Descanso 90s."},
+  {n:"Remada baixa",s:"3 × 12",a:"Trapézio médio, romboides",nt:"Retração escapular completa no fim de cada repetição. Descanso 75s."},
+  {n:"Tríceps testa + corda",s:"3 × 12",a:"Tríceps, cabeça longa e lateral",nt:"Adjacente. Entra aqui porque na remada o tríceps não trabalhou — chega descansado. Drop na corda."},
+  {n:"Abdominal do dia",s:"3 séries",a:"Reto abdominal, oblíquos, transverso"}]},
+ C2:{nome:"C2 · Costas",sub:"costas",tip:"Mesma estrutura do C1 com os ângulos trocados. É aqui que mora a variedade da semana. 17 séries.",ex:[
+  {n:"Puxada aberta, pegada supinada",s:"4 × 12·10·8·6",a:"Latíssimo do dorso, bíceps",nt:"A pegada supinada muda a linha de tração. Descanso 2 min."},
+  {n:"Remada curvada com barra",s:"4 × 12·10·8·6",a:"Romboides, trapézio médio, latíssimo",nt:"Tronco a 45°. Descanso 2 min."},
+  {n:"Puxada articulada neutra",s:"3 × 12",maq:1,a:"Latíssimo, redondo maior",nt:"Descanso 75s."},
+  {n:"Remada unilateral com halter",s:"3 × 12 cada",a:"Latíssimo, romboides",nt:"Joelho no banco. Corrige assimetria. Descanso 75s."},
+  {n:"Rosca direta + martelo",s:"3 × 12",a:"Bíceps braquial, braquial, braquiorradial",nt:"Adjacente. Já vem aquecido das puxadas. Sem balanço de tronco."},
+  {n:"Abdominal do dia",s:"3 séries",a:"Reto abdominal, oblíquos, transverso"}]},
+ T1:{nome:"T1 · Peito",sub:"peito",tip:"Dois supinos, um isolador, um de ombro, um adjacente. 17 séries.",ex:[
+  {n:"Supino articulado",s:"4 × 12·10·8·6",maq:1,a:"Peitoral maior",nt:"Abre pesado sem o estabilizador limitando. Descanso 2 min."},
+  {n:"Supino inclinado com halteres",s:"4 × 12·10·8·8",a:"Peitoral maior, porção clavicular",nt:"É onde falta desenho no colo. Descanso 2 min."},
+  {n:"Crossover na polia alta",s:"3 × 15",a:"Peitoral maior, porção esternal",nt:"Drop na última. Descanso 60s."},
+  {n:"Desenvolvimento militar em pé",s:"3 × 10",a:"Deltoide anterior e medial, tríceps",nt:"Em pé, o core trabalha junto. Descanso 90s."},
+  {n:"Elevação lateral",s:"3 × 15",a:"Deltoide medial",nt:"Adjacente. Carga fixa e execução limpa — pirâmide aqui vira balanço. É o que dá largura de ombro."},
+  {n:"Abdominal do dia",s:"3 séries",a:"Reto abdominal, oblíquos, transverso"}]},
+ T2:{nome:"T2 · Peito",sub:"peito",tip:"Barra livre no lugar da articulada, ângulos trocados. 17 séries.",ex:[
+  {n:"Supino reto com barra",s:"4 × 12·10·8·6",a:"Peitoral maior, tríceps, deltoide anterior",nt:"Carga sobe a cada série. Descanso 2 min."},
+  {n:"Supino inclinado articulado",s:"4 × 12·10·8·8",maq:1,a:"Peitoral maior, porção clavicular",nt:"Descanso 2 min."},
+  {n:"Crucifixo inclinado com halteres",s:"3 × 12",a:"Peitoral maior, porção clavicular",nt:"Amplitude completa, sem hiperextender o ombro embaixo. Descanso 75s."},
+  {n:"Desenvolvimento com halteres, sentado",s:"3 × 10",a:"Deltoide anterior e medial",nt:"Descanso 90s."},
+  {n:"Crucifixo inverso",s:"3 × 15",a:"Deltoide posterior, trapézio",nt:"Adjacente. A cabeça que quase todo mundo esquece e que arredonda o ombro de perfil."},
+  {n:"Abdominal do dia",s:"3 séries",a:"Reto abdominal, oblíquos, transverso"}]},
+ BO:{nome:"BO · Braço e ombro",sub:"opcional",tip:"Sábado, depois da trilha. É a sessão descartável: se chegou cansado ou a trilha foi longa, não faz. Nenhuma perna aqui.",ex:[
+  {n:"Desenvolvimento militar",s:"4 × 12·10·8·6",a:"Deltoide anterior e medial, tríceps",nt:"Descanso 2 min."},
+  {n:"Elevação lateral",s:"4 × 15",a:"Deltoide medial",nt:"Carga fixa, drop na última. Descanso 60s."},
+  {n:"Rosca direta com barra",s:"3 × 12·10·8",a:"Bíceps braquial",nt:"Sem balanço de tronco. Descanso 75s."},
+  {n:"Tríceps testa",s:"3 × 12·10·8",a:"Tríceps, cabeça longa",nt:"Dois terços do volume do braço. Descanso 75s."},
+  {n:"Rosca martelo + tríceps corda",s:"3 × 12",a:"Braquial, braquiorradial, tríceps lateral",nt:"Adjacente, em supersérie. Fecha o braço com sangue."},
+  {n:"Abdominal do dia",s:"3 séries",a:"Reto abdominal, oblíquos, transverso"}]},
+ CP:{nome:"CP · Costas e peito",sub:"coringa",tip:"O curinga de recuperar semana: quando um dia furou, esta sessão fecha os dois grupos de uma vez. Também entra na semana de prova, no lugar da perna.",ex:[
+  {n:"Remada articulada",s:"4 × 12·10·8·6",maq:1,a:"Latíssimo, romboides, trapézio médio",nt:"Descanso 2 min."},
+  {n:"Supino articulado",s:"4 × 12·10·8·6",maq:1,a:"Peitoral maior",nt:"Descanso 2 min."},
+  {n:"Puxada aberta",s:"3 × 12",a:"Latíssimo do dorso",nt:"Pegada larga, puxa até o peito. Descanso 75s."},
+  {n:"Crossover na polia alta",s:"3 × 15",a:"Peitoral maior, porção esternal",nt:"Drop na última. Descanso 60s."},
+  {n:"Crucifixo inverso",s:"3 × 15",a:"Deltoide posterior, trapézio",nt:"Adjacente."},
+  {n:"Abdominal do dia",s:"3 séries",a:"Reto abdominal, oblíquos, transverso"}]}
 };var CORRIDA={
  seg:{dia:"Segunda",n:"Rodagem base",t:"rua",loc:"rua · Ibirapuera",
-  obj:"Volume aeróbio limpo. É a sessão mais barata da semana: constrói base sem cobrar recuperação, e é ela que segura o total semanal quando o resto aperta.",
+  obj:"Volume aeróbio em zona 2. É a sessão mais barata da semana: constrói base sem cobrar recuperação, e é ela que segura o total semanal quando o resto aperta.",
   passos:["<b>10' de trote progressivo</b> — FC subindo devagar até 130. Não comece no ritmo do treino.",
-          "<b>Corpo do treino em zona 2</b> — FC 130 a 142, ritmo em que dá para conversar em frase inteira.",
-          "<b>5' soltando</b> — trote leve, FC caindo abaixo de 120.",
-          "<b>4 educativos, 30 m cada</b> — skipping alto, anfersen, dribbling, passada. <em>É onde a técnica é corrigida, não no meio da rodagem.</em>"],
-  presc:{"Bloco 0":"Contínuo, sem variação de ritmo","Bloco 1":"Contínuo. Últimos 10' um pouco mais firmes, ainda abaixo de 142","Bloco 2":"Contínuo + 6 × 20\" de passada forte no fim, recuperação completa","Bloco 3":"Contínuo + 8 × 20\" de passada forte no fim","Bloco 4":"Contínuo, curto, nada além disso"},
-  reg:"<b>Se a FC passar de 142, anda.</b> O teto é o mesmo das três primeiras horas de prova. Correr acima dele aqui não antecipa nada — só atrasa a terça."},
- ter:{dia:"Terça",n:"Subida na esteira",t:"esteira",loc:"esteira · inclinação",
-  obj:"O treino específico de subida, em intensidade. É esta sessão, repetida por 25 semanas, que resolve o \"virar monstro de subida\". Chuva não tem voto: é esteira.",
-  passos:["<b>15' de aquecimento</b> — trote em 3% de inclinação, FC até 135.",
-          "<b>As séries</b> — inclinação alta, ritmo forte mas sustentável. FC no topo de cada série até 155. <em>Não é sprint: é força de subida em ritmo.</em>",
-          "<b>Recuperação entre séries</b> — caminhada em 1%, FC descendo de 130.",
-          "<b>10' soltando</b> — trote em 1%, FC abaixo de 120."],
-  presc:{"Bloco 0":"6 × 2' a 10% · recuperação 2'","Bloco 1":"6 × 3' a 12% · recuperação 2'","Bloco 2":"5 × 5' a 12% · recuperação 2'30","Bloco 3":"4 × 8' a 14% · recuperação 3'","Bloco 4":"4 × 3' a 10% · recuperação 2' — só manter o estímulo"},
-  reg:"<b>Cadência acima de 170 nas séries.</b> Passo curto e rápido sobe melhor que passada longa. Se a cadência cair, a inclinação está alta demais para hoje — baixa 2% e termina a série."},
- qua:{dia:"Quarta",n:"Rodagem com ritmo",t:"rua",loc:"rua · Ibirapuera",
+   "<b>Rodagem em zona 2</b> — FC 130 a 142, ritmo de conversar em frase inteira.",
+   "<b>5' soltando</b> — FC caindo abaixo de 120.",
+   "<b>4 educativos, 30 m cada</b> — skipping, anfersen, dribbling, passada."],
+  presc:{"Bloco 0":"Contínuo, sem variação de ritmo","Bloco 1":"Contínuo, últimos 10' mais firmes","Bloco 2":"Contínuo + 6 × 20\" de passada no fim","Bloco 3":"Contínuo + 8 × 20\" de passada no fim","Bloco 4":"Contínuo, curto"},
+  reg:"<b>Se a FC passar de 142, anda.</b> Na semana de 28/09 dois terços do seu volume saíram acima desse teto — é isso que trava a base, não o volume."},
+ ter:{dia:"Terça",n:"Tiros em subida",t:"esteira",loc:"esteira · inclinação",
+  obj:"Potência de subida. Estímulo curto e forte, que recruta fibra rápida e ensina a perna a empurrar em rampa. É esta sessão, repetida por 25 semanas, que resolve o virar monstro de subida. Chuva não tem voto: é esteira.",
+  passos:["<b>15' de aquecimento</b> — trote a 3%, FC até 135, mais 4 educativos.",
+   "<b>Os tiros</b> — inclinação alta, forte. FC no topo de cada tiro até 160. <em>É estímulo, não rodagem em rampa.</em>",
+   "<b>Recuperação completa entre os tiros</b> — caminhada a 1%, FC descendo de 130 antes do próximo.",
+   "<b>10' soltando</b> a 1%."],
+  presc:{"Bloco 0":"8 × 45\" a 10% · rec 90\"","Bloco 1":"10 × 1' a 12% · rec 90\"","Bloco 2":"10 × 1'30 a 12% · rec 90\"","Bloco 3":"8 × 2' a 14% · rec 2'","Bloco 4":"6 × 45\" a 10% · rec 90\""},
+  reg:"<b>Cadência acima de 175 nos tiros.</b> Passo curto e rápido sobe melhor que passada longa. Se a cadência cair, a inclinação está alta demais para hoje — baixa 2% e termina a série."},
+ qua:{dia:"Quarta",n:"Limiar",t:"rua",loc:"rua · Ibirapuera",
   obj:"A sessão de qualidade em plano. Sobe o limiar, que é o que segura ritmo nas partes corríveis da prova — e é o que leva a meia para 1h40.",
-  passos:["<b>15' de aquecimento</b> — trote progressivo + 4 educativos.",
-          "<b>Os blocos em limiar</b> — ritmo \"confortavelmente duro\": dá para falar três ou quatro palavras, não uma frase.",
-          "<b>Recuperação</b> — trote leve, não caminhada.",
-          "<b>10' soltando.</b>"],
-  presc:{"Bloco 0":"3 × 5' no limiar · recuperação 2'","Bloco 1":"4 × 6' no limiar · recuperação 2'","Bloco 2":"4 × 8' no limiar · recuperação 2'","Bloco 3":"3 × 12' no limiar · recuperação 3'","Bloco 4":"2 × 5' no limiar · recuperação 3'"},
-  reg:"<b>O limiar ainda não tem número.</b> Sai do teste da semana 2 — 30' contrarrelógio, e a FC média dos últimos 20' é o limiar. Até lá, corre por sensação e anota a FC que deu."},
- qui:{dia:"Quinta",n:"Subida longa na esteira",t:"esteira",loc:"esteira · inclinação",
-  obj:"Volume de subida, não intensidade. É o ensaio do power hiking — a marcha forte que resolve as subidas longas que não dá para correr. Complementa a terça: uma dá potência, esta dá resistência.",
-  passos:["<b>10' de aquecimento</b> — trote em 2%.",
-          "<b>Bloco contínuo em inclinação alta</b> — caminhada forte ou trote, o que sustentar. FC teto de 145, sem picos.",
-          "<b>Mão fora do corrimão.</b> <em>Segurar tira metade do trabalho e ensina o corpo errado.</em>",
-          "<b>10' soltando</b> em 1%."],
-  presc:{"Bloco 0":"20' contínuo a 12%, caminhada forte","Bloco 1":"30' contínuo a 12–15%","Bloco 2":"45' contínuo a 15%, com mochila de 4 kg","Bloco 3":"60' contínuo a 15%, com mochila de 6 kg","Bloco 4":"20' a 10%, sem mochila"},
-  reg:"<b>A mochila entra no Bloco 2.</b> Antes disso o ombro e a lombar não estão prontos para carga em movimento repetido. A partir dali, é a mesma mochila da prova, com o mesmo peso de água."},
+  passos:["<b>15' de aquecimento</b> — trote progressivo mais 4 educativos.",
+   "<b>Os blocos em limiar</b> — ritmo confortavelmente duro: dá para falar três ou quatro palavras, não uma frase.",
+   "<b>Recuperação em trote leve</b>, não caminhada.",
+   "<b>10' soltando.</b>"],
+  presc:{"Bloco 0":"3 × 5' no limiar · rec 2'","Bloco 1":"4 × 6' no limiar · rec 2'","Bloco 2":"4 × 8' no limiar · rec 2'","Bloco 3":"3 × 12' no limiar · rec 3'","Bloco 4":"2 × 5' no limiar · rec 3'"},
+  reg:"<b>O número do limiar sai do teste.</b> Até ele acontecer, corre por sensação e me manda a FC que deu."},
+ qui:{dia:"Quinta",n:"Subida contínua",t:"esteira",loc:"esteira · inclinação",
+  obj:"Resistência de subida, não potência. É o ensaio do power hiking — a marcha forte que resolve as rampas longas que não dá para correr. Complementa os tiros de terça: uma dá potência, esta dá resistência.",
+  passos:["<b>10' de aquecimento</b> — trote a 2%.",
+   "<b>Bloco contínuo em inclinação alta</b> — caminhada forte ou trote, o que sustentar. FC teto de 145, sem picos.",
+   "<b>Mão fora do corrimão.</b> <em>Segurar tira metade do trabalho e ensina o corpo errado.</em>",
+   "<b>10' soltando</b> a 1%."],
+  presc:{"Bloco 0":"20' contínuo a 12%","Bloco 1":"30' contínuo a 12–15%","Bloco 2":"45' contínuo a 15%, mochila de 4 kg","Bloco 3":"60' contínuo a 15%, mochila de 6 kg","Bloco 4":"20' a 10%, sem mochila"},
+  reg:"<b>A mochila entra no Bloco 2</b>, com o mesmo peso de água da prova. Antes disso o ombro e a lombar não estão prontos para carga em movimento repetido."},
  sex:{dia:"Sexta",n:"Rodagem leve",t:"rua",loc:"rua · Ibirapuera",
-  obj:"Existe para a sexta não roubar o sábado. Pernas soltas, sangue circulando, nada mais. É a sessão que a vontade manda acelerar e o plano manda segurar.",
+  obj:"Existe para o longão de sábado existir. Pernas soltas, sangue circulando, nada mais. É a sessão que a vontade manda acelerar e o plano manda segurar.",
   passos:["<b>Trote contínuo em zona 1 e 2</b> — FC teto de 135.",
-          "<b>Nenhum bloco de ritmo.</b> <em>Nem no fim, nem \"só um pouquinho\".</em>",
-          "<b>4 educativos</b> no fim, se as pernas estiverem boas."],
-  presc:{"Bloco 0":"Contínuo leve","Bloco 1":"Contínuo leve","Bloco 2":"Contínuo leve","Bloco 3":"Contínuo leve","Bloco 4":"Contínuo muito leve, ou off na semana da prova"},
-  reg:"<b>Na semana de prova esta sessão vira shakeout:</b> 10 km bem leves a 130 bpm, ou menos, dependendo do dia."},
+   "<b>Nenhum bloco de ritmo.</b> <em>Nem no fim, nem só um pouquinho.</em>",
+   "<b>4 educativos</b> no fim, se as pernas estiverem boas."],
+  presc:{"Bloco 0":"Contínuo leve","Bloco 1":"Contínuo leve","Bloco 2":"Contínuo leve","Bloco 3":"Contínuo leve","Bloco 4":"Shakeout: 10 km a 130 bpm ou menos"},
+  reg:"<b>Na semana de prova esta sessão vira shakeout:</b> 10 km bem leves a 130 bpm."},
  "sáb":{dia:"Sábado",n:"Longão de trilha",t:"trilha",loc:"trilha",
   obj:"O treino da semana. É a única sessão com terreno de verdade e a única em que a descida técnica é treinada — que é justamente o que o arquivo do Strava não mostra e o que a prova cobra.",
   passos:["<b>Ritmo de conversa do início ao fim.</b> Caminhar as subidas fortes é esperado, não é falha.",
-          "<b>Descida técnica em atenção</b> — passo curto, olhar três metros à frente. <em>A descida é onde o quadríceps é destruído e onde o tempo é ganho.</em>",
-          "<b>Comer a cada 40 min</b> a partir do Bloco 2, mesmo sem fome. É ensaio, não é necessidade do dia.",
-          "<b>Beber por relógio, não por sede.</b> A quebra de 2025 foi desidratação e cãibra no km 23, não perna."],
-  presc:{"Bloco 0":"Até 300 m de D+. Reconhecimento de terreno","Bloco 1":"600 a 900 m de D+. Mochila entra vazia","Bloco 2":"1000 a 1400 m de D+. Mochila completa, comida e água de prova","Bloco 3":"1500 a 1800 m de D+. Desnível e duração de prova","Bloco 4":"Sem D+ novo. Terreno conhecido, curto"},
+   "<b>Descida técnica em atenção</b> — passo curto, olhar três metros à frente. <em>A descida é onde o quadríceps é destruído e onde o tempo é ganho.</em>",
+   "<b>Comer a cada 40 min</b> a partir do Bloco 2, mesmo sem fome. É ensaio, não é necessidade do dia.",
+   "<b>Beber por relógio, não por sede.</b> A quebra de 2025 foi desidratação e cãibra no km 23, não perna."],
+  presc:{"Bloco 0":"Até 300 m de D+ · reconhecimento de terreno","Bloco 1":"600 a 900 m de D+ · mochila entra vazia","Bloco 2":"1000 a 1400 m de D+ · mochila completa","Bloco 3":"1500 a 1800 m de D+ · desnível e duração de prova","Bloco 4":"Sem D+ novo · terreno conhecido"},
   reg:"<b>O VOTU fica a 40 km de casa e só dá em fim de semana — e nem sempre.</b> Quando o sábado não tiver trilha, a sessão vira o mesmo tempo em rua com o maior desnível que São Paulo der, e a quinta da semana seguinte ganha 15 min."},
  dom:{dia:"Domingo",n:"Rodagem regenerativa",t:"leve",loc:"rua · leve",
   obj:"Tirar o lixo das pernas do longão. É curta de propósito, e emenda com a força da manhã — as duas sessões de domingo são no mesmo bloco, antes do almoço.",
-  passos:["<b>20 a 30' bem fácil</b> — FC teto de 130.",
-          "<b>Se o sábado foi duro, anda.</b> <em>Caminhada de 30 min conta como a sessão.</em>",
-          "<b>Força em seguida</b> — o T, ou o que o rodízio devolver."],
+  passos:["<b>20 a 35' bem fácil</b> — FC teto de 130.",
+   "<b>Se o sábado foi duro, anda.</b> <em>Caminhada de 30 min conta como a sessão.</em>",
+   "<b>Força em seguida</b> — o T2, peito."],
   presc:{"Bloco 0":"20' fácil","Bloco 1":"25 a 30' fácil","Bloco 2":"30 a 35' fácil","Bloco 3":"30 a 35' fácil","Bloco 4":"20' fácil ou off"},
-  reg:"<b>Esta é a sessão que mais vale cortar</b> quando a semana passou do limite. Nenhuma das outras seis é negociável antes dela."}
-};var ABD=["Prancha — 3 × 60s","Elevação de pernas suspenso — 3 × 12","Pallof press — 3 × 12 cada lado",
+  reg:"<b>Esta é a sessão que mais vale cortar</b> quando a semana passou do limite. Nenhuma das outras seis é negociável antes dela."},
+ teste:{dia:"Teste",n:"Teste de limiar",t:"rua",loc:"rua · piso plano",
+  obj:"Trinta minutos no máximo que você sustenta. A FC média dos últimos 20 minutos vira o seu limiar, e dela saem todas as zonas do ciclo. O teto de 142 em uso hoje foi derivado de uma prova de 12h30, não medido.",
+  passos:["<b>15' de aquecimento</b> — trote progressivo mais 4 educativos. Chega no início do teste já quente.",
+   "<b>30' no máximo sustentável</b> — o ritmo que você aguenta por trinta minutos e nem um a mais. Piso plano, sem subida, sem semáforo.",
+   "<b>Começa conservador.</b> <em>É melhor acelerar nos últimos dez do que morrer aos vinte — um teste em que você quebra no meio não mede nada.</em>",
+   "<b>10' soltando.</b>",
+   "<b>Me manda a FC média dos últimos 20 minutos.</b> É esse número que vira o limiar e reescreve as zonas no dash."],
+  presc:{"Bloco 0":"30' contrarrelógio em piso plano","Bloco 1":"repetir para recalibrar","Bloco 2":"repetir para recalibrar","Bloco 3":"repetir para recalibrar","Bloco 4":"não se faz em polimento"},
+  reg:"<b>Se o dia estiver ruim, adia para quinta — mas não faz pela metade.</b> Teste mal feito é pior que teste nenhum, porque as zonas do ciclo inteiro saem dele e o erro acompanha você até março. Não fazer depois de noite mal dormida."}
+};
+var ABD=["Prancha — 3 × 60s","Elevação de pernas suspenso — 3 × 12","Pallof press — 3 × 12 cada lado",
          "Ab wheel — 3 × 10","Prancha lateral — 3 × 45s cada","Canivete — 3 × 15","Dead bug — 3 × 12 cada"];var BLOCOS=[
  {n:"Bloco 0",nm:"Retomada",dt:"29/09 – 18/10",q:"Reconstruir a rotina de seis dias e aferir o estado atual. Teste de limiar na semana 2 e a WTR Campos do Jordão de 19 km na semana 3, corrida sem preparo específico."},
  {n:"Bloco 1",nm:"Base aeróbia",dt:"19/10 – 13/12",q:"Volume sobe em degraus de 10% com uma semana de descarga a cada quatro. Subida na esteira inclinada terça e quinta, independente de chuva. Fecha o ano lambendo os 88 km."},
@@ -879,7 +892,7 @@ var W={
  {dt:"~24–30/08/2027",p:"UTMB Chamonix",d:"a definir",a:"Data 2027 não publicada. O padrão é a última semana de agosto.",alvo:0},
  {dt:"29/08/2027",p:"Maratona de Floripa",d:"42 km",a:"Projeto uma maratona por estado. Mesma semana do UTMB.",alvo:0},
  {dt:"meados/fim 08/2027",p:"Matterhorn Ultraks",d:"49 km SKY",a:"Zermatt, Suíça. Inscrição 2027 abre no outono de 2026.",alvo:0}
-];var FORCA_DIA={seg:"A1",ter:"B",qua:"C",qui:"A2",sex:"D","sáb":null,dom:"T"};var DIAS7=["seg","ter","qua","qui","sex","sáb","dom"];
+];var FORCA_DIA={seg:"P1",ter:"C1",qua:"T1",qui:"P2",sex:"C2","sáb":"BO",dom:"T2"};var DIAS7=["seg","ter","qua","qui","sex","sáb","dom"];
 var COR={rua:"--s1",esteira:"--s3",trilha:"--s2",leve:"--ink-3"};
 CORRIDA.teste={dia:"Teste",n:"Teste de limiar",t:"rua",loc:"rua \u00b7 piso plano",
  obj:"Trinta minutos no m\u00e1ximo que voc\u00ea sustenta. A FC m\u00e9dia dos \u00faltimos 20 minutos vira o seu limiar, e dela saem todas as zonas do ciclo. O teto de 142 que est\u00e1 em uso hoje foi derivado de uma prova de 12h30, n\u00e3o medido.",
@@ -937,6 +950,7 @@ function pintaSemana(){
   document.getElementById("sem7").innerHTML=DIAS7.map(function(k,j){
     var w=D[iSem], d=w.dias.filter(function(x){return x.d===k;})[0], c=CORRIDA[d.s||k],
         f=(d.g!==undefined)?(d.g||null):FORCA_DIA[k];
+    if(f&&!W[f]) f=null;
     var fu=!!d.f, iso=isoDoDia(iSem,j), m=FEITO[iso]||{};
     var h='<div class="sd'+(d.t==="trilha"?" longo":"")+'"><div class="dn">'+NOMES[k]
      +(fu?'<small class="furou">n\u00e3o feito</small>':'<small>'+nm(d.km)+' km</small>')+'</div>'
@@ -980,6 +994,7 @@ function conta(){
   DIAS7.forEach(function(k,j){
     var d=D[iSem].dias.filter(function(x){return x.d===k;})[0];
     var f=(d.g!==undefined)?(d.g||null):FORCA_DIA[k];
+    if(f&&!W[f]) f=null;
     var m=FEITO[isoDoDia(iSem,j)]||{};
     tot++; if(m.corrida) ok++;
     if(f){ tot++; if(m.forca) ok++; }
@@ -1051,7 +1066,7 @@ function pintaC(){
   document.getElementById("creg").innerHTML=c.reg;
 }
 
-var faba="A1", fabas=document.getElementById("fabas");
+var faba="P1", fabas=document.getElementById("fabas");
 Object.keys(W).forEach(function(k){
   var b=document.createElement("button");
   b.type="button"; b.dataset.k=k; b.setAttribute("role","tab");
