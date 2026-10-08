@@ -205,6 +205,22 @@ img{max-width:100%}
   .day .wf{grid-column:2;grid-row:3;margin-top:0}
   .day .st{grid-column:3;grid-row:3;justify-self:end}}
 
+/* ---------------- seções, alerta, prova ---------------- */
+.sec{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:10px;padding-top:6px;border-top:1px solid var(--hair)}
+.sec:first-child{margin-top:0;border-top:0;padding-top:0}
+.sec .n{font-size:11px;color:var(--muted);letter-spacing:.1em;font-variant-numeric:tabular-nums}
+.sec h2{font-size:17px;font-weight:600;letter-spacing:-.02em}
+.sec p{font-size:12.5px;color:var(--muted)}
+.alerta{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--accent-wash);color:var(--accent);font-size:12.5px;line-height:1.4;margin-bottom:10px}
+.alerta svg{width:16px;height:16px;flex:0 0 auto;margin-top:2px}
+.alerta b{display:block;font-weight:600}
+.seg.wrap{flex-wrap:wrap;border-radius:14px;gap:2px}
+.rc{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;align-items:start}
+@media(max-width:900px){.rc{grid-template-columns:1fr}}
+.chips2{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chips2 span{font-size:12px;padding:4px 10px;border-radius:99px;background:var(--card-2);border:1px solid var(--border)}
+.hl .mid{font-size:26px}
+
 /* ---------------- listas ---------------- */
 .list{display:flex;flex-direction:column}
 .li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--hair);min-width:0}
