@@ -685,30 +685,26 @@ export const SEMANAS: SemanaModelo[] = [
         "t": "rua",
         "km": 9,
         "dp": 180,
-        "s": "seg",
-        "g": ""
+        "s": "seg"
       },
       {
         "d": "sex",
         "t": "rua",
         "km": 7,
         "dp": 140,
-        "s": "sex",
-        "g": ""
+        "s": "sex"
       },
       {
         "d": "sáb",
         "t": "trilha",
         "km": 13.5,
-        "dp": 743,
-        "g": ""
+        "dp": 743
       },
       {
         "d": "dom",
         "t": "rua",
         "km": 6.5,
-        "dp": 130,
-        "g": ""
+        "dp": 130
       }
     ],
     "dp": 2515
