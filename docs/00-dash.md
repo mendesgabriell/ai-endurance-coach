@@ -81,12 +81,36 @@ código com teste, e o modelo só lê o resultado (ADR-0004).
 | R6 | Mensagem da manhã v2 | manda o nível e a sessão **já modulada** | formatador |
 | R7 | `carga.ts` | carga por FC e por tonelagem | módulo + teste |
 | R8 | `acwr.ts` · `fitness.ts` | agudo/crônico, CTL/ATL/TSB | módulo + teste |
-| R9 | `conformidade.ts` | alvo × executado; em dia fácil, rápido demais conta como fora | módulo + teste |
+| R9 | `conformidade.ts` | **previsto × realizado por semana e por tipo de treino** — ver abaixo | módulo + teste |
 | R10 | `projecao.ts` | tempo projetado com faixa, a partir do limiar medido | módulo + teste |
 | R11 | `portoes.ts` | avalia os cinco portões com motivo | módulo + teste |
 | R12 | O dash lendo o banco | a página deixa de ser estática | rota |
 | R13 | `tenis.ts` | km por par e vida útil | módulo + tabela |
 | R14 | O ciclo da La Misión | o modelo fecha em 21/03; de lá a 12/08 é outro ciclo | modelo |
+
+#### R9 em detalhe — pedido dele em 08/10/2026
+
+*"Na semana, quanto que a gente está construindo de volume proposto e entrega?...
+o que estava proposto de treino de qualidade, de subida, de rodagem base, de trilha,
+e o que foi de fato executado... para a gente utilizar isso como fonte depois de
+ajuste."*
+
+- **Previsto congelado na segunda-feira.** Replanejar no meio da semana não muda a
+  régua: o realizado é medido contra a semana como foi publicada. Hoje isso mora em
+  `src/plan/previsto-congelado.json`.
+- **Categorias:** rodagem (base, leve, regenerativa, longa na rua) · qualidade
+  (limiar e ritmo) · subida (tiros e contínua, na esteira) · trilha · caminhada.
+- **Por categoria:** km, sessões e D+, previsto × realizado × a fazer.
+- **Caminhada fora do volume** (< 4 km e ritmo ≥ 10:00/km, revisão de 07/10), mas
+  contada em sessões e em D+.
+- **D+ de esteira sai da prescrição**, nunca do arquivo — o relógio erra a inclinação
+  quando ela muda depois de iniciar a atividade.
+- **Intensidade do que foi corrido:** km em fácil (≤ 142), zona cinza (143–151) e
+  forte (≥ 152), contra o alvo de 75–80% fácil.
+- **Fora da faixa:** rodagem prescrita como fácil e corrida acima de 142.
+- **Hoje existe como instantâneo**: `scripts/previsto-realizado.mjs` lê o
+  intervals.icu e grava `var PXR` no dash. O Prumo deve calcular o mesmo ao vivo, e
+  aí o script morre.
 
 ---
 
