@@ -98,3 +98,17 @@ export const nutritionDays = pgTable("nutrition_days", {
   source: text("source").notNull().default("apple-health"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+/**
+ * O que entrou num treino: gel, bebida, cápsula de sal. O atleta conta depois
+ * do treino; o registro guarda produto e quantidade, e os dados do rótulo
+ * moram no catálogo (src/prumo/produtos.json).
+ */
+export const fuelLog = pgTable("fuel_log", {
+  id: serial("id").primaryKey(),
+  day: text("day").notNull(),
+  session: text("session"),
+  items: jsonb("items").$type<{ p: string; q: number }[]>().notNull(),
+  note: text("note"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});

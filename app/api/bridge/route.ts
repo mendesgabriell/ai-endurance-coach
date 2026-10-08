@@ -17,6 +17,8 @@ import {
   saveTurn,
 } from "@/db/client";
 import { sessionsOn, todayISO } from "@/plan/plan";
+import { gravarSuplementacao, interpretarSuplementacao } from "@/prumo/nutricao";
+import produtos from "@/prumo/produtos.json";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -65,6 +67,17 @@ async function runTool(name: string, input: Record<string, string>) {
       await saveNote(dia, input.texto);
       return { ok: true, result: "anotado" };
     }
+    case "suplementacao": {
+      const e = interpretarSuplementacao({ ...(input as unknown as Record<string, unknown>), day: input.dia ?? dia });
+      if (!e) return { ok: false, error: "precisa de dia e itens [{p,q}] com ids do catálogo" };
+      const ids = new Set(produtos.produtos.map((p) => p.id));
+      const fora = e.itens.filter((i) => !ids.has(i.p)).map((i) => i.p);
+      if (fora.length) return { ok: false, error: `produto fora do catálogo: ${fora.join(", ")}` };
+      await gravarSuplementacao(e);
+      return { ok: true, result: `registrado em ${e.d}: ${e.itens.map((i) => `${i.q}× ${i.p}`).join(", ")}` };
+    }
+    case "produtos":
+      return { ok: true, result: produtos.produtos };
     default:
       return { ok: false, error: `ferramenta desconhecida: ${name}` };
   }

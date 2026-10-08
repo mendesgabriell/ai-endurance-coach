@@ -1,0 +1,76 @@
+{
+ "produtos": [
+  {
+   "id": "dobro-carbs-maracuja",
+   "nome": "Carbs Gel · maracujá",
+   "marca": "Dobro",
+   "porcao": "sachê 30 g",
+   "carb": 21,
+   "sodio": 200,
+   "cafeina": 0,
+   "kcal": 84,
+   "foto": null,
+   "fonte": "rótulo (Drogasil)"
+  },
+  {
+   "id": "dobro-carbs-goiaba",
+   "nome": "Carbs Gel · goiaba",
+   "marca": "Dobro",
+   "porcao": "sachê 30 g",
+   "carb": null,
+   "sodio": null,
+   "cafeina": null,
+   "kcal": null,
+   "foto": null,
+   "fonte": "rótulo a confirmar"
+  },
+  {
+   "id": "gel-mousse-maracuja",
+   "nome": "Gel mousse de maracujá",
+   "marca": "a confirmar",
+   "porcao": "1 unidade",
+   "carb": null,
+   "sodio": null,
+   "cafeina": null,
+   "kcal": null,
+   "foto": null,
+   "fonte": "rótulo a confirmar"
+  },
+  {
+   "id": "mate-leao",
+   "nome": "Mate Leão",
+   "marca": "Leão",
+   "porcao": "300 mL",
+   "carb": null,
+   "sodio": null,
+   "cafeina": null,
+   "kcal": null,
+   "foto": null,
+   "fonte": "rótulo a confirmar"
+  },
+  {
+   "id": "capsula-sal",
+   "nome": "Cápsula de sal",
+   "marca": "a confirmar",
+   "porcao": "1 cápsula",
+   "carb": 0,
+   "sodio": null,
+   "cafeina": 0,
+   "kcal": 0,
+   "foto": null,
+   "fonte": "rótulo a confirmar"
+  },
+  {
+   "id": "eletrolito",
+   "nome": "Eletrólito",
+   "marca": "a confirmar",
+   "porcao": "1 dose",
+   "carb": null,
+   "sodio": null,
+   "cafeina": null,
+   "kcal": null,
+   "foto": null,
+   "fonte": "rótulo a confirmar"
+  }
+ ]
+}

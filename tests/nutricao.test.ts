@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { interpretarNutricao } from "../src/prumo/nutricao";
+import { interpretarNutricao, interpretarSuplementacao } from "../src/prumo/nutricao";
 
 test("Health Auto Export: soma as amostras do dia e converte unidades", () => {
   const dias = interpretarNutricao({
@@ -35,4 +35,13 @@ test("ignora lixo", () => {
   assert.deepEqual(interpretarNutricao(null), []);
   assert.deepEqual(interpretarNutricao({ date: "ontem", kcal: 1 }), []);
   assert.deepEqual(interpretarNutricao({ data: { metrics: [{ name: "heart_rate", data: [{ date: "2026-10-07", qty: 50 }] }] } }), []);
+});
+
+test("suplementação: dia, itens com quantidade, lixo fora", () => {
+  const e = interpretarSuplementacao({ day: "2026-10-07", sessao: "Longão", itens: [{ p: "dobro-carbs-maracuja", q: 2 }, { produto: "mate-leao" }, { p: "", q: 1 }], nota: "sem sede" });
+  assert.ok(e);
+  assert.equal(e?.itens.length, 2);
+  assert.equal(e?.itens[1]?.q, 1);
+  assert.equal(interpretarSuplementacao({ day: "hoje", itens: [{ p: "x", q: 1 }] }), null);
+  assert.equal(interpretarSuplementacao({ day: "2026-10-07", itens: [] }), null);
 });

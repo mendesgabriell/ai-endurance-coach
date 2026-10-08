@@ -1,6 +1,6 @@
 import { desc, sql } from "drizzle-orm";
 import { db } from "@/db/client";
-import { nutritionDays } from "@/db/schema";
+import { fuelLog, nutritionDays } from "@/db/schema";
 
 /** Um dia de alimentação como a página consome. Água em mL, peso em kg. */
 export interface DiaNutricao {
@@ -135,4 +135,38 @@ export async function lerNutricao(dias = 14): Promise<DiaNutricao[]> {
   return rows
     .map((r) => ({ d: r.day, kcal: r.kcal, carb: r.carbsG, prot: r.proteinG, gord: r.fatG, agua: r.waterMl, peso: r.weightKg }))
     .sort((a, b) => (a.d < b.d ? -1 : 1));
+}
+
+/* ---------- suplementação por treino ---------- */
+
+export interface Suplementacao { d: string; sessao: string | null; itens: { p: string; q: number }[]; nota: string | null }
+
+/** { day|d, sessao?, itens:[{p:"dobro-carbs-maracuja", q:2}], nota? } → registro válido ou null. */
+export function interpretarSuplementacao(body: unknown): Suplementacao | null {
+  const o = (body ?? {}) as Record<string, unknown>;
+  const d = String(o.day ?? o.d ?? "").slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || !Array.isArray(o.itens)) return null;
+  const itens = (o.itens as unknown[])
+    .map((i) => {
+      const x = (i ?? {}) as Record<string, unknown>;
+      const p = String(x.p ?? x.produto ?? "").trim();
+      const q = Number(x.q ?? x.qtd ?? 1);
+      return p && Number.isFinite(q) && q > 0 ? { p, q } : null;
+    })
+    .filter((x): x is { p: string; q: number } => !!x);
+  if (!itens.length) return null;
+  return { d, sessao: o.sessao ? String(o.sessao).slice(0, 80) : null, itens, nota: o.nota ? String(o.nota).slice(0, 300) : null };
+}
+
+export async function gravarSuplementacao(e: Suplementacao): Promise<boolean> {
+  if (!db) return false;
+  await db.insert(fuelLog).values({ day: e.d, session: e.sessao, items: e.itens, note: e.nota });
+  return true;
+}
+
+/** Os últimos N registros, do mais antigo para o mais novo. */
+export async function lerSuplementacao(n = 30): Promise<Suplementacao[]> {
+  if (!db) return [];
+  const rows = await db.select().from(fuelLog).orderBy(desc(fuelLog.createdAt)).limit(n);
+  return rows.map((r) => ({ d: r.day, sessao: r.session, itens: r.items, nota: r.note })).reverse();
 }
