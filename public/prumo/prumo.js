@@ -684,7 +684,7 @@ function topo(){
   return '<svg viewBox="0 0 '+Wd+' '+H+'" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true">'+o+'</svg>';
 }
 var PV=store("prova")||NEXT.c;
-function provaSeg(p){ return '<div class="seg light wrap big" role="group" aria-label="Prova">'+D.provas.map(function(q){return '<button type="button" data-prova="'+esc(q.c)+'" aria-pressed="'+(q.c===p.c)+'">'+esc(q.c)+(q.cls==="A"?' <i></i>':'')+'</button>';}).join("")+'</div>'; }
+function provaSeg(p){ return '<div class="seg light wrap provas" role="group" aria-label="Prova">'+D.provas.map(function(q){return '<button type="button" data-prova="'+esc(q.c)+'" aria-pressed="'+(q.c===p.c)+'">'+esc(q.c)+(q.cls==="A"?' <i></i>':'')+'</button>';}).join("")+'</div>'; }
 function provaCard(p){
   var c=parts(alvoTs(p)), key=p.c==="Indomit"?"indomit":p.c==="La Misión"?"mision":null, planAte=0, feito=0;
   for(var d=P.inicio; d<p.d&&d<=FIM; d=add(d,1)){ var pd=plan(d); if(pd) planAte+=pd.km; if(d<=HOJE) feito+=runKm(d); }

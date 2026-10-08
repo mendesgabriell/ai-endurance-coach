@@ -215,9 +215,9 @@ img{max-width:100%}
 .alerta svg{width:16px;height:16px;flex:0 0 auto;margin-top:2px}
 .alerta b{display:block;font-weight:600}
 .seg.wrap{flex-wrap:wrap;border-radius:14px;gap:2px}
-.seg.big button{font-size:13.5px;padding:8px 14px;display:inline-flex;align-items:center;gap:6px}
-.seg.big button i{width:7px;height:7px;border-radius:99px;background:var(--accent-fill);display:block}
-.seg.big button[aria-pressed="true"] i{background:#fff}
+.seg.provas button{font-size:13.5px;padding:8px 14px;display:inline-flex;align-items:center;gap:6px}
+.seg.provas button i{width:7px;height:7px;border-radius:99px;background:var(--accent-fill);display:block}
+.seg.provas button[aria-pressed="true"] i{background:#fff}
 .rc{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;align-items:start}
 @media(max-width:900px){.rc{grid-template-columns:1fr}}
 .chips2{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
