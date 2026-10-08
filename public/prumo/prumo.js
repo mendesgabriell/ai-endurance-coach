@@ -68,6 +68,8 @@ var PCT=KM_CICLO/PLAN_KM;
 function semanaDone(w){ var s=0; for(var i=0;i<7;i++){ var d=add(P.inicio,w*7+i); if(d<=HOJE) s+=runKm(d); } return s; }
 var W=D.intervals.wellness, WC=W.filter(function(x){return x.ctl!=null;}), WH=W.filter(function(x){return x.hrv!=null;});
 var FIT=D.coros.fit, HRV7=D.coros.hrv, SONO=D.coros.sono;
+var FSRC=store("fsrc")||"strava";
+function serieFit(src){ if(src==="intervals") return WC.map(function(x){return {d:x.d,f:x.ctl,a:x.atl};}); return (D.strava.fitness||[]).map(function(x){return {d:x[0],f:x[1],a:x[2]};}); }
 
 /* estado técnico de um dia: previsto × realizado */
 function estado(date,planned,done){
@@ -91,7 +93,7 @@ function prontidao(){
   var ss=s[1]>=85?2:s[1]>=70?1:s[1]>=55?0:-2; if(s[2]<360) ss-=1; it.push({k:"Sono",v:s[1]+" · "+hm(s[2]),s:ss,l:"nota "+s[1]}); t+=ss;
   var rh=W.filter(function(x){return x.rhr!=null;}), cur=last(rh), prev=rh.slice(-8,-1).map(function(x){return x.rhr;}), mu=mean(prev);
   var rs=cur.rhr<=mu?1:cur.rhr>=mu+5?-2:0; it.push({k:"FC repouso",v:cur.rhr+" bpm",s:rs,l:"média 7d "+Math.round(mu)}); t+=rs;
-  var tsb=w.ctl-w.atl, fs=tsb>=-5?1:tsb>=-15?0:-1; it.push({k:"Forma",v:(tsb>=0?"+":"")+tsb.toFixed(0),s:fs,l:"fitness "+w.ctl.toFixed(0)+" · fadiga "+w.atl.toFixed(0)}); t+=fs;
+  var fz=last(serieFit(FSRC)), tsb=fz.f-fz.a, fs=tsb>=-5?1:tsb>=-15?0:-1; it.push({k:"Forma",v:(tsb>=0?"+":"")+tsb.toFixed(0),s:fs,l:"fitness "+fz.f.toFixed(0)+" · fadiga "+fz.a.toFixed(0)}); t+=fs;
   var n=t>=5?5:t>=3?4:t>=1?3:t>=-1?2:1;
   return {n:n,total:t,itens:it};
 }
@@ -216,37 +218,37 @@ function atencao(){
 }
 
 /* fitness · fadiga · forma (intervals.icu, modelo de Banister como o Strava) */
-function fitness(h,compact){
-  var S=WC, n=S.length, Wd=1000, H=h||260, L=36, R=52, T=18, B=36, mx=Math.max(40,Math.ceil(Math.max.apply(null,S.map(function(x){return Math.max(x.ctl,x.atl);}))/10)*10);
-  var tsbMin=Math.min.apply(null,S.map(function(x){return x.ctl-x.atl;})), tsbMax=Math.max.apply(null,S.map(function(x){return x.ctl-x.atl;}));
-  var X=function(i){return L+i/(n-1)*(Wd-L-R);}, Y=function(v){return T+(1-v/mx)*(H-T-B);}, o="";
-  var ymin=Math.min(tsbMin,-10), Y2=function(v){return T+(1-(v-ymin)/(mx-ymin))*(H-T-B);};
-  for(var g=0;g<=mx;g+=10) o+='<line class="gl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y2(g)+'" y2="'+Y2(g)+'"/><text class="ax" x="'+(L-8)+'" y="'+(Y2(g)+3.5)+'" text-anchor="end">'+g+'</text>';
-  o+='<line x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y2(0)+'" y2="'+Y2(0)+'" stroke="var(--axis)" stroke-width="1"/>';
-  var tsb=S.map(function(x,i){return [X(i),Y2(x.ctl-x.atl)];});
-  o+='<path d="'+smooth(tsb)+' L'+X(n-1).toFixed(1)+','+Y2(0)+' L'+X(0).toFixed(1)+','+Y2(0)+'Z" fill="var(--tsb)" opacity=".12"/>';
-  o+='<path d="'+smooth(tsb)+'" fill="none" stroke="var(--tsb)" stroke-width="1.5"/>';
-  o+='<path d="'+smooth(S.map(function(x,i){return [X(i),Y2(x.atl)];}))+'" fill="none" stroke="var(--atl)" stroke-width="1.5" opacity=".9"/>';
-  o+='<path d="'+smooth(S.map(function(x,i){return [X(i),Y2(x.ctl)];}))+'" fill="none" stroke="var(--ctl)" stroke-width="2.5" stroke-linejoin="round"/>';
-  var pk=0; S.forEach(function(x,i){ if(x.ctl>S[pk].ctl) pk=i; });
-  var ip=S.findIndex(function(x){return x.d===D.paraty.d;});
-  if(ip>=0) o+='<line x1="'+X(ip)+'" x2="'+X(ip)+'" y1="'+T+'" y2="'+Y2(ymin)+'" stroke="var(--axis)" stroke-dasharray="3 4"/><text class="ax" x="'+(X(ip)+5)+'" y="'+(T+8)+'">Paraty 58K</text>';
-  o+='<circle cx="'+X(pk)+'" cy="'+Y2(S[pk].ctl)+'" r="5" fill="var(--ctl)" stroke="var(--card)" stroke-width="2"'+tip("fitness "+S[pk].ctl.toFixed(1),"maior do registro · "+ddmm(S[pk].d))+'/><text class="vl" x="'+X(pk)+'" y="'+(Y2(S[pk].ctl)-10)+'" text-anchor="middle">'+S[pk].ctl.toFixed(0)+' · pico</text>';
-  var lx=X(n-1), lc=last(S);
-  o+='<circle cx="'+lx+'" cy="'+Y2(lc.ctl)+'" r="5" fill="var(--ctl)" stroke="var(--card)" stroke-width="2"/><text class="vl" x="'+(lx+8)+'" y="'+(Y2(lc.ctl)+4)+'">'+lc.ctl.toFixed(0)+'</text>';
-  o+='<circle cx="'+lx+'" cy="'+Y2(lc.atl)+'" r="4" fill="var(--atl)" stroke="var(--card)" stroke-width="2"/><text class="ax" x="'+(lx+8)+'" y="'+(Y2(lc.atl)+(Math.abs(lc.atl-lc.ctl)<2.5?14:4))+'" style="fill:var(--accent);font-weight:600">'+lc.atl.toFixed(0)+'</text>';
-  o+='<circle cx="'+lx+'" cy="'+Y2(lc.ctl-lc.atl)+'" r="4" fill="var(--tsb)" stroke="var(--card)" stroke-width="2"/><text class="ax" x="'+(lx+8)+'" y="'+(Y2(lc.ctl-lc.atl)+4)+'" style="fill:var(--tsb);font-weight:600">'+(lc.ctl-lc.atl>=0?"+":"")+(lc.ctl-lc.atl).toFixed(0)+'</text>';
-  S.forEach(function(x,i){ o+='<rect x="'+(X(i)-(Wd-L-R)/n/2)+'" y="'+T+'" width="'+((Wd-L-R)/n)+'" height="'+(H-T-B)+'" fill="transparent"'+tip("fitness "+x.ctl.toFixed(0)+" · fadiga "+x.atl.toFixed(0)+" · forma "+(x.ctl-x.atl>=0?"+":"")+(x.ctl-x.atl).toFixed(0),ddmm(x.d))+'/>'; });
-  var lm=-1; S.forEach(function(x,i){ var m=parse(x.d).getUTCMonth(); if(m!==lm){ o+='<text class="ax" x="'+X(i)+'" y="'+(H-14)+'">'+MES[m]+'</text>'; lm=m; } });
-  return vb(Wd,H,o,"Fitness, fadiga e forma desde julho")+'<div class="legend"><span><i class="ln" style="background:var(--ctl)"></i>Fitness · carga crônica 42 dias</span><span><i class="ln" style="background:var(--atl)"></i>Fadiga · carga aguda 7 dias</span><span><i style="background:var(--tsb);opacity:.5"></i>Forma · fitness − fadiga</span></div>';
+function fitness(h,src){
+  src=src||FSRC; var S=serieFit(src), n=S.length, Wd=1000, H=h||260, L=36, R=56, T=18, B=36;
+  var top=Math.max.apply(null,S.map(function(x){return Math.max(x.f,x.a);})), ymax=Math.ceil((top*1.08)/10)*10;
+  var ymin=Math.min(-10,Math.floor(Math.min.apply(null,S.map(function(x){return x.f-x.a;}))/10)*10);
+  var X=function(i){return L+i/(n-1)*(Wd-L-R);}, Y=function(v){return T+(1-(v-ymin)/(ymax-ymin))*(H-T-B);}, o="";
+  var step=10; while((ymax-ymin)/step*15>(H-T-B)) step*=2;
+  for(var g=Math.ceil(ymin/step)*step; g<=ymax; g+=step) o+='<line class="gl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(g)+'" y2="'+Y(g)+'"/><text class="ax" x="'+(L-8)+'" y="'+(Y(g)+3.5)+'" text-anchor="end">'+g+'</text>';
+  o+='<line x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(0)+'" y2="'+Y(0)+'" stroke="var(--axis)" stroke-width="1"/>';
+  var tsb=S.map(function(x,i){return [X(i),Y(x.f-x.a)];});
+  o+='<path d="'+smooth(tsb)+' L'+X(n-1).toFixed(1)+','+Y(0)+' L'+X(0).toFixed(1)+','+Y(0)+'Z" fill="var(--tsb)" opacity=".10"/><path d="'+smooth(tsb)+'" fill="none" stroke="var(--tsb)" stroke-width="1.5"/>';
+  o+='<path d="'+smooth(S.map(function(x,i){return [X(i),Y(x.a)];}))+'" fill="none" stroke="var(--atl)" stroke-width="1.5" opacity=".9"/>';
+  o+='<path d="'+smooth(S.map(function(x,i){return [X(i),Y(x.f)];}))+'" fill="none" stroke="var(--ctl)" stroke-width="2.5" stroke-linejoin="round"/>';
+  var provas=(D.strava.provasFit||{});
+  Object.keys(provas).forEach(function(d){ var i=S.findIndex(function(x){return x.d===d;}); if(i<0) return; o+='<line x1="'+X(i)+'" x2="'+X(i)+'" y1="'+(T+10)+'" y2="'+Y(ymin)+'" stroke="var(--axis)" stroke-dasharray="3 4"/><circle cx="'+X(i)+'" cy="'+Y(S[i].f)+'" r="4" fill="var(--card)" stroke="var(--ctl)" stroke-width="2"'+tip(provas[d],ddmm(d)+" · fitness "+S[i].f.toFixed(0))+'/>'; });
+  var pk=0; S.forEach(function(x,i){ if(x.f>S[pk].f) pk=i; });
+  o+='<text class="vl" x="'+X(pk)+'" y="'+(Y(S[pk].f)-10)+'" text-anchor="middle">pico '+S[pk].f.toFixed(0)+'</text>';
+  var lx=X(n-1), lc=last(S), labs=[{v:lc.f,c:"var(--ctl)",t:lc.f.toFixed(0),cls:"vl"},{v:lc.a,c:"var(--atl)",t:lc.a.toFixed(0),cls:"ax",st:"fill:var(--accent);font-weight:600"},{v:lc.f-lc.a,c:"var(--tsb)",t:(lc.f-lc.a>=0?"+":"")+(lc.f-lc.a).toFixed(0),cls:"ax",st:"fill:var(--tsb);font-weight:600"}];
+  labs.forEach(function(l){ l.y=Y(l.v); }); labs.sort(function(p,q){return p.y-q.y;});
+  for(var i=1;i<labs.length;i++) if(labs[i].y-labs[i-1].y<13) labs[i].y=labs[i-1].y+13;
+  labs.forEach(function(l){ o+='<circle cx="'+lx+'" cy="'+Y(l.v)+'" r="4.5" fill="'+l.c+'" stroke="var(--card)" stroke-width="2"/><text class="'+l.cls+'" x="'+(lx+9)+'" y="'+(l.y+4)+'"'+(l.st?' style="'+l.st+'"':'')+'>'+l.t+'</text>'; });
+  S.forEach(function(x,i){ o+='<rect x="'+(X(i)-(Wd-L-R)/n/2)+'" y="'+T+'" width="'+((Wd-L-R)/n)+'" height="'+(H-T-B)+'" fill="transparent"'+tip("fitness "+x.f.toFixed(0)+" · fadiga "+x.a.toFixed(0)+" · forma "+(x.f-x.a>=0?"+":"")+(x.f-x.a).toFixed(0),ddmm(x.d))+'/>'; });
+  var lm=-1; S.forEach(function(x,i){ var m=parse(x.d).getUTCMonth(); if(m!==lm){ if(i>0||true) o+='<text class="ax" x="'+X(i)+'" y="'+(H-14)+'">'+MES[m]+'</text>'; lm=m; } });
+  var legSrc = src==="strava" ? "Modelo do Strava: esforço relativo, médias exponenciais de 42 e 7 dias" : "intervals.icu: carga por FC, 42 e 7 dias · alvo 75 na Indomit e 100 na La Misión";
+  return vb(Wd,H,o,"Fitness, fadiga e forma")+'<div class="legend"><span><i class="ln" style="background:var(--ctl)"></i>Fitness</span><span><i class="ln" style="background:var(--atl)"></i>Fadiga</span><span><i style="background:var(--tsb);opacity:.5"></i>Forma</span><span><i class="dot rg"></i>Prova</span></div><p class="note">'+legSrc+'</p>';
 }
-function fitnessStats(){
-  var lc=last(WC), pk=WC.reduce(function(m,x){return x.ctl>m.ctl?x:m;},WC[0]), w7=WC[WC.length-8]||WC[0];
-  var d=lc.ctl-w7.ctl;
-  return '<div class="stat3"><div><span class="k">Fitness hoje</span><span class="v">'+lc.ctl.toFixed(0)+'</span><span class="d '+(d>=0?'up':'dn')+'">'+(d>=0?'+':'')+d.toFixed(1)+' em 7 dias</span></div>'
-    +'<div><span class="k">Pico do registro</span><span class="v">'+pk.ctl.toFixed(0)+'</span><span class="d">'+ddmm(pk.d)+' · Paraty</span></div>'
-    +'<div><span class="k">Fadiga</span><span class="v">'+lc.atl.toFixed(0)+'</span><span class="d">carga de 7 dias</span></div>'
-    +'<div><span class="k">Forma</span><span class="v">'+(lc.ctl-lc.atl>=0?'+':'')+(lc.ctl-lc.atl).toFixed(0)+'</span><span class="d">'+(lc.ctl-lc.atl>5?'descansado':lc.ctl-lc.atl>-10?'equilibrado':'em fadiga')+'</span></div></div>';
+function fitnessSeg(){ return '<div class="seg light" role="group" aria-label="Fonte"><button type="button" data-fsrc="strava" aria-pressed="'+(FSRC==="strava")+'">Strava</button><button type="button" data-fsrc="intervals" aria-pressed="'+(FSRC==="intervals")+'">intervals.icu</button></div>'; }
+
+function fitnessStats(src){
+  src=src||FSRC; var S=serieFit(src), lc=last(S), pk=S.reduce(function(m,x){return x.f>m.f?x:m;},S[0]), w7=S[S.length-8]||S[0], d=lc.f-w7.f;
+  var alvo = src==="intervals" ? '<div><span class="k">Alvo</span><span class="v">75<small> · 100</small></span><span class="d">Indomit · La Misión</span></div>' : '<div><span class="k">Pico do registro</span><span class="v">'+pk.f.toFixed(0)+'</span><span class="d">'+ddmm(pk.d)+'</span></div>';
+  return '<div class="stat3"><div><span class="k">Fitness</span><span class="v">'+lc.f.toFixed(0)+'</span><span class="d '+(d>=0?'up':'dn')+'">'+(d>=0?'+':'')+d.toFixed(1)+' em 7 dias</span></div><div><span class="k">Fadiga</span><span class="v">'+lc.a.toFixed(0)+'</span><span class="d">7 dias</span></div><div><span class="k">Forma</span><span class="v">'+(lc.f-lc.a>=0?'+':'')+(lc.f-lc.a).toFixed(0)+'</span><span class="d">'+(lc.f-lc.a>5?'descansado':lc.f-lc.a>-10?'equilibrado':'em fadiga')+'</span></div>'+alvo+'</div>';
 }
 
 /* carga por dia (vermelho = esforço; prova = verde) */
@@ -331,7 +333,7 @@ function auditoria(n,tipo){
   }
   var tot=cont.feito+cont.parcial+cont.nao||1, r0=38, c=2*Math.PI*r0, a=0, dz="";
   [["feito",cont.feito],["parcial",cont.parcial],["nao",cont.nao]].forEach(function(s){ if(!s[1]) return; var l=s[1]/tot*c; dz+='<circle cx="50" cy="50" r="'+r0+'" fill="none" stroke="'+EST[s[0]][1]+'" stroke-width="13" stroke-dasharray="'+Math.max(0,l-2)+' '+(c-l+2)+'" stroke-dashoffset="'+(-a)+'" transform="rotate(-90 50 50)"'+tip(s[1]+" sessões",EST[s[0]][0])+'/>'; a+=l; });
-  var donut='<svg viewBox="0 0 100 100" width="104" height="104" role="img" aria-label="Sessões por estado"><circle cx="50" cy="50" r="'+r0+'" fill="none" stroke="var(--card-3)" stroke-width="13"/>'+dz+'<text x="50" y="49" text-anchor="middle" style="font-size:20px;font-weight:600;fill:var(--ink)">'+Math.round(cont.feito/tot*100)+'%</text><text x="50" y="63" text-anchor="middle" class="ax">realizado</text></svg>';
+  var donut='<svg viewBox="0 0 100 100" width="104" height="104" role="img" aria-label="Sessões por estado"><circle cx="50" cy="50" r="'+r0+'" fill="none" stroke="var(--card-3)" stroke-width="13"/>'+dz+'<text x="50" y="47" text-anchor="middle" style="font-size:19px;font-weight:600;fill:var(--ink)">'+Math.round(cont.feito/tot*100)+'%</text><text x="50" y="62" text-anchor="middle" class="ax" style="font-size:9px">realizado</text></svg>';
   var head=(tipo!=="f"?'<th>Corrida prevista</th><th class="n">Realizado</th><th></th>':'')+(tipo!=="c"?'<th>Força</th><th class="n">Realizado</th><th></th>':'');
   return '<div class="row" style="gap:22px;flex-wrap:wrap">'+donut+'<div class="legend" style="flex-direction:column;gap:6px"><span><i style="background:var(--good)"></i>'+cont.feito+' realizadas</span><span><i style="background:var(--warn)"></i>'+cont.parcial+' parciais</span><span><i style="background:var(--crit)"></i>'+cont.nao+' não aconteceram</span><span><i style="background:var(--ink-2)"></i>'+cont.extra+' extras</span></div></div>'
     +'<div class="tbl"><table><thead><tr><th>Dia</th>'+head+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
@@ -381,8 +383,8 @@ function percurso(key,h){
 }
 function percursoStats(key){
   var pf=D.perfis[key], pv=D.provas.filter(function(p){return key==="indomit"?p.c==="Indomit":p.c==="La Misión";})[0], kme=pf.km+pf.dplus/100;
-  var meta=key==="indomit"?9*3600:25*3600, sonho=key==="indomit"?8*3600:20*3600;
-  return '<div class="stat3"><div><span class="k">Distância</span><span class="v">'+k1(pf.km)+'<small> km</small></span></div><div><span class="k">Desnível positivo</span><span class="v">'+thou(pf.dplus)+'<small> m</small></span></div><div><span class="k">Teto</span><span class="v">'+thou(pf.altmax)+'<small> m</small></span></div><div><span class="k">Km-esforço</span><span class="v">'+Math.round(kme)+'</span><span class="d">km + D+/100 · ITRA</span></div><div><span class="k">Ritmo para '+hhmm(meta)+'</span><span class="v">'+pace(meta/pf.km)+'<small>/km</small></span><span class="d">'+pace(meta/kme)+' por km-esforço</span></div><div><span class="k">Sonho '+hhmm(sonho)+'</span><span class="v">'+pace(sonho/pf.km)+'<small>/km</small></span></div></div>'
+  var meta=key==="indomit"?31800:72000;
+  return '<div class="stat3"><div><span class="k">Distância</span><span class="v">'+k1(pf.km)+'<small> km</small></span></div><div><span class="k">Desnível positivo</span><span class="v">'+thou(pf.dplus)+'<small> m</small></span></div><div><span class="k">Teto</span><span class="v">'+thou(pf.altmax)+'<small> m</small></span></div><div><span class="k">Km-esforço</span><span class="v">'+Math.round(kme)+'</span><span class="d">km + D+/100 · ITRA</span></div><div><span class="k">Ritmo para '+hhmm(meta)+'</span><span class="v">'+pace(meta/pf.km)+'<small>/km</small></span><span class="d">'+pace(meta/kme)+' por km-esforço</span></div></div>'
     +'<p class="note">Traçado oficial da organização ('+esc(pf.fonte.split(" · ")[0])+'). Terreno: '+esc(pf.terreno)+'.'+(pv?' Largada '+ddmm(pv.d)+(pv.hora?' às '+pv.hora:'')+'.':'')+'</p>';
 }
 
@@ -393,7 +395,7 @@ function projNumeros(){
   var prev=FIT.prev, prs=D.strava.prs, metas={"21k":6000,"42k":12600};
   var rows=DIST.map(function(x){ var k=x[0], pv=prev[k]!=null?prev[k]:riegel(prev["42k"],42.195,50), pr=prs[k], m=metas[k];
     return '<tr><td style="font-weight:500">'+x[2]+'</td><td class="n">'+clock(pv)+'<br><span class="lbl">'+pace(pv/x[1])+'/km</span></td><td class="n pr">'+(pr?clock(pr.t):'—')+(pr?'<br><span class="lbl" style="font-weight:400">'+esc(pr.onde.split(" ·")[0])+' · '+ddmm(pr.d)+'</span>':'')+'</td><td class="n">'+(m?clock(m):'—')+'</td><td class="n">'+(m?'<span style="color:'+(pv-m>0?'var(--accent)':'var(--good-text)')+';font-weight:600">'+(pv-m>0?'−':'+')+clock(Math.abs(pv-m))+'</span>':'<span class="lbl">sem meta</span>')+'</td></tr>'; }).join("");
-  return '<div class="tbl"><table><thead><tr><th>Distância</th><th class="n">Previsão COROS</th><th class="n">RP</th><th class="n">Meta</th><th class="n">Falta</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="note">Previsão do relógio (VO₂max '+FIT.vo2+', limiar '+FIT.limiar+'/km). 50 km plano por Riegel a partir da maratona. RPs do Strava.</p>';
+  return '<div class="tbl"><table><thead><tr><th>Distância</th><th class="n"><span class="lg">Previsão COROS</span><span class="sm">COROS</span></th><th class="n"><span class="lg">Melhor no Strava · 2026</span><span class="sm">Strava 2026</span></th><th class="n">Meta</th><th class="n">Falta</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="note">Previsão do relógio (VO₂max '+FIT.vo2+', limiar '+FIT.limiar+'/km). 50 km plano por Riegel a partir da maratona. Melhores tempos registrados no Strava em 2026 — os RPs de antes entram quando você passar.</p>';
 }
 function projCurva(key){
   var x=DIST.filter(function(z){return z[0]===key;})[0], pv=D.provas.filter(function(p){return key==="21k"?p.c==="Rio 21K":p.c==="POA 42K";})[0];
@@ -413,19 +415,17 @@ function projCurva(key){
 function projTrail(){
   var pa=D.paraty, kme=pa.km+pa.dplus/100, rate=pa.t/kme;
   var it=[{n:"Paraty 58K",s:"referência · 19/09/2026",kme:kme,t:pa.t,rate:rate,ref:true},
-    {n:"Indomit sub-9h",s:"20/03/2027",kme:D.perfis.indomit.km+D.perfis.indomit.dplus/100,t:9*3600},
-    {n:"Indomit sub-8h",s:"sonho",kme:D.perfis.indomit.km+D.perfis.indomit.dplus/100,t:8*3600},
-    {n:"La Misión sub-25h",s:"13/08/2027",kme:D.perfis.mision.km+D.perfis.mision.dplus/100,t:25*3600},
-    {n:"La Misión 20h",s:"mira",kme:D.perfis.mision.km+D.perfis.mision.dplus/100,t:20*3600}];
+    {n:"Indomit 8h50",s:"20/03/2027 · projeta 20h",kme:D.perfis.indomit.km+D.perfis.indomit.dplus/100,t:31800},
+    {n:"La Misión 20h",s:"13/08/2027 · o alvo do ano",kme:D.perfis.mision.km+D.perfis.mision.dplus/100,t:72000}];
   it.forEach(function(x){ x.rate=x.t/x.kme; });
-  var Wd=480, H=26+it.length*34, L=150, R=70, mn=300, mx=560, X=function(v){return L+(v-mn)/(mx-mn)*(Wd-L-R);}, o="";
-  [300,360,420,480,540].forEach(function(v){ o+='<line class="gl" x1="'+X(v)+'" x2="'+X(v)+'" y1="14" y2="'+(H-16)+'"/><text class="ax" x="'+X(v)+'" y="'+(H-4)+'" text-anchor="middle">'+pace(v)+'</text>'; });
+  var Wd=480, H=26+it.length*34, L=150, R=70, mn=360, mx=540, X=function(v){return L+(v-mn)/(mx-mn)*(Wd-L-R);}, o="";
+  [360,420,480,540].forEach(function(v){ o+='<line class="gl" x1="'+X(v)+'" x2="'+X(v)+'" y1="14" y2="'+(H-16)+'"/><text class="ax" x="'+X(v)+'" y="'+(H-4)+'" text-anchor="middle">'+pace(v)+'</text>'; });
   o+='<line x1="'+X(rate)+'" x2="'+X(rate)+'" y1="10" y2="'+(H-16)+'" stroke="var(--axis)" stroke-dasharray="3 4"/>';
   it.forEach(function(x,i){ var y=28+i*34, w=X(x.rate)-L;
     o+='<text class="lb" x="0" y="'+(y+4)+'" style="font-weight:600;fill:var(--ink)">'+x.n+'</text><text class="ax" x="0" y="'+(y+17)+'">'+x.s+'</text>';
     o+='<path d="'+rowPath(L,y-7,Math.max(2,w),14,5)+'" fill="'+(x.ref?'var(--axis)':x.rate<rate?'var(--accent-fill)':'var(--ink)')+'"'+tip(pace(x.rate)+" por km-esforço",Math.round(x.kme)+" km-esforço · "+hhmm(x.t))+'/>';
     o+='<text class="vl" x="'+(X(x.rate)+8)+'" y="'+(y+4)+'">'+pace(x.rate)+(x.ref?'':' · '+(x.rate<rate?'−':'+')+Math.round(Math.abs(1-x.rate/rate)*100)+'%')+'</text>'; });
-  return '<div style="min-width:0"><p style="font-size:13px;font-weight:600;margin-bottom:4px">Trilha · ritmo por km-esforço <span class="lbl">min por (km + D+/100)</span></p>'+vb(Wd,H,o,"Ritmo por km-esforço em trilha")+'<p class="note">Paraty 58K com 3.320 m D+ em 12h30 dá '+pace(rate)+' por km-esforço. A Indomit sub-9h pede ser '+Math.round((1-it[1].rate/rate)*100)+'% mais rápido nessa régua; a La Misión sub-25h é o ritmo de Paraty sustentado por 25 horas.</p></div>';
+  return '<div style="min-width:0"><p style="font-size:13px;font-weight:600;margin-bottom:4px">Trilha · ritmo por km-esforço <span class="lbl">min por (km + D+/100)</span></p>'+vb(Wd,H,o,"Ritmo por km-esforço em trilha")+'<p class="note">Paraty 58K com 3.320 m D+ em 12h30 dá '+pace(rate)+' por km-esforço. As duas metas pedem a mesma coisa: ficar '+Math.round((1-it[2].rate/rate)*100)+'% mais rápido por km-esforço, e na La Misión sustentar isso pelo dobro da distância.</p></div>';
 }
 
 /* corpo */
@@ -466,16 +466,25 @@ function sonoChart(){
   return vb(Wd,H,o,"Sono por fase")+'<div class="legend">'+ST.map(function(s){return '<span><i style="background:'+s[2]+'"></i>'+s[0]+'</span>';}).join("")+'</div>';
 }
 function janelaSono(){
-  /* dias no X, horário no Y (22h embaixo, 10h em cima) */
-  var Wd=480, H=250, L=40, R=8, T=14, B=30, t0=22*60, t1=34*60, n=SONO.length, bw=(Wd-L-R)/n, Y=function(m){return T+(1-(m-t0)/(t1-t0))*(H-T-B);}, o="";
+  /* dias no X; relógio no Y, 20h embaixo e 10h em cima. Barra = deitou → levantou. */
+  var Wd=480, H=270, L=40, R=8, T=16, B=30, t0=20*60, t1=34*60, n=SONO.length, bw=(Wd-L-R)/n, Y=function(m){return T+(1-(m-t0)/(t1-t0))*(H-T-B);}, o="";
   function mc(h){ var a=h.split(":").map(Number), m=a[0]*60+a[1]; return m<12*60?m+24*60:m; }
-  [22,24,2,4,6,8,10].forEach(function(h){ var m=(h<12?h+24:h)*60; o+='<line class="gl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(m)+'" y2="'+Y(m)+'"/><text class="ax" x="'+(L-6)+'" y="'+(Y(m)+3.5)+'" text-anchor="end">'+String(h%24).padStart(2,"0")+'h</text>'; });
-  o+='<rect x="'+L+'" y="'+Y(30*60)+'" width="'+(Wd-L-R)+'" height="'+(Y(23*60)-Y(30*60))+'" fill="var(--good)" opacity=".07"/>';
-  o+='<line x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(23*60)+'" y2="'+Y(23*60)+'" stroke="var(--accent)" stroke-width="1.5"/><text class="vlr" x="'+(Wd-R)+'" y="'+(Y(23*60)-5)+'" text-anchor="end">meta: deitar 23h</text>';
-  SONO.forEach(function(s,i){ var a=mc(s[8]), b=mc(s[9]); if(b<a) b+=24*60; var w=Math.min(16,bw*.5), x=L+i*bw+(bw-w)/2;
-    o+='<path d="'+colPath(x,Y(b),w,Y(a)-Y(b),5)+'" fill="'+(a<=23*60+30?'var(--s-rem)':'var(--ink)')+'"'+tip(s[8]+" → "+s[9],ddmm(s[0])+" · "+hm(s[2])+" dormindo")+'/>';
+  [20,22,24,2,4,6,8,10].forEach(function(h){ var m=(h<12?h+24:h)*60; o+='<line class="gl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(m)+'" y2="'+Y(m)+'"/><text class="ax" x="'+(L-6)+'" y="'+(Y(m)+3.5)+'" text-anchor="end">'+String(h%24).padStart(2,"0")+'h</text>'; });
+  /* faixa de acordar 5h–6h e de deitar 21h–22h (8 h de sono) */
+  o+='<rect x="'+L+'" y="'+Y(30*60)+'" width="'+(Wd-L-R)+'" height="'+(Y(29*60)-Y(30*60))+'" fill="var(--good)" opacity=".10"/><text class="ax" x="'+(Wd-R)+'" y="'+(Y(30*60)-3)+'" text-anchor="end" style="fill:var(--good-text)">acordar 5h–6h</text>';
+  o+='<rect x="'+L+'" y="'+Y(22*60)+'" width="'+(Wd-L-R)+'" height="'+(Y(21*60)-Y(22*60))+'" fill="var(--good)" opacity=".10"/><text class="ax" x="'+(Wd-R)+'" y="'+(Y(21*60)+11)+'" text-anchor="end" style="fill:var(--good-text)">deitar 21h–22h · 8 h</text>';
+  o+='<line x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(23*60)+'" y2="'+Y(23*60)+'" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3"/><text class="ax" x="'+(L+4)+'" y="'+(Y(23*60)-4)+'" style="fill:var(--accent)">23h · limite para 7 h</text>';
+  SONO.forEach(function(s,i){ var a=mc(s[8]), b=mc(s[9]); if(b<a) b+=24*60; var w=Math.min(16,bw*.5), x=L+i*bw+(bw-w)/2, dur=s[2];
+    var cor= dur>=480?'var(--good)': dur>=420?'var(--ink)':'var(--accent-fill)';
+    o+='<path d="'+colPath(x,Y(b),w,Y(a)-Y(b),5)+'" fill="'+cor+'"'+tip(s[8]+" → "+s[9]+" · "+hm(dur),ddmm(s[0])+" · nota "+s[1])+'/>';
     o+='<text class="ax" x="'+(x+w/2)+'" y="'+(H-10)+'" text-anchor="middle">'+parse(s[0]).getUTCDate()+'</text>'; });
-  return vb(Wd,H,o,"Hora de deitar e levantar")+'<div class="legend"><span><i style="background:var(--s-rem)"></i>Deitou até 23h30</span><span><i style="background:var(--ink)"></i>Depois</span></div>';
+  return vb(Wd,H,o,"Hora de deitar e de levantar, contra as metas")+'<div class="legend"><span><i style="background:var(--good)"></i>8 h ou mais</span><span><i style="background:var(--ink)"></i>7 a 8 h</span><span><i style="background:var(--accent-fill)"></i>Menos de 7 h</span></div>';
+}
+function sonoMeta(){
+  var ult=SONO.slice(-7), med=mean(ult.map(function(s){return s[2];})), noites8=ult.filter(function(s){return s[2]>=480;}).length, noites7=ult.filter(function(s){return s[2]>=420;}).length;
+  var medBed=mean(ult.map(function(s){ var a=s[8].split(":").map(Number), m=a[0]*60+a[1]; return m<12*60?m+24*60:m; })), hb=Math.floor(medBed/60)%24, mb=Math.round(medBed%60);
+  return '<div class="stat3"><div><span class="k">Média · 7 noites</span><span class="v">'+hm(med)+'</span><span class="d '+(med>=480?'up':'dn')+'">'+(med>=480?'na meta de 8 h':'faltam '+Math.round(480-med)+' min para 8 h')+'</span></div><div><span class="k">Noites com 8 h+</span><span class="v">'+noites8+'<small> de 7</small></span><span class="d">'+noites7+' com 7 h+</span></div><div><span class="k">Deitou, em média</span><span class="v">'+String(hb).padStart(2,"0")+'h'+String(mb).padStart(2,"0")+'</span><span class="d">meta 21h30 para 8 h às 5h30</span></div></div>'
+    +'<div class="tbl"><table><thead><tr><th>Para acordar às</th><th class="n">7 h · mínimo</th><th class="n">8 h · ideal</th><th class="n">9 h · sonho</th></tr></thead><tbody>'+[["5h00","22h00","21h00","20h00"],["5h30","22h30","21h30","20h30"],["6h00","23h00","22h00","21h00"]].map(function(r){return '<tr><td style="font-weight:500">'+r[0]+'</td><td class="n">'+r[1]+'</td><td class="n pr">'+r[2]+'</td><td class="n">'+r[3]+'</td></tr>';}).join("")+'</tbody></table></div>';
 }
 
 /* kit */
@@ -502,7 +511,10 @@ function usoKit(){
 }
 function suplementos(){
   var C=["Rodagem","Qualidade","Longão","Força"], R=["Antes","Durante","Depois"], M={"Longão|Durante":["Comer a cada 40 min","Beber pelo relógio"],"Força|Depois":["Proteína"]};
-  return '<div class="tbl"><table><thead><tr><th></th>'+C.map(function(c){return '<th>'+c+'</th>';}).join("")+'</tr></thead><tbody>'+R.map(function(r){ return '<tr><td style="font-weight:500">'+r+'</td>'+C.map(function(c){ var v=M[c+"|"+r]; return '<td>'+(v?v.map(function(x){return '<span class="pill ink" style="margin:2px 4px 2px 0">'+x+'</span>';}).join(""):'<span class="chip ghost" style="font-weight:500">a definir</span>')+'</td>'; }).join("")+'</tr>'; }).join("")+'</tbody></table></div>';
+  var cel=function(c,r){ var v=M[c+"|"+r]; return v?v.map(function(x){return '<span class="pill ink" style="margin:2px 4px 2px 0">'+x+'</span>';}).join(""):'<span class="chip ghost" style="font-weight:500">a definir</span>'; };
+  var mesa='<div class="tbl lgb"><table><thead><tr><th></th>'+C.map(function(c){return '<th>'+c+'</th>';}).join("")+'</tr></thead><tbody>'+R.map(function(r){ return '<tr><td style="font-weight:500">'+r+'</td>'+C.map(function(c){ return '<td>'+cel(c,r)+'</td>'; }).join("")+'</tr>'; }).join("")+'</tbody></table></div>';
+  var lista='<div class="list smb">'+C.map(function(c){ return '<div class="li" style="display:block"><p class="lt" style="margin-bottom:6px">'+c+'</p>'+R.map(function(r){ return '<p class="ls" style="margin:3px 0"><span style="display:inline-block;min-width:58px;color:var(--muted)">'+r+'</span>'+cel(c,r)+'</p>'; }).join("")+'</div>'; }).join("")+'</div>';
+  return mesa+lista;
 }
 function fuelLine(){
   var Wd=640, H=118, L=10, R=14, X=function(m){return L+m/180*(Wd-L-R);}, o='<line x1="'+L+'" x2="'+(Wd-R)+'" y1="60" y2="60" stroke="var(--ink)" stroke-width="2"/>';
@@ -535,7 +547,7 @@ function seriesForca(){
   var F=D.strava.forca, Wd=1000, H=220, L=34, R=10, T=16, B=36, mx=40, bw=(Wd-L-R)/F.length, Y=function(v){return T+(1-v/mx)*(H-T-B);}, o="";
   [0,10,20,30,40].forEach(function(v){ o+='<line class="gl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="ax" x="'+(L-8)+'" y="'+(Y(v)+3.5)+'" text-anchor="end">'+v+'</text>'; });
   F.forEach(function(f,i){ var w=Math.min(24,bw*.5), x=L+i*bw+(bw-w)/2, n=f.sets.length, cyc=f.d>=P.inicio; o+='<path d="'+colPath(x,Y(n),w,Y(0)-Y(n))+'" fill="'+(cyc?'var(--ink)':'var(--axis)')+'"'+tip(n+" séries",D7A[dow(f.d)]+" "+ddmm(f.d))+'/><text class="vl" x="'+(x+w/2)+'" y="'+(Y(n)-6)+'" text-anchor="middle">'+n+'</text><text class="ax" x="'+(x+w/2)+'" y="'+(Y(0)+14)+'" text-anchor="middle">'+ddmm(f.d)+'</text>'; });
-  o+='<line x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(17)+'" y2="'+Y(17)+'" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 4"/><text class="vlr" x="'+(Wd-R)+'" y="'+(Y(17)-6)+'" text-anchor="end">prescrito · 17 por sessão</text><line class="bl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(0)+'" y2="'+Y(0)+'"/>';
+  o+='<line x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(17)+'" y2="'+Y(17)+'" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 4"/><text class="vlr" x="'+(L+6)+'" y="'+(Y(17)-6)+'">prescrito · 17 por sessão</text><line class="bl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(0)+'" y2="'+Y(0)+'"/>';
   return vb(Wd,H,o,"Séries por sessão")+'<div class="legend"><span><i style="background:var(--axis)"></i>Antes do ciclo</span><span><i style="background:var(--ink)"></i>No ciclo</span><span><i class="ln" style="background:var(--accent)"></i>Prescrição</span></div>';
 }
 
@@ -573,19 +585,20 @@ function topo(){
 function heroBlock(){
   var ind=AS[0], c=parts(alvoTs(ind)), foto=FOTOS.hero;
   return '<section class="hero"><div class="bg">'+(foto?'<img alt="Gabriel treinando" src="'+foto+'">':topo())+'</div><div class="shade"></div><div class="swap"><label class="btn mini">'+ic("cam")+(foto?'Trocar foto':'Colocar foto')+'<input class="up" type="file" accept="image/*" data-foto="hero"></label></div>'
-    +'<div class="tx"><div><p class="eb">Gabriel Mendes · trail e ultra · São Paulo</p><h1>Rumo à <em>Indomit</em></h1><div class="chips"><span>INDOMIT Pedra do Baú 50K</span><span>20.03.27 · 05h</span><span>Meta sub-9h</span><span>Sonho sub-8h</span></div></div>'
+    +'<div class="tx"><div><p class="eb">Gabriel Mendes · trail e ultra · São Paulo</p><h1>Rumo à <em>Indomit</em></h1><div class="chips"><span>INDOMIT Pedra do Baú 50K</span><span>20.03.27 · 05h</span><span>Meta 8h50</span><span>Rumo às 20h na La Misión</span></div></div>'
     +'<div class="cds num">'+[["d",c.d,"dias"],["h",c.h,"horas"],["m",c.m,"min"],["s",c.s,"seg"]].map(function(x){return '<div class="cd"><b data-cd="'+x[0]+':'+ind.d+'">'+(x[0]==="d"?x[1]:String(x[1]).padStart(2,"0"))+'</b><span>'+x[2]+'</span></div>';}).join("")+'</div></div></section>';
 }
 function destaques(){
-  var pd=plan(HOJE), s=last(SONO), h=last(HRV7), lc=last(WC);
-  var it=[["Treino de hoje",pd&&pd.c?'<span style="font-size:19px">'+esc(pd.c.n)+'</span>':'—',pd&&pd.c?k1(pd.km)+' km · '+TERRL[pd.t]+(pd.fz?' · força '+pd.fz:''):'',''],
-    ["Prontidão",PRON.n+'<small style="font-size:14px;color:var(--muted)"> · '+NIV[PRON.n][0]+'</small>','lido do relógio',''],
-    ["Fitness",lc.ctl.toFixed(0),'fadiga '+lc.atl.toFixed(0)+' · forma '+(lc.ctl-lc.atl>=0?'+':'')+(lc.ctl-lc.atl).toFixed(0),spark(WC.slice(-30).map(function(x){return x.ctl;}),200,30,"var(--ink)","var(--accent-fill)")],
+  var s=last(SONO), h=last(HRV7), fz=last(serieFit(FSRC));
+  var it=[["Fitness",fz.f.toFixed(0),'forma '+(fz.f-fz.a>=0?'+':'')+(fz.f-fz.a).toFixed(0)+' · fadiga '+fz.a.toFixed(0),spark(serieFit(FSRC).slice(-30).map(function(x){return x.f;}),200,30,"var(--ink)","var(--accent-fill)")],
+    ["Rodado no ciclo",k1(KM_CICLO)+'<small style="font-size:14px;color:var(--muted)"> km</small>',k1(PCT*100)+'% de '+thou(PLAN_KM)+' km','<div class="meter"><i style="width:'+Math.max(2,PCT*100)+'%;background:var(--accent-fill)"></i></div>'],
     ["HRV da noite",h[1]+'<small style="font-size:14px;color:var(--muted)"> ms</small>',h[5]+' do normal',spark(WH.slice(-14).map(function(x){return x.hrv;}),200,30,"var(--good)")],
     ["Sono",String(s[1]),hm(s[2])+' dormindo',spark(SONO.map(function(x){return x[1];}),200,30,"var(--s-rem)")],
+    ["FC de repouso",last(W.filter(function(x){return x.rhr!=null;})).rhr+'<small style="font-size:14px;color:var(--muted)"> bpm</small>','mínima do registro',spark(W.filter(function(x){return x.rhr!=null;}).slice(-14).map(function(x){return x.rhr;}),200,30,"var(--ink)")],
     ["VO₂max",String(FIT.vo2),'limiar '+FIT.limiar+'/km · COROS','']];
   return '<div class="hl-grid">'+it.map(function(x){return '<div class="hl"><span class="lbl"><i></i>'+x[0]+'</span><p class="mid">'+x[1]+'</p><span class="lbl">'+x[2]+'</span>'+x[3]+'</div>';}).join("")+'</div>';
 }
+
 function treinosPublicos(){
   var rs=A.filter(function(a){return RUN[a.t]&&a.km>2;}).slice().reverse().slice(0,6), links=D.strava.corridasStrava;
   return '<div class="list">'+rs.map(function(a){ var id=links[a.d]; return '<div class="li"><span class="sq" style="background:'+TERR[a.t]+';width:56px;height:56px;border-radius:12px;flex-direction:column;font-size:15px;font-weight:600;letter-spacing:-.02em">'+k1(a.km)+'<small style="font-size:9.5px;opacity:.8">km</small></span><div style="min-width:0"><p class="lt">'+esc(a.n||TERRL[a.t])+'</p><p class="ls">'+pace(a.min*60/a.km)+'/km · FC '+(a.hr||"—")+(a.dplus?' · '+thou(a.dplus)+' m D+':'')+' · carga '+(a.load||0)+'</p></div>'+(id?'<a class="btn mini" href="https://www.strava.com/activities/'+id+'" target="_blank" rel="noopener">Strava '+ic("arrow")+'</a>':'<span class="lbl">'+ddmm(a.d)+'</span>')+'</div>'; }).join("")+'</div>';
@@ -606,10 +619,10 @@ function comoFunciona(){
    ========================================================================= */
 var WK=Math.max(0,Math.min(24,semIdx(HOJE))), TR_TAB=store("trtab")||"corrida";
 function vHoje(){
-  var pd=plan(HOJE), w=WK, sem=P.semanas[w], s=last(SONO), h=last(HRV7), lc=last(WC);
+  var pd=plan(HOJE), w=WK, sem=P.semanas[w], s=last(SONO), fz=last(serieFit(FSRC));
   var k=kpi("flag","Próxima prova",'<span data-cd="d:'+NEXT.d+'">'+parts(alvoTs(NEXT)).d+'</span>',"dias",'<span class="pill red">'+esc(NEXT.c)+'</span>','var(--accent)')
     +kpi("bolt","Prontidão",PRON.n,NIV[PRON.n][0],'','var(--good-text)')
-    +kpi("pulse","Fitness",lc.ctl.toFixed(0),"forma "+(lc.ctl-lc.atl>=0?"+":"")+(lc.ctl-lc.atl).toFixed(0))
+    +kpi("pulse","Forma",(fz.f-fz.a>=0?"+":"")+(fz.f-fz.a).toFixed(0),"fitness "+fz.f.toFixed(0))
     +kpi("moon","Sono",s[1],hm(s[2]),'','var(--s-rem)');
   return hello(saudacao()+", Gabriel",dataLonga(HOJE)+" · Semana "+(w+1)+" de 25 · "+sem.b+" "+blocoNome(sem.b),k)
     +'<div class="grid">'
@@ -618,15 +631,16 @@ function vHoje(){
     +'<article class="card c4">'+proxCard()+'</article>'
     +'<article class="card c8" id="semcard">'+semana(WK)+'</article>'
     +card("c4","Precisa de você",atencao())
-    +card("c8","Fitness e forma",fitnessStats()+fitness(230),"intervals.icu · desde julho")
+    +'<article class="card c8"><div class="ch"><h2>Fitness e forma</h2><div class="r">'+fitnessSeg()+'</div></div>'+fitness(240)+'</article>'
     +card("c4","Registro",feed(8),"relógio")
     +card("c12","Carga por dia",heat(10,10),"carga de treino · vermelho é esforço")
     +'</div>';
 }
+
 function vTreino(){
   var w=WK, wd=semanaDone(w), seg='<div class="seg" role="group" aria-label="Corrida ou força"><button type="button" data-tr="corrida" aria-pressed="'+(TR_TAB==="corrida")+'">Corrida</button><button type="button" data-tr="forca" aria-pressed="'+(TR_TAB==="forca")+'">Força</button></div>';
   if(TR_TAB==="corrida"){
-    var k=kpi("run","Semana",k1(wd),"de "+P.semanas[w].km+" km",'','var(--rua)')+kpi("mtn","Ciclo",k1(KM_CICLO),"de "+thou(PLAN_KM)+" km")+kpi("incl","Limiar",FIT.limiar,"→ alvo 4:36",'<span class="pill">meia 1h40</span>')+kpi("flag","Próxima chave","Teste","limiar · esta semana",'','var(--accent)');
+    var k=kpi("run","Semana",k1(wd),"de "+P.semanas[w].km+" km",'','var(--rua)')+kpi("mtn","Ciclo",k1(KM_CICLO),"de "+thou(PLAN_KM)+" km")+kpi("incl","Limiar · relógio",FIT.limiar,"/km",'<span class="pill">espirométrico a marcar</span>')+kpi("flag","Próxima prova",diff(HOJE,NEXT.d),"dias · "+NEXT.c,'','var(--accent)');
     return hello("Treino · corrida","Semana "+(w+1)+" de 25 · "+P.semanas[w].b+" "+blocoNome(P.semanas[w].b),k)+'<div style="margin-bottom:14px">'+seg+'</div><div class="grid">'
       +card("c12","Calendário do bloco",periodizacao(200,true),"25 semanas · marcos e provas")
       +card("c8","Volume semanal",volume(230),"km")+card("c4","Terreno",terreno())
@@ -652,7 +666,7 @@ function vCorpo(){
   var lc=last(WC), k=kpi("pulse","VO₂max",FIT.vo2,"",'','var(--good-text)')+kpi("scale","Peso",D.atleta.peso,"kg")+kpi("incl","Limiar",FIT.limiar,"/km")+kpi("heart","FC de repouso",last(W.filter(function(x){return x.rhr!=null;})).rhr,"bpm");
   return hello("Corpo","Leitura do relógio · "+dm(HOJE),k)+'<div class="grid">'
     +card("c6","HRV noturno",hrvChart(),WH.length+" noites")+card("c6","FC de repouso",fcChart(),W.filter(function(x){return x.rhr!=null;}).length+" dias")
-    +card("c8","Sono por fase",sonoChart(),"14 noites")+card("c4","Hora de deitar",janelaSono(),"meta 23h")
+    +card("c7","Sono por fase",sonoChart(),"14 noites")+card("c5","Hora de deitar e levantar",janelaSono()+sonoMeta(),"7 h mínimo · 8 h ideal · 9 h sonho")
     +card("c7","Previsões e RPs",projNumeros(),"COROS · Strava")
     +card("c5","Pendências",'<div class="list">'+((PRIV&&PRIV.pendencias)||[]).map(function(x){return '<div class="li">'+sq(x[1],x[0])+'<div><p class="lt">'+x[2]+'</p><p class="ls">'+x[3]+'</p></div><span class="pill">pendente</span></div>';}).join("")+'</div>')+'</div>';
 }
@@ -664,19 +678,38 @@ function vKit(){
   var L=tenisLista(), k=kpi("run","Em uso",L.ultimos.length,"pares")+kpi("mtn","Todos",L.todos.length,"pares no Strava")+kpi("watch","Relógio","PACE 3","COROS");
   return hello("Kit","Tênis, relógio e suplemento",k)+'<div class="grid"><article class="card c12" id="kitcard"><div class="ch"><h2>Rotação de tênis</h2><span class="m">Strava</span></div>'+tenis(false,KIT_TAB)+'</article>'+card("c5","O que uso",usoKit())+card("c7","Suplemento por sessão",suplementos(),"com o nutricionista · visível no público")+'</div>';
 }
+function nutriRows(){ return (PRIV&&PRIV.nutricao)||[]; }
+function nutriBloco(){
+  var rows=nutriRows(), n0=function(v){return Math.round(v).toLocaleString("pt-BR");}, lit=function(ml){return (ml/1000).toFixed(1).replace(".",",");};
+  var st=function(k,v,u){return '<div><span class="k">'+k+'</span><span class="v">'+(v==null?'—':n0(v)+'<small> '+u+'</small>')+'</span></div>';};
+  if(!rows.length) return '<div class="stat3">'+st("Calorias",null)+st("Carboidrato",null)+st("Proteína",null)+st("Água",null)+'</div>'
+    +'<div class="list" style="margin-top:12px"><div class="li">'+sq("var(--ink)","food")+'<div><p class="lt">1 · MyFitnessPal grava no Apple Health</p><p class="ls">MyFitnessPal › Mais › Apps e dispositivos › Apple Health: ligar nutrição, água e peso.</p></div></div>'
+    +'<div class="li">'+sq("var(--ink)","drop")+'<div><p class="lt">2 · Health Auto Export manda para o Prumo</p><p class="ls">Automação REST API, todo dia, com dietary_energy, carbohydrates, protein, total_fat, dietary_water e weight_body_mass → POST /api/nutricao com a chave do modo privado.</p></div></div>'
+    +'<div class="li">'+sq("var(--accent-fill)","scale")+'<div><p class="lt">3 · Esta aba mostra o dia</p><p class="ls">Calorias, macros, água e peso por dia. O longão passa a ler o carboidrato real.</p></div></div></div>';
+  var r=rows[rows.length-1], hoje=r.d===HOJE;
+  var o='<div class="stat3">'+st("Calorias",r.kcal,"kcal")+st("Carboidrato",r.carb,"g")+st("Proteína",r.prot,"g")+'<div><span class="k">Água</span><span class="v">'+(r.agua==null?'—':lit(r.agua)+'<small> L</small>')+'</span></div></div>';
+  o+='<p class="note" style="margin-top:8px">'+(hoje?'hoje':'último registro · '+ddmm(r.d))+(r.gord!=null?' · gordura '+n0(r.gord)+' g':'')+(r.peso!=null?' · peso '+String(r.peso).replace(".",",")+' kg':'')+' · MyFitnessPal via Apple Health</p>';
+  var last=rows.slice(-14), W=480,H=150,L=40,R=12,T=18,B=28, mx=Math.max.apply(null,last.map(function(x){return x.kcal||0;}).concat([2500]));
+  var X=function(k){return L+(k+.5)/last.length*(W-L-R);}, Y=function(v){return T+(1-v/mx)*(H-T-B);}, bw=Math.max(6,(W-L-R)/last.length-6), g="";
+  [1000,2000,3000,4000].filter(function(v){return v<=mx;}).forEach(function(v){ g+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="ax" x="'+(L-6)+'" y="'+(Y(v)+3.5)+'" text-anchor="end">'+(v/1000)+'k</text>'; });
+  last.forEach(function(x,k){ var v=x.kcal||0; g+='<rect x="'+(X(k)-bw/2)+'" y="'+Y(v)+'" width="'+bw+'" height="'+(Y(0)-Y(v))+'" rx="2" fill="'+(x.d===HOJE?'var(--accent-fill)':'var(--ink)')+'"'+tip(n0(v)+' kcal'+(x.agua!=null?' · '+lit(x.agua)+' L':''),ddmm(x.d))+'/>'; if(k%2===last.length%2||last.length<8) g+='<text class="ax" x="'+X(k)+'" y="'+(H-8)+'" text-anchor="middle">'+ddmm(x.d).slice(0,5)+'</text>'; });
+  return o+'<div style="margin-top:12px">'+vb(W,H,g,"Calorias por dia, últimos 14 dias")+'</div>';
+}
 function vNutri(){
-  var k=kpi("food","Hoje","—","sem registro")+kpi("drop","Regras decididas",2,"")+kpi("scale","Peso",D.atleta.peso,"kg");
+  var rows=nutriRows(), r=rows[rows.length-1];
+  var k=kpi("food","Calorias",r&&r.kcal!=null?Math.round(r.kcal).toLocaleString("pt-BR"):"—",r?(r.d===HOJE?"kcal · hoje":"kcal · "+ddmm(r.d)):"sem registro")+kpi("drop","Água",r&&r.agua!=null?(r.agua/1000).toFixed(1).replace(".",",")+" L":"—",r?"MyFitnessPal":"sem registro")+kpi("scale","Peso",r&&r.peso!=null?String(r.peso).replace(".",","):D.atleta.peso,"kg");
   return hello("Nutrição","O que o treino precisa saber da cozinha",k)+'<div class="grid">'
-    +card("c6","Hoje",'<div class="stat3"><div><span class="k">Calorias</span><span class="v">—</span></div><div><span class="k">Carboidrato</span><span class="v">—</span></div><div><span class="k">Proteína</span><span class="v">—</span></div><div><span class="k">Gordura</span><span class="v">—</span></div></div><p class="note">Entra pela integração de nutrição (MyFitnessPal ou similar) ou por registro no Telegram. Carboidrato de treino fica fora do déficit.</p>',"registro do dia")
-    +card("c6","Regras decididas",'<div class="list"><div class="li">'+sq("var(--accent-fill)","drop")+'<div><p class="lt">Comer a cada 40 min no longão</p><p class="ls">A partir do Bloco 2, mesmo sem fome. É ensaio de prova.</p></div></div><div class="li">'+sq("var(--rua)","drop")+'<div><p class="lt">Beber pelo relógio, não pela sede</p><p class="ls">A quebra de 2025 foi desidratação e cãibra no km 23.</p></div></div></div>')
+    +card("c6","Registro do dia",nutriBloco(),rows.length?"MyFitnessPal · Apple Health":"como conectar")
+    +card("c6","Regras decididas",'<div class="list"><div class="li">'+sq("var(--accent-fill)","drop")+'<div><p class="lt">Comer a cada 40 min no longão</p><p class="ls">A partir do Bloco 2, mesmo sem fome. É ensaio de prova.</p></div></div><div class="li">'+sq("var(--rua)","drop")+'<div><p class="lt">Beber pelo relógio, não pela sede</p><p class="ls">A quebra de 2025 foi desidratação e cãibra no km 23.</p></div></div><div class="li">'+sq("var(--ink)","food")+'<div><p class="lt">Carboidrato de treino fica fora do déficit</p><p class="ls">O que entra no longão e no limiar não conta contra o dia.</p></div></div></div>')
     +card("c7","Ensaio do longão",fuelLine(),"3 horas")+card("c5","Suplemento por sessão",suplementos(),"a definir")+'</div>';
 }
 function vPublico(){
   return heroBlock()+'<div style="margin:16px 0">'+destaques()+'</div><div class="grid">'
-    +card("c5","Treino de hoje",sessoes(plan(HOJE),true),(plan(HOJE)||{}).bloco)
-    +'<article class="card c7"><div class="ch"><h2>Percurso</h2><span class="m">'+k1(PCT*100)+'% do caminho · traçado oficial</span></div>'+percurso("indomit",230)+'</article>'
-    +card("c8","Fitness e forma",fitnessStats()+fitness(220),"intervals.icu")
+    +card("c4","Treino de hoje",sessoes(plan(HOJE),true),(plan(HOJE)||{}).bloco)
     +'<article class="card c4">'+prontCard(true)+'</article>'
+    +'<article class="card c4">'+proxCard()+'</article>'
+    +'<article class="card c12"><div class="ch"><h2>Percurso</h2><span class="m">'+k1(PCT*100)+'% do caminho · traçado oficial</span></div>'+percurso("indomit",240)+'</article>'
+    +'<article class="card c12"><div class="ch"><h2>Fitness e forma</h2><div class="r">'+fitnessSeg()+'</div></div>'+fitness(240)+'</article>'
     +'<article class="card c12">'+semana(WK,true)+'</article>'
     +'<article class="card c12"><div class="ch"><h2>Projeção</h2><span class="m">previsão do relógio · RPs · metas</span></div>'+projNumeros()+'<div class="grid" style="gap:16px"><div class="c4">'+projCurva("21k")+'</div><div class="c4">'+projCurva("42k")+'</div><div class="c4">'+projTrail()+'</div></div></article>'
     +card("c6","Treinos recentes",treinosPublicos(),"Strava")+card("c6","No Instagram",instagram(),"@mendesgabriell")
@@ -708,6 +741,7 @@ document.addEventListener("click",function(e){
   if(t.dataset.perfil){ PK=t.dataset.perfil; store("perfil",PK); render(true); return; }
   if(t.dataset.kit){ KIT_TAB=t.dataset.kit; store("kittab",KIT_TAB); render(true); return; }
   if(t.dataset.tr){ TR_TAB=t.dataset.tr; store("trtab",TR_TAB); render(); return; }
+  if(t.dataset.fsrc){ FSRC=t.dataset.fsrc; store("fsrc",FSRC); PRON=prontidao(); render(true); return; }
 });
 document.addEventListener("change",function(e){
   var inp=e.target; if(!inp.dataset||!inp.dataset.foto||!inp.files||!inp.files[0]) return;

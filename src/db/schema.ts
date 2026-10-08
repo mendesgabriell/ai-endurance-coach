@@ -3,8 +3,10 @@ import {
   boolean,
   date,
   index,
+  integer,
   jsonb,
   pgTable,
+  real,
   serial,
   text,
   timestamp,
@@ -78,4 +80,21 @@ export const workerStatus = pgTable("worker_status", {
   name: text("name").primaryKey(),
   lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull(),
   info: jsonb("info").$type<Record<string, unknown>>().notNull().default({}),
+});
+
+/**
+ * Um dia de alimentação, como chega do Apple Health (MyFitnessPal escreve lá).
+ * Quem envia é o app Health Auto Export, no iPhone, para /api/nutricao.
+ * Upsert por dia: o último envio do dia vale.
+ */
+export const nutritionDays = pgTable("nutrition_days", {
+  day: text("day").primaryKey(),
+  kcal: integer("kcal"),
+  carbsG: integer("carbs_g"),
+  proteinG: integer("protein_g"),
+  fatG: integer("fat_g"),
+  waterMl: integer("water_ml"),
+  weightKg: real("weight_kg"),
+  source: text("source").notNull().default("apple-health"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });

@@ -158,7 +158,7 @@ img{max-width:100%}
 .fat div{background:var(--card-2);border-radius:10px;padding:9px 11px;min-width:0}
 .fat .k{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
 .fat .k i{width:7px;height:7px;border-radius:99px;display:block}
-.fat .v{font-size:15px;font-weight:600;letter-spacing:-.02em;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fat .v{font-size:15px;font-weight:600;letter-spacing:-.02em;margin-top:2px;line-height:1.25}
 .fat .v small{font-size:11px;color:var(--muted);font-weight:500}
 
 /* ---------------- semana ---------------- */
@@ -184,7 +184,7 @@ img{max-width:100%}
 .li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--hair);min-width:0}
 .li:first-child{border-top:0;padding-top:2px}
 .li .lt{font-size:13.5px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.li .ls{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .ls{font-size:12px;color:var(--muted);line-height:1.35}
 .li .sq{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;flex:0 0 auto}
 .li .sq svg{width:16px;height:16px}
 .li .meter{margin-top:6px}
@@ -215,8 +215,11 @@ svg [data-tip]:hover{opacity:.8}
 .stat3 .d.up{color:var(--good-text)} .stat3 .d.dn{color:var(--accent)}
 
 /* ---------------- tabela ---------------- */
-.tbl{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{border-collapse:collapse;width:100%;font-size:13px}
+.tbl{overflow:visible}
+table{border-collapse:collapse;width:100%;font-size:13px;table-layout:auto}
+@media(max-width:560px){table{font-size:11.5px}th,td{padding:7px 4px}td .lbl{display:none}}
+.sm,.smb{display:none}
+@media(max-width:560px){.lg,.lgb{display:none}.sm{display:inline}.smb{display:block}}
 th,td{text-align:left;padding:9px 8px;border-top:1px solid var(--hair);vertical-align:middle}
 th{font-size:11.5px;font-weight:500;color:var(--muted);border-top:0;padding-top:0}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}

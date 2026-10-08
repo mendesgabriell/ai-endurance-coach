@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ABDOMINAL, BLOCOS, CORRIDA, FORCA, FORCA_DO_DIA, INICIO, SEMANAS } from "@/plan/ciclo-bau";
 import { todayISO } from "@/plan/plan";
+import { lerNutricao } from "./nutricao";
 
 /**
  * Monta o pacote de dados que a página do Prumo lê. Uma função só, duas saídas:
@@ -72,5 +73,6 @@ export async function montarDados(privado: boolean) {
   const estatico = JSON.parse(readFileSync(join(process.cwd(), "src/prumo/estatico.json"), "utf8"));
   const intervals = await lerIntervals(hoje);
   const { privadoDados, ...publico } = estatico;
-  return { hoje, geradoEm: new Date().toISOString(), ...publico, plano: exportarPlano(), intervals, privado: privado ? privadoDados : null };
+  const priv = privado ? { ...privadoDados, nutricao: await lerNutricao(14) } : null;
+  return { hoje, geradoEm: new Date().toISOString(), ...publico, plano: exportarPlano(), intervals, privado: priv };
 }
