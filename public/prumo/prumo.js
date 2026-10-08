@@ -684,29 +684,29 @@ function topo(){
   return '<svg viewBox="0 0 '+Wd+' '+H+'" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true">'+o+'</svg>';
 }
 var PV=store("prova")||NEXT.c;
+function provaSeg(p){ return '<div class="seg light wrap big" role="group" aria-label="Prova">'+D.provas.map(function(q){return '<button type="button" data-prova="'+esc(q.c)+'" aria-pressed="'+(q.c===p.c)+'">'+esc(q.c)+(q.cls==="A"?' <i></i>':'')+'</button>';}).join("")+'</div>'; }
 function provaCard(p){
-  var seg='<div class="seg light wrap" role="group" aria-label="Prova">'+D.provas.map(function(q){return '<button type="button" data-prova="'+esc(q.c)+'" aria-pressed="'+(q.c===p.c)+'">'+esc(q.c)+'</button>';}).join("")+'</div>';
   var c=parts(alvoTs(p)), key=p.c==="Indomit"?"indomit":p.c==="La Misión"?"mision":null, planAte=0, feito=0;
   for(var d=P.inicio; d<p.d&&d<=FIM; d=add(d,1)){ var pd=plan(d); if(pd) planAte+=pd.km; if(d<=HOJE) feito+=runKm(d); }
   var alem=p.d>FIM, cl=p.clima, proj="";
   if(p.c==="Rio 21K"||p.c==="POA 42K"){ var kk=p.c==="Rio 21K"?"21k":"42k", t0=FIT.prev[kk]; proj='<span class="v">'+clock(t0)+'</span><span class="d">o relógio projeta hoje · meta '+clock(p.meta_s)+(t0>p.meta_s?' · faltam '+clock(t0-p.meta_s):' · dentro da meta')+'</span>'; }
   else if(key){ var pf=D.perfis[key], kme=pf.km+pf.dplus/100, pa=D.paraty, rate=pa.t/(pa.km+pa.dplus/100), need=p.meta_s/kme; proj='<span class="v">'+pace(need)+'<small> /km-e</small></span><span class="d">o que a meta pede · Paraty foi '+pace(rate)+' · '+Math.round((1-need/rate)*100)+'% mais rápido</span>'; }
   else proj='<span class="v">—</span><span class="d">sem projeção ainda</span>';
-  var o='<div class="ch"><h2>'+esc(p.n)+'</h2><div class="r">'+seg+'</div></div>';
-  o+='<div class="rc"><div class="rc-a"><p class="lbl">'+dataLonga(p.d)+(p.hora?' · largada '+p.hora:'')+(p.lugar?' · '+esc(p.lugar):'')+' · prova '+esc(p.cls)+'</p>'
-    +'<div class="row" style="align-items:baseline;gap:6px;margin-top:6px"><span class="big num" data-cd="d:'+p.d+'">'+c.d+'</span><span class="lbl">dias</span><span class="num" style="font-size:20px;font-weight:600;letter-spacing:-.03em;margin-left:8px"><span data-cd="h:'+p.d+'">'+String(c.h).padStart(2,"0")+'</span><small class="lbl">h</small> <span data-cd="m:'+p.d+'">'+String(c.m).padStart(2,"0")+'</span><small class="lbl">min</small></span></div>'
-    +'<div class="chips2">'+(p.km?'<span>'+k1(p.km)+' km</span>':'<span>distância a definir</span>')+(p.dplus?'<span>'+thou(p.dplus)+' m D+</span>':'')+'<span>meta · '+esc(p.meta)+'</span></div></div>'
+  var o='<div class="ch"><h2>'+esc(p.n)+'</h2><span class="m">'+dataLonga(p.d)+(p.hora?' · largada '+p.hora:'')+(p.lugar?' · '+esc(p.lugar):'')+'</span></div>';
+  o+='<div class="rc"><div class="rc-a"><div class="chips2" style="margin-top:0">'+(p.km?'<span>'+k1(p.km)+' km</span>':'<span>distância a definir</span>')+(p.dplus?'<span>'+thou(p.dplus)+' m D+</span>':'')+'<span>meta · '+esc(p.meta)+'</span><span>prova '+esc(p.cls)+'</span></div>'
+    +'<p class="note" style="margin-top:10px">'+(p.cls==="A"?'Prova A: é para ela que o ciclo aponta.':p.cls==="B"?'Prova B: aferição no meio do caminho, sem polimento.':p.cls==="C"?'Prova C: participação, sem meta de tempo.':'Participação a confirmar.')+'</p></div>'
     +'<div class="rc-b stat3"><div><span class="k">Rodado até a prova</span><span class="v">'+k1(feito)+'<small> de '+thou(planAte)+' km</small></span><span class="d">'+(alem?'do ciclo da Indomit · o da La Misión é montado depois':'planejado até '+ddmm(p.d))+'</span></div>'
     +'<div><span class="k">Clima esperado</span>'+(cl?'<span class="v">'+Math.round(cl.tmin)+'–'+Math.round(cl.tmax)+'<small> °C</small></span><span class="d">chuva em '+cl.chuva_pct+'% dos dias · umidade '+cl.umidade+'% · '+cl.anos+' na semana da prova</span>':'<span class="v">—</span><span class="d">sem histórico</span>')+'</div>'
     +'<div><span class="k">Projeção</span>'+proj+'</div></div></div>';
   o+=key?'<div style="margin-top:14px">'+percurso(key,200,true)+'</div><p class="note">Traçado oficial ('+esc(D.perfis[key].fonte.split(" · ")[0])+'). '+esc(D.perfis[key].terreno)+'.</p>':'<p class="note" style="margin-top:10px">Sem traçado oficial cadastrado para esta prova.</p>';
   return o;
 }
-function heroBlock(){
-  var ind=NEXT, c=parts(alvoTs(ind)), foto=FOTOS.hero;
+var ART={"UTMB":"ao"};
+function heroBlock(p){
+  var c=parts(alvoTs(p)), foto=FOTOS.hero, lm=D.provas.filter(function(q){return q.c==="La Misión";})[0];
   return '<section class="hero"><div class="bg">'+(foto?'<img alt="Gabriel treinando" src="'+foto+'">':topo())+'</div><div class="shade"></div><div class="swap"><label class="btn mini">'+ic("cam")+(foto?'Trocar foto':'Colocar foto')+'<input class="up" type="file" accept="image/*" data-foto="hero"></label></div>'
-    +'<div class="tx"><div><p class="eb">Gabriel Mendes · trail e ultra · São Paulo · '+saudacao().toLowerCase()+', visitante</p><h1>Rumo à <em>La Misión</em></h1><div class="chips"><span>próxima: '+esc(NEXT.n)+' · '+ddmm(NEXT.d)+'</span><span>Indomit 50K · 20.03.27 · meta 8h50</span><span>La Misión 110K · 13.08.27 · abaixo de 20h</span></div><div class="chips" style="margin-top:8px"><a class="btn" href="https://www.instagram.com/'+esc(D.atleta.ig)+'/" target="_blank" rel="noopener" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.3)">'+ic("ig")+'Instagram</a><a class="btn" href="https://www.strava.com/athletes/'+esc(D.atleta.strava||"")+'" target="_blank" rel="noopener" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.3)">'+ic("arrow")+'Strava</a></div></div>'
-    +'<div class="cds num">'+[["d",c.d,"dias"],["h",c.h,"horas"],["m",c.m,"min"],["s",c.s,"seg"]].map(function(x){return '<div class="cd"><b data-cd="'+x[0]+':'+ind.d+'">'+(x[0]==="d"?x[1]:String(x[1]).padStart(2,"0"))+'</b><span>'+x[2]+'</span></div>';}).join("")+'</div></div></section>';
+    +'<div class="tx"><div><p class="eb">Gabriel Mendes · trail e ultra · São Paulo · '+saudacao().toLowerCase()+', visitante</p><h1>Rumo '+(ART[p.c]||"à")+' <em>'+esc(p.c)+'</em></h1><div class="chips"><span>'+esc(p.n)+'</span><span>'+ddmm(p.d)+(p.hora?' · '+p.hora:'')+'</span>'+(p.km?'<span>'+k1(p.km)+' km'+(p.dplus?' · '+thou(p.dplus)+' m D+':'')+'</span>':'')+'<span>meta · '+esc(p.meta)+'</span>'+(p.c!=="La Misión"&&lm?'<span>o alvo do ano: La Misión em '+parts(alvoTs(lm)).d+' dias</span>':'')+'</div><div class="chips" style="margin-top:8px"><a class="btn" href="https://www.instagram.com/'+esc(D.atleta.ig)+'/" target="_blank" rel="noopener" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.3)">'+ic("ig")+'Instagram</a><a class="btn" href="https://www.strava.com/athletes/'+esc(D.atleta.strava||"")+'" target="_blank" rel="noopener" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.3)">'+ic("arrow")+'Strava</a></div></div>'
+    +'<div class="cds num">'+[["d",c.d,"dias"],["h",c.h,"horas"],["m",c.m,"min"],["s",c.s,"seg"]].map(function(x){return '<div class="cd"><b data-cd="'+x[0]+':'+p.d+'">'+(x[0]==="d"?x[1]:String(x[1]).padStart(2,"0"))+'</b><span>'+x[2]+'</span></div>';}).join("")+'</div></div></section>';
 }
 function destaques(){
   var s=last(SONO), h=last(HRV7), fz=last(serieFit(FSRC)), sh=sonoHoje();
@@ -870,8 +870,10 @@ function vNutri(){
 }
 function vPublico(){
   var pv=D.provas.filter(function(p){return p.c===PV;})[0]||NEXT, pd=plan(HOJE);
-  return heroBlock()+'<div class="grid" style="margin-top:16px">'
-    +secao("01","Para que estou treinando","escolha a prova: dados, clima esperado, quanto do ciclo já rodei até ela")
+  return '<div class="grid">'
+    +secao("01","Para que estou treinando","escolha a prova")
+    +'<div class="c12">'+provaSeg(pv)+'</div>'
+    +'<div class="c12">'+heroBlock(pv)+'</div>'
     +'<article class="card c12">'+provaCard(pv)+'</article>'
     +card("c12","Temporada 2026–27",temporada(),"todas as provas e participações")
     +secao("02","Como estou hoje","o que o relógio leu esta noite e o treino do dia")
