@@ -214,7 +214,7 @@ img{max-width:100%}
 .alerta{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--accent-wash);color:var(--accent);font-size:12.5px;line-height:1.4;margin-bottom:10px}
 .alerta svg{width:16px;height:16px;flex:0 0 auto;margin-top:2px}
 .alerta b{display:block;font-weight:600}
-.seg.wrap{flex-wrap:wrap;border-radius:14px;gap:2px}
+.seg.multi{flex-wrap:wrap;border-radius:14px;gap:2px}
 .seg.provas button{font-size:13.5px;padding:8px 14px;display:inline-flex;align-items:center;gap:6px}
 .seg.provas button i{width:7px;height:7px;border-radius:99px;background:var(--accent-fill);display:block}
 .seg.provas button[aria-pressed="true"] i{background:#fff}
