@@ -656,8 +656,8 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 2",
     "dt": "5 – 11/10",
     "b": "Bloco 0",
-    "km": 42,
-    "tag": "teste",
+    "km": 44,
+    "tag": "replanejada",
     "dias": [
       {
         "d": "seg",
@@ -669,41 +669,45 @@ export const SEMANAS: SemanaModelo[] = [
         "d": "ter",
         "t": "esteira",
         "km": 6,
-        "dp": 140
+        "dp": 140,
+        "f": 1
       },
       {
         "d": "qua",
         "t": "rua",
         "km": 8,
-        "s": "teste",
-        "dp": 160
+        "dp": 160,
+        "f": 1,
+        "g": ""
       },
       {
         "d": "qui",
-        "t": "esteira",
-        "km": 5,
-        "dp": 220
+        "t": "rua",
+        "km": 8,
+        "dp": 160,
+        "s": "teste"
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 3,
-        "dp": 60
+        "km": 8,
+        "dp": 160,
+        "s": "sex"
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 10,
-        "dp": 550
+        "km": 14,
+        "dp": 770
       },
       {
         "d": "dom",
-        "t": "leve",
-        "km": 4,
-        "dp": 80
+        "t": "rua",
+        "km": 8,
+        "dp": 160
       }
     ],
-    "dp": 2650
+    "dp": 2690
   },
   {
     "n": "Sem 3",
