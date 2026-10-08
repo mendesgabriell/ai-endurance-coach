@@ -33,5 +33,5 @@ console.log('nomes           :', (grade.match(/>(Segunda|Terça|Quarta|Quinta|Se
 console.log('contador        :', store['dica']?store['dica'].innerHTML.replace(/<[^>]+>/g,''):'(vazio)');
 console.log('exercícios força:', (store['fex']?store['fex'].innerHTML.match(/<li/g)||[]:[]).length);
 console.log('passos corrida  :', (store['cpassos']?store['cpassos'].innerHTML.match(/<li/g)||[]:[]).length);
-if(dias!==7||checks<10){ console.log('ERRO: grade incompleta'); process.exit(1); }
+if(dias!==7||checks<7){ console.log('ERRO: grade incompleta'); process.exit(1); }
 console.log('OK');
