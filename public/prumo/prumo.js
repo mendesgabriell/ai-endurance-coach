@@ -494,16 +494,16 @@ function projTrail(){
 function hrvChart(){
   var S=WH.slice(-30), n=S.length, Wd=1000, H=250, L=34, R=40, T=18, B=34, mn=35, mx=100, X=function(i){return L+i/(n-1)*(Wd-L-R);}, Y=function(v){return T+(1-(v-mn)/(mx-mn))*(H-T-B);}, o="";
   [40,55,70,85,100].forEach(function(v){ o+='<line class="gl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="ax" x="'+(L-8)+'" y="'+(Y(v)+3.5)+'" text-anchor="end">'+v+'</text>'; });
-  var idx={}; S.forEach(function(x,i){ idx[x.d]=i; });
-  var band=HRV7.map(function(h){return X(idx[h[0]])+","+Y(h[3]);}).join(" ")+" "+HRV7.slice().reverse().map(function(h){return X(idx[h[0]])+","+Y(h[2]);}).join(" ");
-  o+='<polygon points="'+band+'" fill="var(--good)" opacity=".12"/>';
-  o+='<polyline points="'+HRV7.map(function(h){return X(idx[h[0]])+","+Y(h[4]);}).join(" ")+'" fill="none" stroke="var(--ink-2)" stroke-width="1.2" stroke-dasharray="4 4"/>';
+  var coros=HRV7.length&&diff(last(HRV7)[0],HOJE)<=1, idx={}; S.forEach(function(x,i){ idx[x.d]=i; });
+  var faixa=[]; if(coros){ HRV7.forEach(function(h){ if(idx[h[0]]!==undefined) faixa.push({i:idx[h[0]],lo:h[2],hi:h[3],base:h[4],v:h[1],sit:h[5]}); }); }
+  else { S.forEach(function(x,i){ var prev=WH.slice(Math.max(0,WH.length-30+i-7),WH.length-30+i).map(function(z){return z.hrv;}); if(prev.length<4) return; var b=mean(prev); faixa.push({i:i,lo:Math.round(b*0.9),hi:Math.round(b*1.1),base:Math.round(b),v:x.hrv,sit:x.hrv>=b*1.08?"acima":x.hrv>=b*0.9?"normal":"abaixo"}); }); }
+  if(faixa.length>1) o+='<polygon points="'+faixa.map(function(f){return X(f.i)+","+Y(f.hi);}).join(" ")+" "+faixa.slice().reverse().map(function(f){return X(f.i)+","+Y(f.lo);}).join(" ")+'" fill="var(--good)" opacity=".12"/><polyline points="'+faixa.map(function(f){return X(f.i)+","+Y(f.base);}).join(" ")+'" fill="none" stroke="var(--ink-2)" stroke-width="1.2" stroke-dasharray="4 4"/>';
   o+='<path d="'+smooth(S.map(function(x,i){return [X(i),Y(x.hrv)];}))+'" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>';
-  HRV7.forEach(function(h){ var i=idx[h[0]]; if(i===undefined) return; var c=h[5]==="abaixo"?"var(--crit)":h[5]==="acima"?"var(--good)":"var(--ink)"; o+='<circle cx="'+X(i)+'" cy="'+Y(h[1])+'" r="5" fill="'+c+'" stroke="var(--card)" stroke-width="2"'+tip(h[1]+" ms",ddmm(h[0])+" · "+h[5]+" do normal · faixa "+h[2]+"–"+h[3])+'/>'; });
+  faixa.slice(-7).forEach(function(f){ var c=f.sit==="abaixo"?"var(--crit)":f.sit==="acima"?"var(--good)":"var(--ink)"; o+='<circle cx="'+X(f.i)+'" cy="'+Y(f.v)+'" r="5" fill="'+c+'" stroke="var(--card)" stroke-width="2"'+tip(f.v+" ms",ddmm(S[f.i].d)+" · "+f.sit+" do normal · faixa "+f.lo+"–"+f.hi)+'/>'; });
   S.forEach(function(x,i){ o+='<rect x="'+(X(i)-(Wd-L-R)/n/2)+'" y="'+T+'" width="'+((Wd-L-R)/n)+'" height="'+(H-T-B)+'" fill="transparent"'+tip(x.hrv+" ms",ddmm(x.d))+'/>'; });
   var lc=last(S); o+='<text class="vl" x="'+(X(n-1)+8)+'" y="'+(Y(lc.hrv)+4)+'">'+lc.hrv+'</text>';
   var lm=-1; S.forEach(function(x,i){ var m=parse(x.d).getUTCMonth(); if(m!==lm){ o+='<text class="ax" x="'+X(i)+'" y="'+(H-14)+'">'+MES[m]+'</text>'; lm=m; } });
-  return vb(Wd,H,o,"HRV noturno")+'<div class="legend"><span><i style="background:var(--good);opacity:.35"></i>Faixa normal (COROS, 7 dias)</span><span><i class="ln" style="background:var(--ink-2)"></i>Base</span><span><i class="dot" style="background:var(--good)"></i>Acima</span><span><i class="dot" style="background:var(--crit)"></i>Abaixo</span></div>';
+  return vb(Wd,H,o,"HRV noturno")+'<div class="legend"><span><i style="background:var(--good);opacity:.35"></i>'+(coros?'Faixa normal (COROS, 7 dias)':'Faixa normal (±10% da base de 7 dias)')+'</span><span><i class="ln" style="background:var(--ink-2)"></i>Base</span><span><i class="dot" style="background:var(--good)"></i>Acima</span><span><i class="dot" style="background:var(--crit)"></i>Abaixo</span></div>';
 }
 function fcChart(){
   var S=W.filter(function(x){return x.rhr!=null;}).slice(-30), n=S.length, Wd=1000, H=250, L=34, R=40, T=18, B=34, mn=38, mx=58, X=function(i){return L+i/(n-1)*(Wd-L-R);}, Y=function(v){return T+(1-(v-mn)/(mx-mn))*(H-T-B);}, o="";
@@ -519,16 +519,19 @@ function fcChart(){
 }
 function notaCor(n){ return n<60?"var(--e5)":n<80?"var(--e3)":n<90?"var(--g1)":"var(--good)"; }
 function sonoChart(){
-  var Wd=1000, H=260, L=30, R=8, T=26, B=36, mx=10*60, n=SONO.length, bw=(Wd-L-R)/n, Y=function(m){return T+(1-m/mx)*(H-T-B);}, o="";
+  var N=W.filter(function(x){return x.sono!=null;}).slice(-14), byD={}; SONO.forEach(function(s){ byD[s[0]]=s; });
+  var Wd=1000, H=260, L=30, R=8, T=26, B=36, mx=10*60, n=N.length, bw=(Wd-L-R)/n, Y=function(m){return T+(1-m/mx)*(H-T-B);}, o="";
   [0,3,6,9].forEach(function(h){ o+='<line class="gl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(h*60)+'" y2="'+Y(h*60)+'"/><text class="ax" x="'+(L-6)+'" y="'+(Y(h*60)+3.5)+'" text-anchor="end">'+h+'h</text>'; });
   o+='<rect x="'+L+'" y="'+Y(480)+'" width="'+(Wd-L-R)+'" height="'+(Y(420)-Y(480))+'" fill="var(--good)" opacity=".2"/><line x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(420)+'" y2="'+Y(420)+'" stroke="var(--good)" stroke-width="1.2"/><line x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(480)+'" y2="'+Y(480)+'" stroke="var(--good)" stroke-width="1.2"/>';
   o+='<line x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(540)+'" y2="'+Y(540)+'" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="6 4"/>';
-  var ST=[["Profundo",4,"var(--s-deep)"],["REM",6,"var(--s-rem)"],["Leve",5,"var(--s-light)"],["Acordado",7,"var(--s-awake)"]];
-  SONO.forEach(function(s,i){ var w=Math.min(26,bw*.6), x=L+i*bw+(bw-w)/2, yb=Y(0);
-    ST.forEach(function(st,k){ var m=s[3]*s[st[1]]/100, h=Y(0)-Y(m); if(h<.5) return; var y=yb-h; o+='<path d="'+(k===ST.length-1?colPath(x,y,w,h-2,4):'M'+x+','+y+'h'+w+'v'+(h-2)+'h-'+w+'z')+'" fill="'+st[2]+'"'+tip(hm(m),st[0]+" · "+ddmm(s[0]))+'/>'; yb=y; });
-    o+='<rect x="'+(x+w/2-12)+'" y="'+(yb-19)+'" width="24" height="15" rx="4" fill="'+notaCor(s[1])+'"/><text x="'+(x+w/2)+'" y="'+(yb-8)+'" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#fff">'+s[1]+'</text><text class="ax" x="'+(x+w/2)+'" y="'+(Y(0)+14)+'" text-anchor="middle">'+parse(s[0]).getUTCDate()+'</text>'; });
-  o+='<line class="bl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(0)+'" y2="'+Y(0)+'"/><text class="ax" x="'+L+'" y="'+(T-12)+'">Nota do sono sobre cada noite · dia de acordar</text>';
-  return vb(Wd,H,o,"Sono por fase")+'<div class="legend">'+ST.map(function(s){return '<span><i style="background:'+s[2]+'"></i>'+s[0]+'</span>';}).join("")+'<span><i style="background:var(--good);opacity:.3"></i>Meta 7–8 h</span><span><i class="ln" style="background:var(--good)"></i>9 h · sonho</span><span style="margin-left:6px">Nota:</span><span><i style="background:var(--e5)"></i>&lt; 60</span><span><i style="background:var(--e3)"></i>60–79</span><span><i style="background:var(--g1)"></i>80–89</span><span><i style="background:var(--good)"></i>90+</span></div>';
+  var ST=[["Profundo",4,"var(--s-deep)"],["REM",6,"var(--s-rem)"],["Leve",5,"var(--s-light)"],["Acordado",7,"var(--s-awake)"]], comFase=0;
+  N.forEach(function(x,i){ var w=Math.min(26,bw*.6), xx=L+i*bw+(bw-w)/2, s=byD[x.d], m=x.sono, yb=Y(0);
+    if(s&&Math.abs(s[2]-m)<=20){ comFase++; ST.forEach(function(st,k){ var mm=s[3]*s[st[1]]/100, h=Y(0)-Y(mm); if(h<.5) return; var y=yb-h; o+='<path d="'+(k===ST.length-1?colPath(xx,y,w,h-2,4):'M'+xx+','+y+'h'+w+'v'+(h-2)+'h-'+w+'z')+'" fill="'+st[2]+'"'+tip(hm(mm),st[0]+" · "+ddmm(x.d))+'/>'; yb=y; });
+      o+='<rect x="'+(xx+w/2-12)+'" y="'+(yb-19)+'" width="24" height="15" rx="4" fill="'+notaCor(s[1])+'"/><text x="'+(xx+w/2)+'" y="'+(yb-8)+'" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#fff">'+s[1]+'</text>'; }
+    else { var cor=m>=480?'var(--good)':m>=420?'var(--g1)':m>=360?'var(--e3)':'var(--e5)'; o+='<path d="'+colPath(xx,Y(m),w,Y(0)-Y(m),4)+'" fill="'+cor+'"'+tip(hm(m)+" dormindo",ddmm(x.d)+" · relógio")+'/><text class="ax" x="'+(xx+w/2)+'" y="'+(Y(m)-6)+'" text-anchor="middle">'+hm(m)+'</text>'; }
+    o+='<text class="ax" x="'+(xx+w/2)+'" y="'+(Y(0)+14)+'" text-anchor="middle">'+parse(x.d).getUTCDate()+'</text>'; });
+  o+='<line class="bl" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+Y(0)+'" y2="'+Y(0)+'"/><text class="ax" x="'+L+'" y="'+(T-12)+'">Horas dormidas por noite · dia de acordar'+(comFase?' · fases e nota do COROS onde existem':'')+'</text>';
+  return vb(Wd,H,o,"Sono por noite")+'<div class="legend"><span><i style="background:var(--good)"></i>8 h ou mais</span><span><i style="background:var(--g1)"></i>7 a 8 h</span><span><i style="background:var(--e3)"></i>6 a 7 h</span><span><i style="background:var(--e5)"></i>menos de 6 h</span><span><i style="background:var(--good);opacity:.3"></i>Meta 7–8 h</span><span><i class="ln" style="background:var(--good)"></i>9 h · sonho</span>'+(comFase?ST.map(function(s){return '<span><i style="background:'+s[2]+'"></i>'+s[0]+'</span>';}).join(""):'')+'</div>';
 }
 function janelaSono(){
   /* dias no X; relógio no Y, 20h embaixo e 10h em cima. Barra = deitou → levantou. */
@@ -801,7 +804,7 @@ function vCorpo(){
   var lc=last(WC), fc=fcHoje(), k=kpi("pulse","VO₂max",FIT.vo2,"COROS · "+ddmm(D.coros.lido||last(SONO)[0]),'','var(--good-text)')+kpi("scale","Peso",D.atleta.peso,"kg")+kpi("incl","Limiar",FIT.limiar,"/km")+kpi("heart","FC de repouso",fc?fc.v:"—",fc?"bpm · "+(fresco(fc.d)?"hoje":ddmm(fc.d)):"");
   return hello("Corpo","Leitura do relógio · "+dm(HOJE),k)+'<div class="grid">'
     +card("c6","HRV noturno",hrvChart(),Math.min(30,WH.length)+" noites")+card("c6","FC de repouso",fcChart(),Math.min(30,W.filter(function(x){return x.rhr!=null;}).length)+" dias")
-    +card("c7","Sono por fase",sonoChart(),"COROS · até "+ddmm(last(SONO)[0])+" · faixa verde é a meta de 7 a 8 h")+card("c5","Hora de deitar e levantar",janelaSono()+sonoMeta(),"COROS · até "+ddmm(last(SONO)[0]))
+    +card("c7","Sono por noite",sonoChart(),"relógio · 14 noites · faixa verde é a meta de 7 a 8 h")+card("c5","Hora de deitar e levantar",janelaSono()+sonoMeta(),"COROS · até "+ddmm(last(SONO)[0]))
     +card("c7","Previsões e RPs",projNumeros(),"COROS · Strava")
     +card("c5","Pendências",'<div class="list">'+((PRIV&&PRIV.pendencias)||[]).map(function(x){return '<div class="li">'+sq(x[1],x[0])+'<div><p class="lt">'+x[2]+'</p><p class="ls">'+x[3]+'</p></div><span class="pill">pendente</span></div>';}).join("")+'</div>')+'</div>';
 }
