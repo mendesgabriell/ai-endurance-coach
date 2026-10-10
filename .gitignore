@@ -38,3 +38,6 @@ npm-debug.log*
 # build e dependencias
 .vercel
 *.tsbuildinfo
+
+# entradas da rotina diária de dados (COROS + Strava), nunca commitadas
+.prumo-refresh/

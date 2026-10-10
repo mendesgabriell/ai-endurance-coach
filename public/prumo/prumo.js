@@ -87,31 +87,33 @@ var EST={feito:["Realizado","var(--good)"],parcial:["Parcial","var(--warn)"],nao
 /* ---------------- prontidão (só relógio, regra fixa) ---------------- */
 var NIV=[null,["Parado","var(--crit)","Não corre e não levanta."],["Segura","var(--serious)","Metade do tempo, zona 2. Só máquina."],
   ["Atenção","var(--warn)","Mantém o tempo, corta a intensidade."],["Liberado","var(--good)","A sessão como está."],["Pronto","var(--good)","Pode subir o alvo."]];
-function sonoHoje(){ var s=last(SONO); if(s&&s[0]===HOJE) return {d:HOJE,nota:s[1],min:s[2],deitou:s[8],levantou:s[9]}; var w=W.filter(function(x){return x.sono!=null;}), l=last(w); return l?{d:l.d,nota:null,min:l.sono}:(s?{d:s[0],nota:s[1],min:s[2],deitou:s[8],levantou:s[9]}:null); }
+function sonoHoje(){ var s=last(SONO), w=last(W.filter(function(x){return x.sono!=null;})); if(s&&(!w||s[0]>=w.d)) return {d:s[0],nota:s[1],min:s[2],deitou:s[8],levantou:s[9]}; return w?{d:w.d,nota:null,min:w.sono}:null; }
+function hrvHoje(){ var h=last(HRV7), w=last(WH); if(h&&(!w||h[0]>=w.d)) return {d:h[0],v:h[1],faixa:[h[2],h[3]],base:h[4],sit:h[5]}; if(!w) return null; var base=mean(WH.slice(-8,-1).map(function(x){return x.hrv;}))||w.hrv, r=w.hrv/base; return {d:w.d,v:w.hrv,faixa:[Math.round(base*0.9),Math.round(base*1.1)],base:Math.round(base),sit:r>=1.08?"acima":r>=0.9?"normal":"abaixo"}; }
+function fcHoje(){ var rh=W.filter(function(x){return x.rhr!=null;}), c=last(rh); if(!c) return null; return {d:c.d,v:c.rhr,media:mean(rh.slice(-8,-1).map(function(x){return x.rhr;}))}; }
+function fresco(d){ return d===HOJE; }
+function lido(d){ return d?(fresco(d)?'lido hoje':'<span style="color:var(--accent)">lido '+ddmm(d)+' · desatualizado</span>'):'sem leitura'; }
 function prontidao(){
-  var it=[], t=0, h=last(HRV7), wh=last(WH);
-  if(h&&h[0]===HOJE){ var hs=h[5]==="acima"?2:h[5]==="normal"?1:-2; it.push({k:"HRV",v:h[1]+" ms",s:hs,l:h[5]+" do normal"}); t+=hs; }
-  else if(wh){ var base=mean(WH.slice(-8,-1).map(function(x){return x.hrv;}))||wh.hrv, r=wh.hrv/base, hs2=r>=1.08?2:r>=0.9?1:-2; it.push({k:"HRV",v:wh.hrv+" ms",s:hs2,l:(r>=1.08?"acima":r>=0.9?"dentro":"abaixo")+" da base de 7 dias ("+Math.round(base)+")"}); t+=hs2; }
-  var sn=sonoHoje(), ss=0;
-  if(sn&&sn.nota!=null){ ss=sn.nota>=85?2:sn.nota>=70?1:sn.nota>=55?0:-2; if(sn.min<360) ss-=1; it.push({k:"Sono",v:sn.nota+" · "+hm(sn.min),s:ss,l:"nota "+sn.nota}); }
-  else { var m=sn?sn.min:0; ss=m>=480?2:m>=420?1:m>=360?0:-2; it.push({k:"Sono",v:hm(m),s:ss,l:m>=480?"8 h ou mais":m>=420?"entre 7 e 8 h":m>=360?"entre 6 e 7 h":"menos de 6 h"}); }
+  var it=[], t=0, h=hrvHoje(), sn=sonoHoje(), fc=fcHoje(), datas=[];
+  if(h){ var hs=h.sit==="acima"?2:h.sit==="normal"?1:-2; it.push({k:"HRV",v:h.v+" ms",s:hs,l:h.sit+" do normal ("+h.faixa[0]+"–"+h.faixa[1]+")",d:h.d}); t+=hs; datas.push(h.d); }
+  var ss=0;
+  if(sn&&sn.nota!=null){ ss=sn.nota>=85?2:sn.nota>=70?1:sn.nota>=55?0:-2; if(sn.min<360) ss-=1; it.push({k:"Sono",v:sn.nota+" · "+hm(sn.min),s:ss,l:"nota "+sn.nota,d:sn.d}); datas.push(sn.d); }
+  else if(sn){ var m=sn.min; ss=m>=480?2:m>=420?1:m>=360?0:-2; it.push({k:"Sono",v:hm(m),s:ss,l:m>=480?"8 h ou mais":m>=420?"entre 7 e 8 h":m>=360?"entre 6 e 7 h":"menos de 6 h",d:sn.d}); datas.push(sn.d); }
   t+=ss;
-  var rh=W.filter(function(x){return x.rhr!=null;}), cur=last(rh), prev=rh.slice(-8,-1).map(function(x){return x.rhr;}), mu=mean(prev);
-  var rs=cur.rhr<=mu?1:cur.rhr>=mu+5?-2:0; it.push({k:"FC repouso",v:cur.rhr+" bpm",s:rs,l:"média 7d "+Math.round(mu)}); t+=rs;
+  if(fc){ var rs=fc.v<=fc.media?1:fc.v>=fc.media+5?-2:0; it.push({k:"FC repouso",v:fc.v+" bpm",s:rs,l:"média 7d "+Math.round(fc.media),d:fc.d}); t+=rs; datas.push(fc.d); }
   var ac=0, cr=0; for(var k=0;k<28;k++){ var ld=loadDay(add(HOJE,-k)); if(k<7) ac+=ld; cr+=ld; } cr=cr/4; var ratio=cr?ac/cr:0, cs=ratio<=0.9?1:ratio<=1.3?0:ratio<=1.5?-1:-2;
-  it.push({k:"Carga 7 dias",v:Math.round(ac)+" · "+ratio.toFixed(1).replace(".",",")+"×",s:cs,l:"da média de 4 semanas ("+Math.round(cr)+")"}); t+=cs;
-  var n=t>=5?5:t>=3?4:t>=1?3:t>=-1?2:1;
-  return {n:n,total:t,itens:it};
+  it.push({k:"Carga 7 dias",v:Math.round(ac)+" · "+ratio.toFixed(1).replace(".",",")+"×",s:cs,l:"da média de 4 semanas ("+Math.round(cr)+")",d:HOJE}); t+=cs;
+  var n=t>=5?5:t>=3?4:t>=1?3:t>=-1?2:1, vivo=datas.length>=2&&datas.every(fresco), ultima=datas.length?datas.slice().sort().pop():null;
+  return {n:n,total:t,itens:it,vivo:vivo,ultima:ultima};
 }
 var AJ={3:["Atenção","mantém o tempo, corta a intensidade"],2:["Segura","metade do tempo, zona 2; na força, só máquina"],1:["Parado","não corre e não levanta"]};
 function ajuste(pd){
-  var n=PRON.n; if(!pd||n>=4||pd.prova) return null;
+  var n=PRON.n; if(!pd||!PRON.vivo||n>=4||pd.prova) return null;
   var forte=!!(pd.c&&/limiar|tiro|subida|long|ritmo|progress|teste|fartlek/i.test(pd.c.n));
   if(n===3&&!forte) return null;
   var motivo=PRON.itens.filter(function(x){return x.s<0;}).map(function(x){return x.k.toLowerCase()+" "+x.v+" ("+x.l+")";}).join(" · ")||"soma dos sinais do relógio";
-  var c=null; if(pd.c){ c= n===3?{n:"Rodagem leve · ajustado",km:pd.km,presc:"Zona 2 o tempo todo, FC até 142, sem o bloco de intensidade."}: n===2?{n:"Rodagem leve curta · ajustado",km:Math.round(pd.km/2),presc:"Metade do previsto, zona 2."}:{n:"Descanso",km:0,presc:"Sem corrida hoje."}; c.de=pd.c.n; }
-  var f=null; if(pd.fz){ f= n===3?null: n===2?{n:P.forca[pd.fz].nome+" · só máquina",presc:"Metade das séries, sem peso livre."}:{n:"Sem força",presc:"Descanso."}; }
-  return {n:n,c:c,f:f,motivo:motivo,titulo:AJ[n][0],regra:AJ[n][1]};
+  var c=null; if(pd.c&&n>=2){ c= n===3?{n:"Rodagem leve · ajustado",km:pd.km,presc:"Zona 2 o tempo todo, FC até 142, sem o bloco de intensidade."}:{n:"Rodagem leve curta · ajustado",km:Math.round(pd.km/2),presc:"Metade do previsto, zona 2."}; c.de=pd.c.n; }
+  var f=null; if(pd.fz&&n===2){ f={n:P.forca[pd.fz].nome+" · só máquina",presc:"Metade das séries, sem peso livre."}; }
+  return {n:n,c:c,f:f,motivo:motivo,titulo:AJ[n][0],regra:n===1?"o relógio recomenda descanso; o previsto fica abaixo e a decisão é sua":AJ[n][1]};
 }
 var PRON=prontidao(); if(QS.get("pron")){ PRON.n=Math.max(1,Math.min(5,+QS.get("pron"))); }
 
@@ -158,7 +160,7 @@ function tenisPara(pd){
 }
 function sessoes(pd,publico,only){
   if(!pd) return '<p class="lbl">Fora do ciclo.</p>';
-  var aj=ajuste(pd), pre=aj&&((only!=="f"&&aj.c)||(only!=="c"&&aj.f))?'<div class="alerta">'+ic("bolt")+'<div><b>Atenção · treino ajustado · prontidão '+aj.n+' ('+aj.titulo+')</b>Regra: '+esc(aj.regra)+'. Motivo: '+esc(aj.motivo)+'. O previsto continua abaixo, em "Treino completo".</div></div>':'';
+  var aj=ajuste(pd), pre=aj?'<div class="alerta">'+ic("bolt")+'<div><b>'+(aj.n===1?'Atenção · prontidão 1 (Parado)':'Atenção · treino ajustado · prontidão '+aj.n+' ('+aj.titulo+')')+'</b>'+esc(aj.regra)+'. Motivo: '+esc(aj.motivo)+'.'+(aj.n===1?'':' O previsto continua em "Treino completo".')+'</div></div>':(!PRON.vivo&&!publico?'<p class="note" style="margin-bottom:10px">Prontidão de hoje ainda não chegou do relógio'+(PRON.ultima?' (última leitura '+ddmm(PRON.ultima)+')':'')+'. O treino abaixo é o previsto, sem ajuste.</p>':'');
   if(pd.prova) return '<div class="ses">'+sq("var(--good)","flag")+'<div><p class="t">'+esc(pd.prova.n)+'</p><p class="s">'+pd.prova.km+' km'+(pd.prova.dplus?' · '+thou(pd.prova.dplus)+' m D+':'')+' · '+esc(pd.prova.meta)+'</p></div><p class="n">Prova</p></div>';
   var o=pre;
   if(pd.c&&only!=="f"){
@@ -195,9 +197,9 @@ function gauge(nv){
 }
 function prontCard(publico){
   var nv=PRON;
-  var o='<div class="ch"><h2>Prontidão</h2><span class="pill" style="background:var(--card-2)"><i style="background:'+NIV[nv.n][1]+'"></i>'+nv.n+' · '+NIV[nv.n][0]+'</span></div>';
+  var o='<div class="ch"><h2>Prontidão</h2><span class="pill" style="background:var(--card-2)"><i style="background:'+NIV[nv.n][1]+'"></i>'+nv.n+' · '+NIV[nv.n][0]+(nv.vivo?'':' · de '+ddmm(nv.ultima||HOJE))+'</span></div>';
   o+='<div class="gauge-wrap">'+gauge(nv)+'</div><p style="text-align:center;font-size:13px;color:var(--ink-2);margin-top:-8px">'+NIV[nv.n][2]+'</p>';
-  o+='<div class="fat">'+nv.itens.map(function(x){ var c=x.s>=1?"var(--good)":x.s===0?"var(--warn)":"var(--crit)"; return '<div><span class="k"><i style="background:'+c+'"></i>'+x.k+'</span><span class="v">'+x.v+' <small>'+esc(x.l)+'</small></span></div>'; }).join("")+'</div>';
+  o+='<div class="fat">'+nv.itens.map(function(x){ var c=x.s>=1?"var(--good)":x.s===0?"var(--warn)":"var(--crit)"; return '<div><span class="k"><i style="background:'+c+'"></i>'+x.k+'</span><span class="v">'+x.v+' <small>'+esc(x.l)+'</small></span><span class="lbl" style="display:block;font-size:10.5px">'+lido(x.d)+'</span></div>'; }).join("")+'</div>'+(nv.vivo?'':'<p class="note" style="color:var(--accent)">Leitura de hoje ainda não chegou do relógio. Sincroniza o COROS no celular; o painel lê o intervals.icu a cada abertura.</p>');
   if(!publico) o+='<p class="note">Lido do relógio: HRV contra a faixa normal, sono, FC de repouso contra a média de 7 dias e carga dos últimos 7 dias contra a média de 4 semanas. Abaixo de 4, o treino do dia muda sozinho e avisa.</p>';
   return o;
 }
@@ -709,10 +711,10 @@ function heroBlock(p){
     +'<div class="cds num">'+[["d",c.d,"dias"],["h",c.h,"horas"],["m",c.m,"min"],["s",c.s,"seg"]].map(function(x){return '<div class="cd"><b data-cd="'+x[0]+':'+p.d+'">'+(x[0]==="d"?x[1]:String(x[1]).padStart(2,"0"))+'</b><span>'+x[2]+'</span></div>';}).join("")+'</div></div></section>';
 }
 function destaques(){
-  var s=last(SONO), h=last(HRV7), fz=last(serieFit(FSRC)), sh=sonoHoje();
+  var s=last(SONO), h=hrvHoje(), fz=last(serieFit(FSRC)), sh=sonoHoje();
   var it=[["Fitness",fz.f.toFixed(0),'forma '+(fz.f-fz.a>=0?'+':'')+(fz.f-fz.a).toFixed(0)+' · fadiga '+fz.a.toFixed(0),spark(serieFit(FSRC).slice(-30).map(function(x){return x.f;}),200,30,"var(--ink)","var(--accent-fill)")],
-    ["HRV da noite",h[1]+'<small style="font-size:14px;color:var(--muted)"> ms</small>',h[5]+' do normal',spark(WH.slice(-14).map(function(x){return x.hrv;}),200,30,"var(--good)")],
-    ["Sono",sh&&sh.nota!=null?String(sh.nota):(sh?hm(sh.min):"—"),sh&&sh.nota!=null?hm(sh.min)+' dormindo':'dormindo · '+(sh?ddmm(sh.d):''),spark(SONO.map(function(x){return x[1];}),200,30,"var(--s-rem)")],
+    ["HRV da noite",(h?h.v:"—")+'<small style="font-size:14px;color:var(--muted)"> ms</small>',h?h.sit+' do normal · '+(fresco(h.d)?'hoje':ddmm(h.d)):'sem leitura',spark(WH.slice(-14).map(function(x){return x.hrv;}),200,30,"var(--good)")],
+    ["Sono",sh&&sh.nota!=null?String(sh.nota):(sh?hm(sh.min):"—"),sh?(sh.nota!=null?hm(sh.min)+' dormindo':'dormindo')+' · '+(fresco(sh.d)?'hoje':ddmm(sh.d)):'sem leitura',spark(W.filter(function(x){return x.sono!=null;}).slice(-14).map(function(x){return Math.round(x.sono/6)/10;}),200,30,"var(--s-rem)")],
     ["Prontidão",String(PRON.n),NIV[PRON.n][0]+' · '+NIV[PRON.n][2].toLowerCase(),''],
     ["FC de repouso",last(W.filter(function(x){return x.rhr!=null;})).rhr+'<small style="font-size:14px;color:var(--muted)"> bpm</small>','mínima do registro',spark(W.filter(function(x){return x.rhr!=null;}).slice(-14).map(function(x){return x.rhr;}),200,30,"var(--ink)")],
     ["VO₂max",String(FIT.vo2),'limiar '+FIT.limiar+'/km · COROS','']];
@@ -740,11 +742,11 @@ function comoFunciona(){
 var WK=Math.max(0,Math.min(24,semIdx(HOJE))), TR_TAB=QS.get("tr")||store("trtab")||"corrida";
 function secao(n,t,sub){ return '<div class="sec"><span class="n">'+n+'</span><h2>'+t+'</h2>'+(sub?'<p>'+sub+'</p>':'')+'</div>'; }
 function vHoje(){
-  var pd=plan(HOJE), w=WK, sem=P.semanas[w], s=last(SONO), fz=last(serieFit(FSRC)), nr=nutriRows(), nh=nr[nr.length-1];
+  var pd=plan(HOJE), w=WK, sem=P.semanas[w], sn=sonoHoje(), fz=last(serieFit(FSRC)), nr=nutriRows(), nh=nr[nr.length-1];
   var k=kpi("flag","Próxima prova",'<span data-cd="d:'+NEXT.d+'">'+parts(alvoTs(NEXT)).d+'</span>',"dias · "+esc(NEXT.c),'','var(--accent)')
     +kpi("bolt","Prontidão",PRON.n,NIV[PRON.n][0],'','var(--good-text)')
     +kpi("pulse","Fitness",fz.f.toFixed(0),"forma "+(fz.f-fz.a>=0?"+":"")+(fz.f-fz.a).toFixed(0))
-    +kpi("moon","Sono",s[1],hm(s[2]),'','var(--s-rem)')
+    +kpi("moon","Sono",sn?(sn.nota!=null?sn.nota:hm(sn.min)):"—",sn?(sn.nota!=null?hm(sn.min):"")+(fresco(sn.d)?"":" · "+ddmm(sn.d)):"sem leitura",'','var(--s-rem)')
     +kpi("food","Comida",nh&&nh.kcal!=null?Math.round(nh.kcal).toLocaleString("pt-BR"):"—",nh&&nh.kcal!=null?"kcal":"sem registro")
     +kpi("drop","Água",nh&&nh.agua!=null?(nh.agua/1000).toFixed(1).replace(".",",")+" L":"—",nh&&nh.agua!=null?"MyFitnessPal":"sem registro",'','var(--rua)');
   return hello(saudacao()+", Gabriel",dataLonga(HOJE)+" · Semana "+(w+1)+" de 25 · "+sem.b+" "+blocoNome(sem.b),k)
@@ -796,10 +798,10 @@ function vCiclo(){
     +'</div>';
 }
 function vCorpo(){
-  var lc=last(WC), k=kpi("pulse","VO₂max",FIT.vo2,"",'','var(--good-text)')+kpi("scale","Peso",D.atleta.peso,"kg")+kpi("incl","Limiar",FIT.limiar,"/km")+kpi("heart","FC de repouso",last(W.filter(function(x){return x.rhr!=null;})).rhr,"bpm");
+  var lc=last(WC), fc=fcHoje(), k=kpi("pulse","VO₂max",FIT.vo2,"COROS · "+ddmm(D.coros.lido||last(SONO)[0]),'','var(--good-text)')+kpi("scale","Peso",D.atleta.peso,"kg")+kpi("incl","Limiar",FIT.limiar,"/km")+kpi("heart","FC de repouso",fc?fc.v:"—",fc?"bpm · "+(fresco(fc.d)?"hoje":ddmm(fc.d)):"");
   return hello("Corpo","Leitura do relógio · "+dm(HOJE),k)+'<div class="grid">'
     +card("c6","HRV noturno",hrvChart(),Math.min(30,WH.length)+" noites")+card("c6","FC de repouso",fcChart(),Math.min(30,W.filter(function(x){return x.rhr!=null;}).length)+" dias")
-    +card("c7","Sono por fase",sonoChart(),"14 noites · faixa verde é a meta de 7 a 8 h")+card("c5","Hora de deitar e levantar",janelaSono()+sonoMeta(),"7 h mínimo · 8 h ideal · 9 h sonho")
+    +card("c7","Sono por fase",sonoChart(),"COROS · até "+ddmm(last(SONO)[0])+" · faixa verde é a meta de 7 a 8 h")+card("c5","Hora de deitar e levantar",janelaSono()+sonoMeta(),"COROS · até "+ddmm(last(SONO)[0]))
     +card("c7","Previsões e RPs",projNumeros(),"COROS · Strava")
     +card("c5","Pendências",'<div class="list">'+((PRIV&&PRIV.pendencias)||[]).map(function(x){return '<div class="li">'+sq(x[1],x[0])+'<div><p class="lt">'+x[2]+'</p><p class="ls">'+x[3]+'</p></div><span class="pill">pendente</span></div>';}).join("")+'</div>')+'</div>';
 }
