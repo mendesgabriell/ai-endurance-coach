@@ -814,7 +814,7 @@ function vKit(){
 function nutriRows(){ return (PRIV&&PRIV.nutricao)||[]; }
 function nutriHoje(){
   var rows=nutriRows(), r=rows[rows.length-1], lit=function(ml){return (ml/1000).toFixed(1).replace(".",",");}, n0=function(v){return Math.round(v).toLocaleString("pt-BR");};
-  if(!r) return '<div class="stat3"><div><span class="k">Calorias</span><span class="v">—</span></div><div><span class="k">Água</span><span class="v">—</span></div></div><p class="note">Sem registro ainda. O caminho é MyFitnessPal → Apple Health → Prumo; o passo a passo está na aba Nutrição.</p>';
+  if(!r) return '<div class="stat3"><div><span class="k">Calorias</span><span class="v">—</span></div><div><span class="k">Água</span><span class="v">—</span></div></div><p class="note">Sem registro ainda. O caminho é MyFitnessPal → Apple Health → painel; o passo a passo está na aba Nutrição.</p>';
   return '<div class="stat3"><div><span class="k">Calorias</span><span class="v">'+(r.kcal==null?'—':n0(r.kcal)+'<small> kcal</small>')+'</span></div><div><span class="k">Carboidrato</span><span class="v">'+(r.carb==null?'—':n0(r.carb)+'<small> g</small>')+'</span></div><div><span class="k">Água</span><span class="v">'+(r.agua==null?'—':lit(r.agua)+'<small> L</small>')+'</span></div><div><span class="k">Peso</span><span class="v">'+(r.peso==null?'—':String(r.peso).replace(".",",")+'<small> kg</small>')+'</span></div></div><p class="note">'+(r.d===HOJE?'hoje':'último registro · '+ddmm(r.d))+' · MyFitnessPal via Apple Health</p>';
 }
 function supRows(){ return (PRIV&&PRIV.suplementacao)||[]; }
