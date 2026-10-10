@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { clientFromEnv, shift, syncRange } from "@/integrations/intervals/sync";
 import { todayISO } from "@/plan/plan";
+import { sincronizarStrava } from "@/integrations/strava/sync";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -24,15 +25,22 @@ export async function GET(req: Request): Promise<NextResponse> {
     return NextResponse.json({ error: "não autorizado" }, { status: 401 });
   }
 
-  const api = clientFromEnv();
-  if (!api) {
-    return NextResponse.json({ ok: true, watch: "desligado" });
+  const day = todayISO();
+  let strava: unknown = null;
+  try {
+    strava = await sincronizarStrava({ forcar: true });
+  } catch (err) {
+    strava = { ok: false, erro: String(err).slice(0, 160) };
   }
 
-  const day = todayISO();
+  const api = clientFromEnv();
+  if (!api) {
+    return NextResponse.json({ ok: true, watch: "desligado", strava });
+  }
+
   try {
     const r = await syncRange(api, day, shift(day, 14));
-    return NextResponse.json({ ok: true, day, ...r });
+    return NextResponse.json({ ok: true, day, ...r, strava });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("sync intervals.icu falhou:", msg);

@@ -3,6 +3,11 @@ import { join } from "node:path";
 import { ABDOMINAL, BLOCOS, CORRIDA, FORCA, FORCA_DO_DIA, INICIO, SEMANAS } from "@/plan/ciclo-bau";
 import { todayISO } from "@/plan/plan";
 import { lerNutricao, lerSuplementacao } from "./nutricao";
+import { esforcoPorDia, serieFitness } from "./fitness";
+import { sincronizarStrava } from "@/integrations/strava/sync";
+import { db } from "@/db/client";
+import { integrations, stravaActivities, stravaGear } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 /**
  * Monta o pacote de dados que a página do Prumo lê. Uma função só, duas saídas:
@@ -68,11 +73,59 @@ export async function lerIntervals(hoje: string): Promise<{ wellness: Wellness[]
   return { wellness, acts, ok: true };
 }
 
+interface StravaBase {
+  lido?: string; re: Record<string, number>; fitness: [string, number, number][];
+  tenis: { id: string; km: number; [k: string]: unknown }[]; usoTenis: Record<string, string>; corridasStrava: Record<string, string>; [k: string]: unknown;
+}
+
+/**
+ * Strava vivo: sincroniza se a última leitura tem mais de 10 minutos, soma o
+ * esforço por dia por cima do histórico versionado e recalcula o fitness.
+ * Qualquer falha devolve o retrato como está; a página nunca cai por causa do Strava.
+ */
+export async function lerStrava(base: StravaBase, hoje: string): Promise<StravaBase & { vivo: boolean }> {
+  if (!db) return { ...base, vivo: false };
+  try {
+    await sincronizarStrava({ dias: 14 });
+  } catch (e) {
+    console.error("strava sync", e);
+  }
+  try {
+    const [conta] = await db.select().from(integrations).where(eq(integrations.provider, "strava"));
+    if (!conta?.syncedAt) return { ...base, vivo: false };
+    const acts = await db.select().from(stravaActivities);
+    const gear = await db.select().from(stravaGear);
+    const re = { ...base.re };
+    if (acts.length) {
+      const porDia = esforcoPorDia(acts);
+      const primeiro = Object.keys(porDia).sort()[0]!;
+      for (let d = primeiro; d <= hoje; d = shiftDia(d, 1)) re[d] = porDia[d] ?? 0;
+    }
+    const usoTenis = { ...base.usoTenis };
+    const corridasStrava = { ...base.corridasStrava };
+    for (const a of acts.slice().sort((p, q) => (p.day < q.day ? -1 : 1))) {
+      if (a.gearId) usoTenis[a.day] = a.gearId;
+      if (/run/i.test(a.sport)) corridasStrava[a.day] = a.id;
+    }
+    const kmPorId = new Map(gear.map((g) => [g.id, g.km]));
+    const tenis = base.tenis.map((t) => (kmPorId.has(t.id) && kmPorId.get(t.id) != null ? { ...t, km: kmPorId.get(t.id) as number } : t));
+    return { ...base, re, fitness: serieFitness(re, hoje), usoTenis, corridasStrava, tenis, lido: conta.syncedAt.toISOString().slice(0, 10), vivo: true };
+  } catch (e) {
+    console.error("strava leitura", e);
+    return { ...base, vivo: false };
+  }
+}
+
+function shiftDia(iso: string, n: number): string {
+  const d = new Date(`${iso}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10);
+}
+
 export async function montarDados(privado: boolean) {
   const hoje = todayISO();
   const estatico = JSON.parse(readFileSync(join(process.cwd(), "src/prumo/estatico.json"), "utf8"));
-  const intervals = await lerIntervals(hoje);
+  const [intervals, strava] = await Promise.all([lerIntervals(hoje), lerStrava(estatico.strava, hoje)]);
   const { privadoDados, ...publico } = estatico;
+  publico.strava = strava;
   const priv = privado ? { ...privadoDados, nutricao: await lerNutricao(14), suplementacao: await lerSuplementacao(30) } : null;
   return { hoje, geradoEm: new Date().toISOString(), ...publico, plano: exportarPlano(), intervals, privado: priv };
 }

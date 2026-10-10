@@ -27,37 +27,34 @@ do Gabriel. Ver também `docs/03-arquitetura.md` e a ADR-0006.
    fica marcada como desatualizada (e não ajusta o treino).
 2. **Vercel.** Todo push na `main` publica o site.
 
-## A rotina diária: retrato do COROS e do Strava
+## A rotina online: GitHub Actions + Vercel, sem o Claude no meio
 
-Três tarefas agendadas no app Claude, com o mesmo roteiro, enquanto o app
-estiver aberto no Mac (o Mac é o servidor):
+Nada roda no app Claude nem gasta token. Duas peças:
 
-- `prumo-retrato-alvorada` (05:45 e 05:55) e `prumo-retrato-diario` (a cada
-  10 minutos, das 06:00 às 06:50): a janela em que ele acorda, o relógio sobe
-  a noite e o treino começa.
-- `prumo-retrato-dia`: de hora em hora, das 07:00 às 22:00, para o que chega
-  durante o dia (treinos, força, tênis).
+1. **`/api/prumo` sincroniza sozinho.** A cada abertura da página, se a última
+   leitura do Strava tem mais de 10 minutos, a Vercel puxa as atividades dos
+   últimos 14 dias (esforço relativo, tênis, links) e grava no Supabase
+   (`strava_activities`, `strava_gear`). O fitness é recalculado em código
+   (`src/prumo/fitness.ts`, testado) a partir do esforço por dia: histórico
+   versionado em `estatico.json` até a ligação, banco daí em diante.
+2. **`.github/workflows/sync.yml`** chama `/api/sync`, que empurra o plano para
+   o relógio e puxa o Strava, nos horários de Brasília: 05:45 e 05:55, a cada
+   10 minutos das 06:00 às 06:50, e de hora em hora das 07:00 às 22:00. É
+   gratuito e o GitHub pode atrasar alguns minutos na largada.
 
-Para ler na hora, sem esperar: o botão "Run now" da tarefa, na seção
-"Scheduled" do app. Cada rodada é uma sessão do Claude; por isso a cadência
-não desce de 10 minutos. Leitura de 2 em 2 minutos pede um leitor sem modelo
-no Mac, falando direto com a nuvem do COROS: é uma peça nova, com ADR.
+O relógio (sono, HRV, FC, treinos) continua chegando pelo intervals.icu a cada
+abertura, sem rotina nenhuma.
 
-Cada rodada:
+**Ligar o Strava, uma vez:** criar um app em strava.com/settings/api (domínio
+de callback `ai-endurance-coach-omega.vercel.app`), colocar `STRAVA_CLIENT_ID`
+e `STRAVA_CLIENT_SECRET` nas variáveis da Vercel, fazer redeploy e, no modo
+privado, abrir `/api/strava/connect`. Os tokens ficam na tabela
+`integrations` e se renovam sozinhos.
 
-1. lê no conector do COROS as últimas 3 noites, os 7 dias de HRV com a faixa
-   normal, o VO₂max, o limiar e as previsões de prova;
-2. lê no conector do Strava as atividades dos últimos 3 dias (esforço
-   relativo, tênis, links), as séries de cada sessão de força e os km dos
-   tênis usados no período;
-3. grava os arquivos em `.prumo-refresh/` (fora do git) e roda
-   `python3 scripts/prumo-refresh.py`, que valida, mescla e recalcula o
-   fitness. O modelo transcreve; quem calcula é o script;
-4. commita só `src/prumo/estatico.json` e dá push na branch e na `main`,
-   apenas quando algo mudou. Sem novidade, a rodada termina sem commit.
-
-Se um conector falhar, a parte dele fica como estava. Se a validação falhar,
-nada é gravado. A rotina nunca toca em `.env`.
+**O que fica como retrato** (atualizado quando conversamos, com a data visível):
+nota e fases do sono do COROS, faixa normal do HRV, VO₂max, limiar, previsões
+de prova e séries de força do Strava. A API do Strava não publica séries; a do
+COROS é só para parceiros. A prontidão e os gráficos não dependem deles.
 
 ## O que depende do Gabriel
 
@@ -73,10 +70,11 @@ nada é gravado. A rotina nunca toca em `.env`.
   com a automação REST para `/api/nutricao` (header `Authorization: Bearer
   <PRUMO_CHAVE>`).
 - **Suplementação:** depois do treino, dizer o que entrou.
-- **Deixar o app Claude aberto no Mac** para a rotina diária rodar.
 
 ## Ainda não existe
 
 - Aviso no Telegram quando a prontidão mudar o treino do dia.
+- Leitor direto da nuvem do COROS (nota de sono, previsões) sem conector:
+  só com API não oficial e o login dele guardado; decisão em aberto.
 - RPs de toda a vida e fotos oficiais dos tênis (dependem do Strava logado).
 - Bioimpedância e exames de sangue no painel.

@@ -16,9 +16,12 @@ O Strava passa a ser **fonte de leitura**, nunca de cálculo de plano:
 - quilometragem e nomes dos tênis, séries de força, links das atividades,
   melhores tempos.
 
-A leitura é feita pelo conector oficial do Strava no Claude, dentro da rotina
-diária (`docs/08-rotinas-de-dados.md`), e gravada como retrato em
-`src/prumo/estatico.json`. Não há chave do Strava na Vercel nem no `.env`.
+A leitura é feita pela API oficial do Strava, com um app registrado pelo
+atleta (OAuth, escopos de leitura) e tokens guardados na tabela
+`integrations` do Supabase. A Vercel sincroniza sozinha a cada abertura da
+página (quando a última leitura passou de 10 minutos) e o GitHub Actions
+mantém a cadência da manhã. Nada roda no Claude; o modelo não vê os dados
+passarem. Ver `docs/08-rotinas-de-dados.md`.
 
 O treino do dia, a carga e a prontidão continuam vindo do relógio pelo
 intervals.icu (ADR-0002 segue valendo para o plano e para a auditoria).
@@ -31,7 +34,8 @@ intervals.icu (ADR-0002 segue valendo para o plano e para a auditoria).
 
 ## Alternativas descartadas
 
-- API do Strava com token na Vercel: nova peça, segredo a mais, limites de
-  taxa, e dependência de app registrado. O conector já resolve a leitura.
+- Conector do Strava dentro de sessões do Claude: funcionava, mas dependia
+  do app aberto no Mac e gastava assinatura a cada leitura. O atleta pediu a
+  rotina online, sem token. Descartado em 10/10/2026.
 - Manter o Strava fora: contraria a decisão do atleta de olhar o número que
   ele já acompanha.

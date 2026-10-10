@@ -112,3 +112,43 @@ export const fuelLog = pgTable("fuel_log", {
   note: text("note"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+/* ---------- Strava: a conta ligada e o que ela devolve ---------- */
+
+/** Uma linha por provedor ligado. Hoje só "strava". Tokens ficam aqui, nunca no código. */
+export const integrations = pgTable("integrations", {
+  provider: text("provider").primaryKey(),
+  athleteId: text("athlete_id"),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  expiresAt: timestamp("expires_at", { withTimezone: true }),
+  syncedAt: timestamp("synced_at", { withTimezone: true }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Atividades do Strava: esforço relativo, tênis e link. O painel soma o esforço por dia. */
+export const stravaActivities = pgTable(
+  "strava_activities",
+  {
+    id: text("id").primaryKey(),
+    day: text("day").notNull(),
+    sport: text("sport").notNull(),
+    name: text("name"),
+    re: integer("re"),
+    km: real("km"),
+    dplus: integer("dplus"),
+    minutes: integer("minutes"),
+    gearId: text("gear_id"),
+    trainer: boolean("trainer"),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("strava_activities_day").on(t.day)],
+);
+
+/** Quilometragem dos tênis, do Strava. */
+export const stravaGear = pgTable("strava_gear", {
+  id: text("id").primaryKey(),
+  name: text("name"),
+  km: real("km"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});

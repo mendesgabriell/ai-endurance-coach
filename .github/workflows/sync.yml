@@ -1,13 +1,20 @@
-# Mantém o relógio em dia sem esperar a manhã seguinte.
+# Mantém o relógio e o Strava em dia sem depender de ninguém.
 #
 # O cron da Vercel no plano Hobby dispara uma vez ao dia. Este agendador é
-# gratuito e chama a rota de sincronia de 2 em 2 horas. Se nada mudou no plano,
-# a chamada não escreve nada.
-name: sync relógio
+# gratuito e chama /api/sync, que empurra o plano para o relógio e puxa o
+# Strava (esforço relativo, tênis). Horários em UTC: Brasília é UTC−3.
+#   05:45 e 05:55 BRT  → 08:45 e 08:55 UTC   (ele acorda, a noite sobe)
+#   06:00–06:50 BRT a cada 10 min → 09:00–09:50 UTC
+#   07:00–22:00 BRT de hora em hora → 10:00–01:00 UTC
+# O GitHub pode atrasar alguns minutos na largada de cada rodada.
+name: sync relógio e Strava
 
 on:
   schedule:
-    - cron: "0 */2 * * *"
+    - cron: "45,55 8 * * *"
+    - cron: "*/10 9 * * *"
+    - cron: "0 10-23 * * *"
+    - cron: "0 0-1 * * *"
   workflow_dispatch: # permite disparar na mão pela aba Actions
 
 jobs:
