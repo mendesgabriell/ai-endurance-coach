@@ -96,7 +96,7 @@ function prontidao(){
   var it=[], t=0, h=hrvHoje(), sn=sonoHoje(), fc=fcHoje(), datas=[];
   if(h){ var hs=h.sit==="acima"?2:h.sit==="normal"?1:-2; it.push({k:"HRV",v:h.v+" ms",s:hs,l:h.sit+" do normal ("+h.faixa[0]+"–"+h.faixa[1]+")",d:h.d}); t+=hs; datas.push(h.d); }
   var ss=0;
-  if(sn&&sn.nota!=null){ ss=sn.nota>=85?2:sn.nota>=70?1:sn.nota>=55?0:-2; if(sn.min<360) ss-=1; it.push({k:"Sono",v:sn.nota+" · "+hm(sn.min),s:ss,l:"nota "+sn.nota,d:sn.d}); datas.push(sn.d); }
+  if(sn&&sn.nota!=null){ ss=sn.nota>=85?2:sn.nota>=70?1:sn.nota>=55?0:-2; if(sn.min<300) ss-=1; it.push({k:"Sono",v:sn.nota+" · "+hm(sn.min),s:ss,l:"nota "+sn.nota+(sn.min<420?" · abaixo das 7 h":""),d:sn.d}); datas.push(sn.d); }
   else if(sn){ var m=sn.min; ss=m>=480?2:m>=420?1:m>=360?0:-2; it.push({k:"Sono",v:hm(m),s:ss,l:m>=480?"8 h ou mais":m>=420?"entre 7 e 8 h":m>=360?"entre 6 e 7 h":"menos de 6 h",d:sn.d}); datas.push(sn.d); }
   t+=ss;
   if(fc){ var rs=fc.v<=fc.media?1:fc.v>=fc.media+5?-2:0; it.push({k:"FC repouso",v:fc.v+" bpm",s:rs,l:"média 7d "+Math.round(fc.media),d:fc.d}); t+=rs; datas.push(fc.d); }
@@ -168,14 +168,18 @@ function sessoes(pd,publico,only){
     o+='<div class="ses'+(FEITO[kd]?' done':'')+(op?' open':'')+'">'+sq(tc,pd.t==="trilha"?"mtn":pd.t==="esteira"?"incl":"run")
       +'<div style="min-width:0"><p class="t">'+esc(ac?ac.n:c.n)+'</p><p class="s">'+(ac?'era: '+esc(c.n)+' · ':'')+TERRL[pd.t]+(c.loc?' · '+esc(c.loc):'')+'</p><p class="s" style="color:var(--ink);margin-top:2px">'+esc(ac?ac.presc:(c.presc[pd.bloco]||""))+'</p>'+(tn?'<p class="s" style="margin-top:3px">Tênis: <b style="color:var(--ink);font-weight:600">'+esc(tn.marca+" "+tn.modelo)+'</b> · '+thou(tn.km)+' km'+(tn.ultimo?' · usado em '+ddmm(tn.ultimo):'')+'</p>':'')+'</div>'
       +'<p class="n">'+k1(ac?ac.km:pd.km)+'<small>km</small></p>'
+      +'<div class="exs">'+c.passos.slice(0,4).map(function(p,i){return '<div class="ex"><b>'+(i+1)+'</b><span>'+esc(p.split(" — ")[0].split(". ")[0])+'</span></div>';}).join("")+'</div>'
       +'<div class="full"><p>'+(ac?'<b>Previsto: '+esc(c.n)+' · '+k1(pd.km)+' km.</b> ':'')+esc(c.obj)+'</p><ol>'+c.passos.map(function(p){return '<li>'+esc(p)+'</li>';}).join("")+'</ol>'+(c.reg?'<div class="reg">'+esc(c.reg)+'</div>':'')+'</div>'
       +'<div class="acts2"><button class="btn mini" data-abre="'+kd+'">'+(op?'Fechar':'Treino completo')+'</button>'+(publico?'':'<button class="btn mini'+(FEITO[kd]?' dark':'')+'" data-feito="'+kd+'">'+(FEITO[kd]?'Realizado ✓':'Marcar realizado')+'</button>')+'</div></div>';
   }
   if(pd.fz&&only!=="c"){
     var f=P.forca[pd.fz], kf=pd.date+":f", af=aj&&aj.f, sr=f.ex.reduce(function(s,e){ if(/^Abdominal/.test(e[0])) return s; var m=/^(\d+)/.exec(e[1]); return s+(m?+m[1]:3); },0), op2=ABERTO[kf];
+    var fzReg=FZ[pd.date], fzTon=fzReg?tonelagem(fzReg):0, fzSets=fzReg&&fzReg.sets?fzReg.sets.length:0, grupos={}; if(fzReg&&fzReg.sets) fzReg.sets.forEach(function(x){ var g=GRP[x[0]]||"Outro"; grupos[g]=(grupos[g]||0)+x[1]*x[2]; });
+    var foco=f.ex.map(function(e){return GRP[e[0].split(" ")[0]]||null;}).filter(Boolean), focoTxt=foco.length?foco.filter(function(g,i){return foco.indexOf(g)===i;}).slice(0,3).join(" · "):"";
     o+='<div class="ses'+(FEITO[kf]?' done':'')+(op2?' open':'')+'">'+sq("var(--ink)","iron")
-      +'<div style="min-width:0"><p class="t">'+esc(af?af.n:f.nome)+'</p><p class="s">'+(af?esc(af.presc)+' · ':'')+f.ex.length+' exercícios · ~'+Math.round(sr*2.6)+' min · mais abdominal e esteira inclinada</p></div>'
+      +'<div style="min-width:0"><p class="t">'+esc(af?af.n:f.nome)+'</p><p class="s">Força · academia'+(focoTxt?' · '+esc(focoTxt):'')+'</p><p class="s" style="color:var(--ink);margin-top:2px">'+(af?esc(af.presc):esc(f.tip.split(". ")[0]+"."))+'</p>'+(fzReg?'<p class="s" style="margin-top:3px">Registrado: <b style="color:var(--ink);font-weight:600">'+fzSets+' séries'+(fzTon?' · '+thou(fzTon)+' kg deslocados':'')+'</b>'+(Object.keys(grupos).length?' · '+Object.keys(grupos).sort(function(a,b){return grupos[b]-grupos[a];}).slice(0,2).join(" e "):'')+'</p>':'')+'</div>'
       +'<p class="n">'+sr+'<small>séries</small></p>'
+      +'<div class="exs">'+f.ex.map(function(e){return '<div class="ex"><b>'+esc(e[0])+'</b><span>'+esc(e[1])+'</span></div>';}).join("")+'</div>'
       +'<div class="full"><p>'+esc(f.tip)+'</p><ol>'+f.ex.map(function(e){return '<li><b>'+esc(e[0])+'</b> — '+esc(e[1])+(e[3]?'<br><span style="color:var(--muted)">'+esc(e[3])+'</span>':'')+'</li>';}).join("")+'</ol></div>'
       +'<div class="acts2"><button class="btn mini" data-abre="'+kf+'">'+(op2?'Fechar':'Treino completo')+'</button>'+(publico?'':'<button class="btn mini'+(FEITO[kf]?' dark':'')+'" data-feito="'+kf+'">'+(FEITO[kf]?'Realizado ✓':'Marcar realizado')+'</button>')+'</div></div>';
   }
@@ -567,8 +571,8 @@ function tenisLista(){
 function tenis(publico,tab){
   var L=tenisLista(), lista=tab==="todos"?L.todos:L.ultimos, cap=function(t){return t.tipo==="trilha"?900:t.tipo==="prova"?400:800;};
   var seg='<div class="seg light" role="group"><button type="button" data-kit="ultimos" aria-pressed="'+(tab==="ultimos")+'">Em uso · '+L.ultimos.length+'</button><button type="button" data-kit="todos" aria-pressed="'+(tab==="todos")+'">Todos · '+L.todos.length+'</button></div>';
-  var cards='<div class="shoes'+(tab==="todos"?' all':'')+'">'+lista.map(function(t){ var p=t.km/cap(t), img=FOTOS[t.id];
-    return '<div class="shoe"><div class="ph">'+(img?'<img alt="'+esc(t.modelo)+'" src="'+img+'">':SHOE)+(publico?'':'<label class="btn mini">'+ic("cam")+'Foto<input class="up" type="file" accept="image/*" data-foto="'+t.id+'"></label>')+'</div>'
+  var cards='<div class="shoes'+(tab==="todos"?' all':'')+'">'+lista.map(function(t){ var p=t.km/cap(t), img=FOTOS[t.id]||(window.PRUMO_DATA?'/tenis/'+t.id+'.jpg':null);
+    return '<div class="shoe"><div class="ph">'+(img?'<img alt="'+esc(t.modelo)+'" src="'+img+'" loading="lazy" onerror="this.remove()">'+SHOE:SHOE)+(publico?'':'<label class="btn mini">'+ic("cam")+'Foto<input class="up" type="file" accept="image/*" data-foto="'+t.id+'"></label>')+'</div>'
       +'<div class="row"><div style="min-width:0;flex:1"><p class="nm" title="'+esc(t.modelo)+'">'+esc(t.modelo)+'</p><p class="br">'+esc(t.marca)+(t.apelido?' · “'+esc(t.apelido)+'”':'')+' · '+(TERRL[t.tipo]||t.tipo)+'</p></div>'+ring(p,52)+'</div>'
       +'<div class="row num"><b style="font-size:19px;font-weight:600;letter-spacing:-.03em">'+thou(t.km)+'</b><span class="lbl">de '+cap(t)+' km estimados</span><span class="sp"></span>'+(t.ultimo?'<span class="lbl">'+ddmm(t.ultimo)+'</span>':'')+'</div></div>'; }).join("")+'</div>';
   return seg+cards+'<p class="note">Quilometragem e nomes vêm do Strava. Vida útil estimada: 800 km rua, 900 km trilha, 400 km de prova.</p>';
@@ -728,7 +732,12 @@ function treinosPublicos(){
   var rs=A.filter(function(a){return RUN[a.t]&&a.km>2;}).slice().reverse().slice(0,6), links=D.strava.corridasStrava;
   return '<div class="list">'+rs.map(function(a){ var id=links[a.d]; return '<div class="li"><span class="sq" style="background:'+TERR[a.t]+';width:56px;height:56px;border-radius:12px;flex-direction:column;font-size:15px;font-weight:600;letter-spacing:-.02em">'+k1(a.km)+'<small style="font-size:9.5px;opacity:.8">km</small></span><div style="min-width:0"><p class="lt">'+esc(a.n||TERRL[a.t])+'</p><p class="ls">'+pace(a.min*60/a.km)+'/km · FC '+(a.hr||"—")+(a.dplus?' · '+thou(a.dplus)+' m D+':'')+' · carga '+(a.load||0)+'</p></div>'+(id?'<a class="btn mini" href="https://www.strava.com/activities/'+id+'" target="_blank" rel="noopener">Strava '+ic("arrow")+'</a>':'<span class="lbl">'+ddmm(a.d)+'</span>')+'</div>'; }).join("")+'</div>';
 }
-function instagram(){ var o='<div class="ig">'; for(var i=0;i<6;i++) o+='<a href="https://www.instagram.com/mendesgabriell/" target="_blank" rel="noopener" aria-label="Abrir Instagram">'+ic(i%2?"mtn":"ig")+'</a>'; return o+'</div><a class="btn dark" href="https://www.instagram.com/mendesgabriell/" target="_blank" rel="noopener" style="align-self:flex-start">Seguir @mendesgabriell '+ic("arrow")+'</a>'; }
+function instagram(){
+  var posts=(D.instagram||[]).slice(0,6), o='<div class="ig'+(posts.length?' real':'')+'">';
+  if(posts.length) posts.forEach(function(u){ var m=/instagram\.com\/(?:p|reel)\/([A-Za-z0-9_-]+)/.exec(u); if(!m) return; o+='<div class="igp"><iframe src="https://www.instagram.com/p/'+m[1]+'/embed/" loading="lazy" title="Post no Instagram" allowtransparency="true"></iframe></div>'; });
+  else for(var i=0;i<6;i++) o+='<a href="https://www.instagram.com/mendesgabriell/" target="_blank" rel="noopener" aria-label="Abrir Instagram">'+ic(i%2?"mtn":"ig")+'</a>';
+  return o+'</div><a class="btn ig" href="https://www.instagram.com/mendesgabriell/" target="_blank" rel="noopener" style="align-self:flex-start">'+ic("ig")+'Seguir @mendesgabriell</a>';
+}
 function comoFunciona(){
   var t=[["Método","Mede antes de opinar","Prontidão, fitness, fadiga e forma saem de regra fixa sobre o dado do relógio. O modelo lê o número; não inventa."],
     ["Viés 1","Força como fisiculturista","Musculação pesada seis vezes por semana, com isoladores e volume alto. O objetivo é o corpo de 2023, não só a prova."],
