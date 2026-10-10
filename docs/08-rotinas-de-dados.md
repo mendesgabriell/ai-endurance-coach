@@ -29,10 +29,20 @@ do Gabriel. Ver também `docs/03-arquitetura.md` e a ADR-0006.
 
 ## A rotina diária: retrato do COROS e do Strava
 
-Tarefa agendada no app Claude (`prumo-retrato-diario`), de hora em hora das
-05:50 às 22:50, enquanto o app estiver aberto no Mac (o Mac é o servidor). A
-primeira leitura é antes das 06:00, hora do treino; as outras pegam o que
-chegou durante o dia. Ela:
+Duas tarefas agendadas no app Claude, com o mesmo roteiro, enquanto o app
+estiver aberto no Mac (o Mac é o servidor):
+
+- `prumo-retrato-diario`: de manhã, a cada 10 minutos, das 05:00 às 07:50.
+  É a janela em que ele acorda, o relógio sobe a noite e o treino começa.
+- `prumo-retrato-dia`: de hora em hora, das 08:50 às 22:50, para o que chega
+  durante o dia (treinos, força, tênis).
+
+Para ler na hora, sem esperar: o botão "Run now" da tarefa, na seção
+"Scheduled" do app. Cada rodada é uma sessão do Claude; por isso a cadência
+não desce de 10 minutos. Leitura de 2 em 2 minutos pede um leitor sem modelo
+no Mac, falando direto com a nuvem do COROS: é uma peça nova, com ADR.
+
+Cada rodada:
 
 1. lê no conector do COROS as últimas 3 noites, os 7 dias de HRV com a faixa
    normal, o VO₂max, o limiar e as previsões de prova;
