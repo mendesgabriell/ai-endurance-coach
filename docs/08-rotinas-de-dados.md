@@ -39,7 +39,7 @@ Nada roda no app Claude nem gasta token. Duas peças:
    versionado em `estatico.json` até a ligação, banco daí em diante.
 2. **`.github/workflows/sync.yml`** chama `/api/sync`, que empurra o plano para
    o relógio e puxa o Strava, nos horários de Brasília: 05:45 e 05:55, a cada
-   10 minutos das 06:00 às 06:50, e de hora em hora das 07:00 às 22:00. É
+   10 minutos das 06:00 às 07:50, e de hora em hora das 08:00 às 23:00. É
    gratuito e o GitHub pode atrasar alguns minutos na largada.
 
 O relógio (sono, HRV, FC, treinos) continua chegando pelo intervals.icu a cada
