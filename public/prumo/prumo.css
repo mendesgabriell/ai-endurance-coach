@@ -66,6 +66,7 @@ img{max-width:100%}
 @media(max-width:760px){.bar-in{padding:10px 16px;gap:10px;flex-wrap:wrap}}
 .brand{display:flex;align-items:center;gap:9px;text-decoration:none;font-weight:700;font-size:19px;letter-spacing:-.04em}
 .brand svg{width:22px;height:22px}
+.brand small{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.04em;margin-left:2px}
 .tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:99px;padding:4px;margin:0 auto;
   overflow-x:auto;scrollbar-width:none;max-width:100%}
 .tabs::-webkit-scrollbar{display:none}

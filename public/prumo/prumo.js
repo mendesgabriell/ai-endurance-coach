@@ -741,7 +741,7 @@ var WK=Math.max(0,Math.min(24,semIdx(HOJE))), TR_TAB=QS.get("tr")||store("trtab"
 function secao(n,t,sub){ return '<div class="sec"><span class="n">'+n+'</span><h2>'+t+'</h2>'+(sub?'<p>'+sub+'</p>':'')+'</div>'; }
 function vHoje(){
   var pd=plan(HOJE), w=WK, sem=P.semanas[w], s=last(SONO), fz=last(serieFit(FSRC)), nr=nutriRows(), nh=nr[nr.length-1];
-  var k=kpi("flag","Próxima prova",'<span data-cd="d:'+NEXT.d+'">'+parts(alvoTs(NEXT)).d+'</span>',"dias",'<span class="pill red">'+esc(NEXT.c)+'</span>','var(--accent)')
+  var k=kpi("flag","Próxima prova",'<span data-cd="d:'+NEXT.d+'">'+parts(alvoTs(NEXT)).d+'</span>',"dias · "+esc(NEXT.c),'','var(--accent)')
     +kpi("bolt","Prontidão",PRON.n,NIV[PRON.n][0],'','var(--good-text)')
     +kpi("pulse","Fitness",fz.f.toFixed(0),"forma "+(fz.f-fz.a>=0?"+":"")+(fz.f-fz.a).toFixed(0))
     +kpi("moon","Sono",s[1],hm(s[2]),'','var(--s-rem)')
@@ -750,9 +750,8 @@ function vHoje(){
   return hello(saudacao()+", Gabriel",dataLonga(HOJE)+" · Semana "+(w+1)+" de 25 · "+sem.b+" "+blocoNome(sem.b),k)
     +'<div class="grid">'
     +secao("01","Agora","o treino do dia, decidido pelo relógio")
-    +card("c5","Treino de hoje",sessoes(pd),pd?pd.bloco+" · "+blocoNome(pd.bloco):"")
-    +'<article class="card c3" id="pront">'+prontCard()+'</article>'
-    +'<article class="card c4">'+proxCard()+'</article>'
+    +card("c7","Treino de hoje",sessoes(pd),pd?pd.bloco+" · "+blocoNome(pd.bloco):"")
+    +'<article class="card c5" id="pront">'+prontCard()+'</article>'
     +secao("02","A semana","previsto contra realizado, e o que precisa de você")
     +'<article class="card c8" id="semcard">'+semana(WK)+'</article>'
     +card("c4","Precisa de você",atencao())
@@ -838,7 +837,7 @@ function nutriBloco(){
   var st=function(k,v,u){return '<div><span class="k">'+k+'</span><span class="v">'+(v==null?'—':n0(v)+'<small> '+u+'</small>')+'</span></div>';};
   if(!rows.length) return '<div class="stat3">'+st("Calorias",null)+st("Carboidrato",null)+st("Proteína",null)+st("Água",null)+'</div>'
     +'<div class="list" style="margin-top:12px"><div class="li">'+sq("var(--ink)","food")+'<div><p class="lt">1 · MyFitnessPal grava no Apple Health</p><p class="ls">MyFitnessPal › Mais › Apps e dispositivos › Apple Health: ligar nutrição, água e peso.</p></div></div>'
-    +'<div class="li">'+sq("var(--ink)","drop")+'<div><p class="lt">2 · Health Auto Export manda para o Prumo</p><p class="ls">Automação REST API, todo dia, com dietary_energy, carbohydrates, protein, total_fat, dietary_water e weight_body_mass → POST /api/nutricao com a chave do modo privado.</p></div></div>'
+    +'<div class="li">'+sq("var(--ink)","drop")+'<div><p class="lt">2 · Health Auto Export manda para o painel</p><p class="ls">Automação REST API, todo dia, com dietary_energy, carbohydrates, protein, total_fat, dietary_water e weight_body_mass → POST /api/nutricao com a chave do modo privado.</p></div></div>'
     +'<div class="li">'+sq("var(--accent-fill)","scale")+'<div><p class="lt">3 · Esta aba mostra o dia</p><p class="ls">Calorias, macros, água e peso por dia. O longão passa a ler o carboidrato real.</p></div></div></div>';
   var r=rows[rows.length-1], hoje=r.d===HOJE;
   var o='<div class="stat3">'+st("Calorias",r.kcal,"kcal")+st("Carboidrato",r.carb,"g")+st("Proteína",r.prot,"g")+'<div><span class="k">Água</span><span class="v">'+(r.agua==null?'—':lit(r.agua)+'<small> L</small>')+'</span></div></div>';
@@ -893,7 +892,7 @@ function vPublico(){
     +card("c12","Como o ciclo foi montado",comoMontado())
     +card("c12","Como funciona",comoFunciona())
     +card("c12","No Instagram",instagram(),"@mendesgabriell")
-    +'</div><div class="foot"><span>Prumo · mede antes de opinar</span><span>dados: COROS · Strava · '+dm(HOJE)+'</span></div>';
+    +'</div><div class="foot"><span>Dashboard de Gabriel Mendes · mede antes de opinar</span><span>dados: COROS · Strava · '+dm(HOJE)+'</span></div>';
 }
 /* =========================================================================
    SHELL E INTERAÇÃO
