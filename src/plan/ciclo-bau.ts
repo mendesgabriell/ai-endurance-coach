@@ -656,7 +656,7 @@ export const SEMANAS: SemanaModelo[] = [
     "n": "Sem 2",
     "dt": "5 – 11/10",
     "b": "Bloco 0",
-    "km": 42.0,
+    "km": 37,
     "tag": "replanejada",
     "dias": [
       {
@@ -696,15 +696,17 @@ export const SEMANAS: SemanaModelo[] = [
       },
       {
         "d": "sáb",
-        "t": "trilha",
-        "km": 13.5,
-        "dp": 743
+        "t": "rua",
+        "km": 8,
+        "dp": 160,
+        "s": "sex"
       },
       {
         "d": "dom",
         "t": "rua",
-        "km": 6.5,
-        "dp": 130
+        "km": 7,
+        "dp": 140,
+        "s": "sex"
       }
     ],
     "dp": 2515
@@ -714,50 +716,64 @@ export const SEMANAS: SemanaModelo[] = [
     "dt": "12 – 18/10",
     "b": "Bloco 0",
     "km": 48,
-    "dp": 2966,
+    "dp": 2277,
     "tag": "WTR",
     "dias": [
       {
         "d": "seg",
-        "t": "rua",
-        "km": 6.3,
-        "dp": 126
+        "t": "trilha",
+        "km": 10,
+        "dp": 550,
+        "s": "sáb",
+        "g": ""
       },
       {
         "d": "ter",
-        "t": "esteira",
-        "km": 5.8,
-        "dp": 140
+        "t": "rua",
+        "km": 6,
+        "dp": 120,
+        "s": "sex",
+        "g": "C1"
       },
       {
         "d": "qua",
         "t": "rua",
-        "km": 6.8,
-        "dp": 136
+        "km": 6,
+        "dp": 120,
+        "s": "seg",
+        "g": "T1"
       },
       {
         "d": "qui",
-        "t": "esteira",
-        "km": 5.3,
-        "dp": 220
+        "t": "rua",
+        "km": 4,
+        "dp": 80,
+        "s": "sex",
+        "g": "CP"
       },
       {
         "d": "sex",
         "t": "rua",
-        "km": 3.4,
-        "dp": 68
+        "km": 3,
+        "dp": 60,
+        "s": "sex",
+        "g": ""
       },
       {
         "d": "sáb",
         "t": "trilha",
-        "km": 15.6,
-        "dp": 858
+        "km": 19,
+        "dp": 687,
+        "s": "wtr",
+        "g": ""
       },
       {
         "d": "dom",
         "t": "rua",
-        "km": 4.9,
-        "dp": 98
+        "km": 0,
+        "dp": 0,
+        "s": "folga",
+        "g": ""
       }
     ]
   },

@@ -4,28 +4,155 @@
     "1": {
       "dt": "28/09 – 04/10",
       "dias": [
-        {"d":"seg","cat":"rodagem","km":3.8,"dp":76},
-        {"d":"ter","cat":"subida","km":4.5,"dp":140},
-        {"d":"qua","cat":"qualidade","km":4.5,"dp":90},
-        {"d":"qui","cat":"subida","km":5.1,"dp":220},
-        {"d":"sex","cat":"rodagem","km":3.8,"dp":76},
-        {"d":"sáb","cat":"trilha","km":8.3,"dp":457},
-        {"d":"dom","cat":"rodagem","km":1.9,"dp":38}
+        {
+          "d": "seg",
+          "cat": "rodagem",
+          "km": 3.8,
+          "dp": 76
+        },
+        {
+          "d": "ter",
+          "cat": "subida",
+          "km": 4.5,
+          "dp": 140
+        },
+        {
+          "d": "qua",
+          "cat": "qualidade",
+          "km": 4.5,
+          "dp": 90
+        },
+        {
+          "d": "qui",
+          "cat": "subida",
+          "km": 5.1,
+          "dp": 220
+        },
+        {
+          "d": "sex",
+          "cat": "rodagem",
+          "km": 3.8,
+          "dp": 76
+        },
+        {
+          "d": "sáb",
+          "cat": "trilha",
+          "km": 8.3,
+          "dp": 457
+        },
+        {
+          "d": "dom",
+          "cat": "rodagem",
+          "km": 1.9,
+          "dp": 38
+        }
       ],
-      "caminhada": {"sessoes": 6, "dp": 1320}
+      "caminhada": {
+        "sessoes": 6,
+        "dp": 1320
+      }
     },
     "2": {
       "dt": "05 – 11/10",
       "dias": [
-        {"d":"seg","cat":"rodagem","km":6,"dp":120},
-        {"d":"ter","cat":"subida","km":6,"dp":140},
-        {"d":"qua","cat":"qualidade","km":8,"dp":160},
-        {"d":"qui","cat":"subida","km":5,"dp":220},
-        {"d":"sex","cat":"rodagem","km":3,"dp":60},
-        {"d":"sáb","cat":"trilha","km":10,"dp":550},
-        {"d":"dom","cat":"rodagem","km":4,"dp":80}
+        {
+          "d": "seg",
+          "cat": "rodagem",
+          "km": 6,
+          "dp": 120
+        },
+        {
+          "d": "ter",
+          "cat": "subida",
+          "km": 6,
+          "dp": 140
+        },
+        {
+          "d": "qua",
+          "cat": "qualidade",
+          "km": 8,
+          "dp": 160
+        },
+        {
+          "d": "qui",
+          "cat": "subida",
+          "km": 5,
+          "dp": 220
+        },
+        {
+          "d": "sex",
+          "cat": "rodagem",
+          "km": 3,
+          "dp": 60
+        },
+        {
+          "d": "sáb",
+          "cat": "trilha",
+          "km": 10,
+          "dp": 550
+        },
+        {
+          "d": "dom",
+          "cat": "rodagem",
+          "km": 4,
+          "dp": 80
+        }
       ],
-      "caminhada": {"sessoes": 6, "dp": 1320}
+      "caminhada": {
+        "sessoes": 6,
+        "dp": 1320
+      }
+    },
+    "3": {
+      "dt": "12 – 18/10",
+      "dias": [
+        {
+          "d": "seg",
+          "cat": "trilha",
+          "km": 10,
+          "dp": 550
+        },
+        {
+          "d": "ter",
+          "cat": "rodagem",
+          "km": 6,
+          "dp": 120
+        },
+        {
+          "d": "qua",
+          "cat": "rodagem",
+          "km": 6,
+          "dp": 120
+        },
+        {
+          "d": "qui",
+          "cat": "rodagem",
+          "km": 4,
+          "dp": 80
+        },
+        {
+          "d": "sex",
+          "cat": "rodagem",
+          "km": 3,
+          "dp": 60
+        },
+        {
+          "d": "sáb",
+          "cat": "trilha",
+          "km": 19,
+          "dp": 687
+        },
+        {
+          "d": "dom",
+          "cat": "rodagem",
+          "km": 0,
+          "dp": 0
+        }
+      ],
+      "caminhada": {
+        "sessoes": 3,
+        "dp": 660
+      }
     }
   }
 }

@@ -53,7 +53,7 @@ const saida = semanas.map((w) => {
   const datas = DOW.map((_, j) => iso(new Date(ini.getTime() + j * DIA)));
 
   const P = vazio();
-  for (const d of prev.dias) { P[d.cat].km += d.km; P[d.cat].n += 1; P[d.cat].dp += d.dp; }
+  for (const d of prev.dias) { if (!d.km) continue; P[d.cat].km += d.km; P[d.cat].n += 1; P[d.cat].dp += d.dp; }
 
   const R = vazio(), zonas = { facil: 0, cinza: 0, forte: 0 }, detalhe = [];
   const cam = { n: 0, dp: 0 };
