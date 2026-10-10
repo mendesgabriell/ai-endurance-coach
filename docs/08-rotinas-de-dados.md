@@ -29,25 +29,31 @@ do Gabriel. Ver também `docs/03-arquitetura.md` e a ADR-0006.
 
 ## A rotina diária: retrato do COROS e do Strava
 
-Tarefa agendada no app Claude (`prumo-retrato-diario`), todo dia às 06:45,
-enquanto o app estiver aberto no Mac. Ela:
+Tarefa agendada no app Claude (`prumo-retrato-diario`), de hora em hora das
+05:50 às 22:50, enquanto o app estiver aberto no Mac (o Mac é o servidor). A
+primeira leitura é antes das 06:00, hora do treino; as outras pegam o que
+chegou durante o dia. Ela:
 
-1. lê no conector do COROS as últimas 14 noites, os 7 dias de HRV com a faixa
+1. lê no conector do COROS as últimas 3 noites, os 7 dias de HRV com a faixa
    normal, o VO₂max, o limiar e as previsões de prova;
-2. lê no conector do Strava as atividades dos últimos 10 dias (esforço
+2. lê no conector do Strava as atividades dos últimos 3 dias (esforço
    relativo, tênis, links), as séries de cada sessão de força e os km dos
    tênis usados no período;
 3. grava os arquivos em `.prumo-refresh/` (fora do git) e roda
    `python3 scripts/prumo-refresh.py`, que valida, mescla e recalcula o
    fitness. O modelo transcreve; quem calcula é o script;
-4. commita só `src/prumo/estatico.json` e dá push na branch e na `main`.
+4. commita só `src/prumo/estatico.json` e dá push na branch e na `main`,
+   apenas quando algo mudou. Sem novidade, a rodada termina sem commit.
 
 Se um conector falhar, a parte dele fica como estava. Se a validação falhar,
 nada é gravado. A rotina nunca toca em `.env`.
 
 ## O que depende do Gabriel
 
-- **Sincronizar o relógio** no app do COROS ao acordar. É o gatilho de tudo.
+- **Deixar o COROS sincronizar sozinho:** Bluetooth ligado, app do COROS não
+  fechado à força e sem modo de baixo consumo no celular. O relógio manda a
+  noite e os treinos para a nuvem do COROS sem toque; a rotina e o
+  intervals.icu leem de lá. Nada de atualizar na mão ao longo do dia.
 - **Não desligar a ligação COROS → intervals.icu.** O intervals saiu da
   interface, mas é o cano do dado vivo.
 - **Chave do modo privado:** `PRUMO_CHAVE` nas variáveis da Vercel e a visita
